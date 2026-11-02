@@ -126,6 +126,37 @@ def test_lo_no_reportado_queda_como_omitido() -> None:
     assert len(result.missed) == 3
 
 
+def test_defang_mal_hecho_empareja_y_se_marca() -> None:
+    """mistral copia `x[.]com` como `x.[.]com`: es un error de formato, no una alucinacion."""
+    result = match_iocs(
+        [
+            ioc("santiagonasar.duckdns.[.]org", "domain"),
+            ioc("hxxps://nyc008.hawkhost.[.]com/~invoixec/", "url"),
+            ioc("evil.[.]com", "domain"),
+        ],
+        etiqueta(),
+        TEXTO,
+    )
+    assert result.tp == 2
+    assert all(item.defang_error for item in result.predictions)
+    assert result.count("hallucinated") == 1, "lo que no esta en el texto sigue siendo alucinado"
+
+
+def test_ip_con_puerto_empareja() -> None:
+    label = etiqueta()
+    label.iocs.append(type(label.iocs[0])(value="149.56.106.83", type="ipv4", verdict="malicious"))
+    result = match_iocs([ioc("149.56.106[.]83:443", "ipv4")], label, TEXTO + " 149.56.106[.]83:443")
+    assert result.tp == 1
+    assert not result.predictions[0].defang_error
+
+
+def test_la_ruta_de_una_url_no_se_toca() -> None:
+    from aitm.evaluation.matching import repair_defang
+
+    assert repair_defang("url", "https://a.com/x/../y") == ("https://a.com/x/../y", False)
+    assert repair_defang("domain", "a..com") == ("a.com", True)
+
+
 def test_appears_in_text_tolera_defang() -> None:
     assert appears_in_text("santiagonasar.duckdns.org", TEXTO)
     assert not appears_in_text("otro.com", TEXTO)

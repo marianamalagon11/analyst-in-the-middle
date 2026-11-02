@@ -20,10 +20,18 @@ Ademas se marcan dos cosas que no cambian la categoria pero explican errores:
   `domain`, por ejemplo).
 - `partial_of`: no emparejo, pero es el host de una URL del ground truth, o una URL
   cuyo host es un dominio del ground truth. Se reporta aparte, no como acierto.
+- `defang_error`: el modelo desofusco mal el valor. En la linea base, mistral copia
+  `urbancinema[.]net` como `urbancinema.[.]net`, que al hacer refang queda
+  `urbancinema..net`. Un doble punto nunca es valido en un dominio, una IP o el host
+  de una URL, asi que se colapsa antes de emparejar y se marca. Sin esto el evaluador
+  contaba indicadores reales como alucinados, que es otro error y otra metrica.
+  (Regla agregada al ver la linea base; la cuenta de `defang_error` permite
+  reconstruir el criterio estricto.)
 """
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, field
 from typing import Iterable, Literal
 
@@ -45,6 +53,34 @@ def canonical(ioc_type: str, value: str) -> str:
     """Forma comparable de un indicador bajo un tipo dado."""
     normalized = normalize_value(ioc_type, value)  # type: ignore[arg-type]
     return normalized.lower() if ioc_type in _CASE_INSENSITIVE else normalized
+
+
+_DOTS = re.compile(r"\.{2,}")
+_PORT = re.compile(r":\d{1,5}$")
+
+
+def repair_defang(ioc_type: str, value: str) -> tuple[str, bool]:
+    """Colapsa el doble punto que deja un refang mal hecho por el modelo.
+
+    Solo en dominios, IPs y el host de una URL: en la ruta de una URL `..` puede ser
+    legitimo y no se toca.
+
+    Tambien quita el puerto de una IP o un dominio (`149.56.106.83:443`): los reportes
+    publican los C2 con su puerto y el modelo los copia asi, pero el puerto no es parte
+    de la identidad del indicador. Eso no cuenta como `defang_error`.
+    """
+    refanged = refang(value.strip())
+    if ioc_type in ("domain", "ipv4"):
+        repaired = _DOTS.sub(".", refanged)
+        dots_fixed = repaired != refanged
+        return _PORT.sub("", repaired), dots_fixed
+    if ioc_type == "url":
+        match = re.match(r"(https?://)([^/]+)(.*)", refanged, re.I)
+        if match:
+            scheme, host, rest = match.groups()
+            fixed = _DOTS.sub(".", host)
+            return f"{scheme}{fixed}{rest}", fixed != host
+    return value, False
 
 
 def _haystack(text: str) -> str:
@@ -70,6 +106,7 @@ class PredictedMatch:
     gt_verdict: str | None = None
     type_mismatch: bool = False
     partial_of: str | None = None
+    defang_error: bool = False
 
 
 @dataclass
@@ -160,8 +197,9 @@ def match_iocs(predicted: Iterable[IoCFinding], label: ReportLabel, text: str) -
     result = MatchResult(n_ground_truth=len(label.iocs))
 
     for finding in predicted:
-        value = normalize_value(finding.type, finding.value)
-        gt, mismatch = included.find(finding.value, finding.type)
+        raw, defang_error = repair_defang(finding.type, finding.value)
+        value = normalize_value(finding.type, raw)
+        gt, mismatch = included.find(raw, finding.type)
         if gt is not None:
             category: Category = "duplicate" if gt.value in used else "tp"
             used.add(gt.value)
@@ -174,14 +212,15 @@ def match_iocs(predicted: Iterable[IoCFinding], label: ReportLabel, text: str) -
                     gt_value=gt.value,
                     gt_verdict=gt.verdict,  # type: ignore[union-attr]
                     type_mismatch=mismatch,
+                    defang_error=defang_error,
                 )
             )
             continue
 
-        hit, _ = excluded.find(finding.value, finding.type)
+        hit, _ = excluded.find(raw, finding.type)
         if hit is not None:
             category = "excluded"
-        elif appears_in_text(finding.value, text, haystack=haystack):
+        elif appears_in_text(raw, text, haystack=haystack):
             category = "unlabeled_in_text"
         else:
             category = "hallucinated"
@@ -192,6 +231,7 @@ def match_iocs(predicted: Iterable[IoCFinding], label: ReportLabel, text: str) -
                 verdict=finding.verdict,
                 category=category,
                 partial_of=_partial(value, finding.type, label),
+                defang_error=defang_error,
             )
         )
 

@@ -150,6 +150,7 @@ class RunScore:
     duplicates: int
     partial: int
     type_mismatch: int
+    defang_errors: int
     precision: float | None
     recall: float | None
     verdict_pairs: list[tuple[str, str]] = field(repr=False)
@@ -211,6 +212,7 @@ def score_run(record: RunRecord, label: ReportLabel) -> RunScore:
         duplicates=match.count("duplicate"),
         partial=sum(1 for item in match.predictions if item.partial_of),
         type_mismatch=sum(1 for item in match.predictions if item.type_mismatch),
+        defang_errors=sum(1 for item in match.predictions if item.defang_error),
         precision=safe_div(match.tp, match.tp + match.false_positives),
         recall=safe_div(match.tp, match.n_ground_truth),
         verdict_pairs=match.verdict_pairs,
@@ -268,6 +270,7 @@ def aggregate(scores: list[RunScore]) -> dict[str, object]:
         "fp_unlabeled": sum(s.fp_unlabeled for s in scores),
         "fp_hallucinated": sum(s.fp_hallucinated for s in scores),
         "type_mismatch": sum(s.type_mismatch for s in scores),
+        "defang_errors": sum(s.defang_errors for s in scores),
         "verdict_pairs": len(pairs),
         "verdict_macro_f1": macro_f1(pairs),
         "benign_recall": per_class["benign"]["recall"],

@@ -55,6 +55,23 @@ se mide.
 | `num_ctx` 8192 → 12288, `num_predict` 2048 → 4096 | El reporte más largo ocupa 5.637 tokens de prompt reales (la estimación chars/4 daba 3.183): quedaban ~500 tokens de margen, que un payload de la Fase 3 no respetaría. |
 | `maxItems` en las listas del esquema (50 IoCs, 25 técnicas, 5 notas) | mistral y llama3.1 entraron en bucle enumerando técnicas inventadas con IDs consecutivos hasta agotar `num_predict`, y el JSON quedó cortado. |
 
+### Correcciones del evaluador hechas al ver la línea base
+
+Se hicieron **después** de ver las primeras trazas de mistral, y por eso se declaran.
+No tocan la inferencia (las trazas son las mismas) ni el ground truth (sigue
+congelado): corrigen dos casos en que el emparejamiento clasificaba mal un error del
+modelo. Las dos se aplican igual a los tres modelos.
+
+| Corrección | Qué pasaba | Cómo se deja trazable |
+|---|---|---|
+| Doble punto tras el refang (`urbancinema.[.]net` → `urbancinema..net`) se colapsa en dominios, IPs y hosts de URL | mistral inserta un punto antes del `[.]` del defang. Indicadores reales se contaban como **alucinados** (14 en las primeras 34 corridas), que es otro error y otra métrica. | Cada caso queda marcado `defang_error` y se cuenta en la columna "Defang mal hecho": quien quiera el criterio estricto puede restarlos. |
+| Se quita el puerto de IPs y dominios (`149.56.106.83:443`) | Los reportes publican los C2 con puerto y el modelo los copia así. El puerto no forma parte de la identidad del indicador, igual que las mayúsculas. | Prueba en `tests/test_matching.py`. |
+
+**Lo que no se corrigió:** un hash de 63 caracteres en la tabla de IoCs del reporte de
+APT-C-36 (`0d7abdd1…`, errata del vendor) no está en el ground truth porque no es un
+sha256 válido. Los modelos lo reportan igual y cuenta como falso positivo: un analista
+atento debería notar que no sirve.
+
 ---
 
 ## 2. Resultados

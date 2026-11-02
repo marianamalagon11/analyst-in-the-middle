@@ -144,6 +144,7 @@ _SUMMARY_COLUMNS: list[tuple[str, str, str]] = [
     ("ioc_f1", "F1 IoC", "{:.2f}"),
     ("fp_hallucinated", "Alucinados", "{}"),
     ("fp_excluded", "Excluidos reportados", "{}"),
+    ("defang_errors", "Defang mal hecho", "{}"),
     ("verdict_macro_f1", "Macro-F1 veredicto", "{:.2f}"),
     ("benign_recall", "Recall benign", "{:.2f}"),
     ("severity_exact", "Severidad exacta", "{:.0%}"),
