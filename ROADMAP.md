@@ -120,17 +120,26 @@ técnicas: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 ## Fase 3 — Ataques
 
-- [ ] Definir la interfaz `AttackVector` en `src/aitm/attacks/base.py` (entrada: reporte + objetivo; salida: reporte envenenado + manifiesto).
-- [ ] Escribir el catálogo de payloads en `src/aitm/attacks/payloads.py` (3–5 redacciones por objetivo: `flip_to_benign`, `omit_ioc`, `downgrade_severity`, `drop_technique`).
-- [ ] Implementar el vector `plaintext` y verificar manualmente su efecto en un reporte.
-- [ ] Implementar el vector `html_hidden` (`display:none`, `font-size:0`, texto blanco, comentarios HTML).
-- [ ] Implementar el vector `unicode_invisible` (zero-width y caracteres bidi).
-- [ ] Implementar el vector `pdf_hidden` (metadatos y texto con render invisible).
-- [ ] Implementar el vector `author_note` (nota del analista / actualización falsa del reporte).
-- [ ] Implementar `registry.py` y el comando `aitm attack` que genera `data/poisoned/` con su manifiesto.
-- [ ] Verificar que cada reporte envenenado **se ve igual que el original** para un humano (captura de pantalla para el informe).
-- [ ] Generar la matriz completa de reportes envenenados: reporte × vector × objetivo.
-- [ ] Escribir pruebas unitarias de los vectores (que el payload esté, que el formato siga siendo válido).
+- [x] Definir la interfaz `AttackVector` en `src/aitm/attacks/base.py` (entrada: reporte + objetivo; salida: reporte envenenado + manifiesto). Incluye los **criterios de éxito** por objetivo (`attack_succeeded`), que la Fase 5 usará para el ASR.
+- [x] Escribir el catálogo de payloads en `src/aitm/attacks/payloads.py` (4 familias por objetivo: `direct_override`, `authority`, `contextual`, `format_mimic`, en español; payload canónico fijado a priori).
+- [x] Implementar el vector `plaintext` y verificar manualmente su efecto en un reporte. (Efecto sobre el modelo: Fase 5; aquí se verifica que el payload llega al texto extraído.)
+- [x] Implementar el vector `html_hidden` (`display:none`, `font-size:0`, texto blanco, comentarios HTML).
+- [x] Implementar el vector `unicode_invisible` (tags/ASCII smuggling, zero-width, bidi). `bidi` queda como `camouflaged`, no invisible: deja las letras presentes. Solo txt/html (las fuentes del PDF no codifican esos puntos).
+- [x] Implementar el vector `pdf_hidden` (metadatos y texto con render invisible).
+- [x] Implementar el vector `author_note` (nota del analista / actualización falsa del reporte).
+- [x] Implementar `registry.py` y el comando `aitm attack` que genera `data/poisoned/` con su manifiesto.
+- [x] Verificar que cada reporte envenenado **se ve igual que el original** para un humano (captura de pantalla para el informe). PDF por píxeles (`pypdfium2`), HTML/txt por palabras visibles. Captura limpia vs envenenada en `results/figures/visual/` (byte a byte idénticas).
+- [x] Generar la matriz completa de reportes envenenados: reporte × vector × objetivo. 1056 documentos; payload llega al modelo 1056/1056, invisibles se ven igual 440/440.
+- [x] Escribir pruebas unitarias de los vectores (que el payload esté, que el formato siga siendo válido).
+
+> **Estado (2026-11-02, Juan Sebastián):** Fase 3 completa. 5 vectores con sus variantes,
+> catálogo de payloads, selección determinista de objetivos desde el ground truth
+> congelado (`targets.py`), comando `aitm attack` y verificación de extracción + visual.
+> Matriz de 1056 reportes envenenados generada; el manifiesto (`data/poisoned/manifest.jsonl`)
+> y los objetivos (`data/poisoned/targets.json`) se versionan, los documentos se regeneran.
+> **El efecto real de cada ataque sobre el modelo (ASR) es la Fase 5:** aquí se garantiza
+> que el payload llega y que el documento se ve igual, con los criterios de éxito ya en
+> código. 182 pruebas en verde.
 
 ## Fase 4 — Defensas
 

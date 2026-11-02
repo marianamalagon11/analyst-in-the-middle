@@ -236,8 +236,13 @@ data/processed/*
 !data/processed/.gitkeep
 !data/processed/dataset.json
 
+# Los documentos envenenados se regeneran con `aitm attack` desde el manifiesto y los
+# objetivos (commit fijado del dataset + config). Esos dos sí se versionan: son la
+# procedencia exacta de cada reporte envenenado y lo que hace reproducible la Fase 3.
 data/poisoned/*
 !data/poisoned/.gitkeep
+!data/poisoned/manifest.jsonl
+!data/poisoned/targets.json
 
 # El ground truth etiquetado a mano es trabajo nuestro y es lo que hace comparables
 # las corridas entre si: ese va al repositorio completo.

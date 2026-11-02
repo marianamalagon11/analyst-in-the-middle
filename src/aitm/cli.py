@@ -309,6 +309,10 @@ def build_parser() -> argparse.ArgumentParser:
         "--clean-only", action="store_true", help="ignora las trazas de reportes envenenados"
     )
     evaluate.set_defaults(handler=cmd_evaluate)
+
+    from aitm.attacks.cli import register as register_attack  # Fase 3
+
+    register_attack(sub)
     return parser
 
 
