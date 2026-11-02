@@ -76,14 +76,68 @@ atento debería notar que no sirve.
 
 ## 2. Resultados
 
-*(Pendiente: se llena al terminar la corrida.)*
+Corrida `baseline-f2`, 108 análisis (12 reportes × 3 formatos × 3 modelos), config
+`08a6cd5a4a9e`, en el Apple M5. **Ninguno falló** (0 JSON inválidos o cortados). Tabla
+completa en `results/tables/baseline.md`; CSV por corrida en `baseline.csv`.
+
+| Modelo | F1 IoC | Macro-F1 veredicto | Recall `benign` | Severidad exacta | Recall ATT&CK (padre) | p50 (s) | **Puntaje** |
+|---|---|---|---|---|---|---|---|
+| **llama3.1:8b** | 0.70 | 0.32 | 0.00 | **0.83** | 0.30 | **70** | **0.5375** |
+| mistral:7b | **0.78** | 0.33 | 0.00 | 0.69 | 0.31 | 87 | 0.5275 |
+| qwen2.5:7b | 0.68 | 0.37 | 0.00 | 0.25 | 0.31 | 79 | 0.4025 |
+
+**Líneas base sin LLM:** macro-F1 de responder siempre `malicious` = **0.32**; extractor
+regex = precisión 0.80, **recall 0.95** de IoCs.
+
+### Modelo principal elegido: `llama3.1:8b-instruct-q4_K_M`
+
+Por el criterio pre-registrado (promedio de las cuatro métricas): llama 0.5375, mistral
+0.5275, qwen 0.4025. La diferencia llama–mistral (0.010) cae bajo el umbral de 0.03, así
+que decide la latencia p50, y también favorece a llama (70 s < 87 s). Es además el
+analista que ya traía `config.yaml`, así que no se cambia nada.
+
+**Pero la elección es apretada y hay que decirlo con todas sus letras:**
+
+- **mistral es claramente el mejor extrayendo IoCs** (F1 0.78, precisión 0.97, **cero
+  alucinaciones**, cero exclusiones reportadas). llama gana por la severidad (0.83 vs
+  0.69), que con 12 reportes y 9 `high` es la métrica más ruidosa de las cuatro. Si el
+  informe prioriza la extracción sobre la severidad, mistral es defendible; lo dejamos
+  escrito para no esconder la fragilidad del desempate.
+- **El dato que corrige al setup report:** en CPU, mistral era el más barato (3× más
+  rápido que llama). En la GPU del M5 **llama es el más rápido** (p50 70 s). El costo
+  depende del hardware, no es una propiedad del modelo.
+
+### El hallazgo que importa para el proyecto
+
+Los tres modelos tienen un **macro-F1 de veredicto de 0.32–0.37, es decir, pegado a la
+línea base trivial de "responder siempre malicious" (0.32)**. No saben *clasificar* lo
+que encuentran: solo lo encuentran. Esto importa para las fases 3–5, porque el ataque
+`flip_to_benign` intenta mover un veredicto que el modelo, de entrada, casi no razona.
+
+El regex sin LLM saca **recall 0.95** de IoCs contra el 0.62–0.66 de los modelos: para la
+pura extracción de indicadores, una expresión regular supera a los tres LLM. El valor del
+LLM tendría que estar en el veredicto, la severidad y ATT&CK, y ahí es donde flojea.
 
 ---
 
 ## 3. Modos de fallo observados
 
-*(Se completa con la línea base. Ya vistos en las pruebas de humo:)*
+Material directo para "Observaciones experimentales" del informe. Medidos sobre las 108
+corridas.
 
+- **Nunca dicen `benign` ni `critical`.** De los 14 indicadores que el ground truth marca
+  `benign` (recursos legítimos abusados: `powershell.exe`, `cloudflare-dns.com`,
+  `battle.net`...), los modelos clasificaron como `benign` **cero**: todos como
+  `malicious` o `suspicious`. Y en severidad solo predicen `high` (65 de 108) o `medium`
+  (43); nunca `critical`, `low` ni `info`, así que el único reporte `critical` (TA456)
+  no se detecta nunca. El analista colapsa el rango a "amenaza / amenaza menor", que es
+  justo lo que los casos `benign` fueron diseñados para exponer.
+- **El regex gana en extracción.** Recall 0.95 vs 0.62–0.66. El LLM omite indicadores que
+  una regex no omitiría; su aporte no está en encontrar IoCs.
+- **Perfiles de error opuestos entre modelos.** mistral no alucina nada pero comete el
+  error de defang (`x.[.]com`, 14 casos, ya contabilizado aparte); llama y qwen sí
+  alucinan (16 y 10) y reportan indicadores excluidos (21 y 22: URLs del vendor, enlaces
+  de referencia), lo que hunde su precisión.
 - **Bucle de enumeración de ATT&CK con decodificación greedy.** Tras 3–6 técnicas
   plausibles, mistral y llama3.1 siguen con IDs consecutivos inventados
   (`T1086.038`, `T1086.039`…; `T1362`, `T1364`, `T1366`… todas "Data Encrypted File").

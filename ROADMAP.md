@@ -103,9 +103,16 @@ técnicas: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 - [x] Implementar el guardado de trazas en `results/runs/<timestamp>/*.jsonl` con latencia y hash de configuración (`src/aitm/evaluation/traces.py`; además sha256 del prompt, digest del modelo y equipo). Reanudable con `--run-dir`.
 - [x] Implementar `src/aitm/evaluation/matching.py`: normalización de IoCs (defanging, mayúsculas) y emparejamiento con el ground truth.
 - [x] Implementar `src/aitm/evaluation/metrics.py`: precisión/recall de IoCs, macro-F1 del veredicto, acierto de severidad, recall de ATT&CK. Con dos líneas base sin LLM: "siempre `malicious`" y el extractor regex.
-- [ ] Correr la línea base sobre todo el dataset limpio con los tres modelos y guardar los resultados.
-- [ ] Construir la tabla de línea base por modelo y elegir el **modelo principal** del proyecto; justificar la elección.
-- [ ] Anotar los modos de fallo observados sin ataque (alucinaciones, IoCs partidos, severidad inestable) — material para "Observaciones experimentales".
+- [x] Correr la línea base sobre todo el dataset limpio con los tres modelos y guardar los resultados. 108 análisis en el M5, 0 fallos; trazas en `results/runs/baseline-f2/`.
+- [x] Construir la tabla de línea base por modelo y elegir el **modelo principal** del proyecto; justificar la elección. Tabla en [results/tables/baseline.md](results/tables/baseline.md); modelo principal **`llama3.1:8b-instruct-q4_K_M`** por el criterio pre-registrado (desempate apretado con mistral, justificado en [results/baseline_report.md](results/baseline_report.md)).
+- [x] Anotar los modos de fallo observados sin ataque (alucinaciones, IoCs partidos, severidad inestable) — material para "Observaciones experimentales". En [results/baseline_report.md](results/baseline_report.md): nunca dicen `benign` ni `critical`, el regex supera a los tres LLM en recall de IoCs, macro-F1 de veredicto pegado a la línea base trivial.
+
+> **Estado (2026-11-02, Juan Sebastián):** Fase 2 completa. Analista, trazas y evaluador
+> funcionando; línea base de 108 análisis sobre el ground truth congelado, sin fallos.
+> Modelo principal `llama3.1:8b` (el que ya traía la config). Hallazgo central: los tres
+> modelos clasifican el veredicto al nivel de "responder siempre malicious" y nunca
+> aciertan un `benign` ni un `critical`; para la pura extracción de IoCs el regex los
+> supera. Deja la base medida para el ASR de la Fase 5.
 
 > **Estado (2026-11-02, Juan Sebastián):** código de la fase completo y probado (106
 > pruebas). Línea base corriendo en el M5: 12 reportes × 3 formatos × 3 modelos = 108
