@@ -19,15 +19,29 @@ técnicas: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 - [ ] Acordar el reparto inicial de fases entre los cuatro integrantes.
 - [ ] Instalar Ollama en al menos dos equipos del equipo y verificar `ollama --version`.
-- [ ] Descargar los modelos: `ollama pull llama3.1:8b-instruct-q4_K_M`, `mistral:7b-instruct`, `qwen2.5:7b-instruct`.
-- [ ] Medir y anotar en una tabla cuánto tarda cada modelo en una petición de prueba en cada equipo (define cuántos experimentos aguantamos).
-- [ ] Crear el entorno virtual (`python -m venv .venv`) y el `pyproject.toml` con las dependencias base: `requests`, `pydantic`, `pyyaml`, `beautifulsoup4`, `lxml`, `pypdf`, `pandas`, `matplotlib`, `pytest`.
-- [ ] Crear el esqueleto de carpetas descrito en `docs/ARCHITECTURE.md` (con `.gitkeep` donde haga falta).
-- [ ] Escribir `config.yaml` inicial: modelos, `seed`, `temperature: 0`, `num_ctx`, rutas, lista de defensas activas.
-- [ ] Implementar `src/aitm/config.py` que carga y valida `config.yaml` y calcula su hash.
-- [ ] Implementar `src/aitm/llm/ollama_client.py` con una llamada mínima a `/api/chat` y probar que responde.
-- [ ] Verificar determinismo: la misma petición dos veces con la misma semilla debe dar la misma salida; anotar el resultado.
-- [ ] Actualizar el `README.md` con instrucciones de instalación y ejecución.
+- [x] Descargar los modelos: `ollama pull llama3.1:8b-instruct-q4_K_M`, `mistral:7b-instruct`, `qwen2.5:7b-instruct`.
+- [x] Medir y anotar en una tabla cuánto tarda cada modelo en una petición de prueba en cada equipo (define cuántos experimentos aguantamos).
+- [x] Crear el entorno virtual (`python -m venv .venv`) y el `pyproject.toml` con las dependencias base: `requests`, `pydantic`, `pyyaml`, `beautifulsoup4`, `lxml`, `pypdf`, `pandas`, `matplotlib`, `pytest`.
+- [x] Crear el esqueleto de carpetas descrito en `docs/ARCHITECTURE.md` (con `.gitkeep` donde haga falta).
+- [x] Escribir `config.yaml` inicial: modelos, `seed`, `temperature: 0`, `num_ctx`, rutas, lista de defensas activas.
+- [x] Implementar `src/aitm/config.py` que carga y valida `config.yaml` y calcula su hash.
+- [x] Implementar `src/aitm/llm/ollama_client.py` con una llamada mínima a `/api/chat` y probar que responde.
+- [x] Verificar determinismo: la misma petición dos veces con la misma semilla debe dar la misma salida; anotar el resultado.
+- [x] Actualizar el `README.md` con instrucciones de instalación y ejecución.
+
+> **Estado (2026-11-01):** la parte técnica de la Fase 0 está cerrada y verificada en el
+> portátil de Mariana; el reporte de la medición está en
+> [results/setup_report.md](results/setup_report.md). Quedan abiertas solo las dos
+> casillas que dependen del equipo: el reparto de fases y tener Ollama en un segundo
+> equipo. Lo segundo importa más de lo que parece: aquí la inferencia corre 100 % en CPU
+> (~1–1,7 tok/s) y un equipo con GPU cambiaría el tamaño de los experimentos de las
+> fases 3 y 5.
+>
+> **Medición clave:** un análisis real cuesta **7,7 min** con el modelo más rápido
+> (mistral), ~20 min con `llama3.1`. La matriz completa que plantea la arquitectura son
+> 9.450 análisis = más de 1.200 h de cómputo, así que **no cabe**. En
+> [results/setup_report.md](results/setup_report.md) está la propuesta de matriz
+> reducida (262 análisis, ~36 h) para revisar en equipo antes de la Fase 3.
 
 ## Fase 1 — Dataset
 
