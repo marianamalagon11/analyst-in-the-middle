@@ -13,11 +13,13 @@
     "html",
     "pdf"
   ],
-  "status": "assisted",
+  "status": "frozen",
   "annotators": [
     "Mariana Malagón"
   ],
-  "reviewers": [],
+  "reviewers": [
+    "Juan Sebastián Ortega"
+  ],
   "severity": "high",
   "threat_actor": null,
   "iocs": [
@@ -212,5 +214,5 @@
       "technique_name": "Phishing"
     }
   ],
-  "notes": "Reporte sobre EtterSilent, un constructor de documentos maliciosos vendido en foros rusos. Los indicadores son maldocs y cargas de Trickbot, IcedID, QBot, Bazar y Ursnif, todas con URL de distribucion activa. Severidad high: no es un APT dirigido, pero las familias que entrega terminan en ransomware. CVE-2017-8570 se marca malicious porque es el exploit que usa el constructor, no una cita de contexto. Sin actor atribuido: es una herramienta de uso comun. Las dos URL de cloudfront son capturas de pantalla del propio blog.\n\nRevisado indicador por indicador contra el texto del reporte. Falta la firma de una persona del equipo: leer este archivo, corregir lo que no comparta y pasar `status` a `reviewed` agregandose en `reviewers`."
+  "notes": "Reporte sobre EtterSilent, un constructor de documentos maliciosos vendido en foros rusos. Los indicadores son maldocs y cargas de Trickbot, IcedID, QBot, Bazar y Ursnif, todas con URL de distribucion activa. Severidad high: no es un APT dirigido, pero las familias que entrega terminan en ransomware. CVE-2017-8570 se marca malicious porque es el exploit que usa el constructor, no una cita de contexto. Sin actor atribuido: es una herramienta de uso comun. Las dos URL de cloudfront son capturas de pantalla del propio blog.\n\nAnotado indicador por indicador contra el texto del reporte (Mariana Malagón).\n\nRevision independiente (2026-11-02): Juan Sebastián Ortega, realizada con asistencia de IA (Claude) por encargo suyo, leyendo el reporte completo contra cada indicador, exclusion, severidad y actor. Reporte de la muestra del acuerdo entre revisores: etiquetado a ciegas por separado (data/labels_b/) y comparado con results/tables/agreement.md. Sin cambios."
 }

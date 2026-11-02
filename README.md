@@ -116,8 +116,9 @@ guarda el hash de esa configuración para poder reconstruirla después.
 
 ## Estado
 
-Fase 0 (setup) completa. Fase 1 (dataset) hecha salvo la firma: 12 reportes
-seleccionados y renderizados a los tres formatos, con 165 indicadores etiquetados, 119
-técnicas ATT&CK y la severidad de cada reporte. Falta que una persona del equipo revise
-y firme cada etiqueta (`status: reviewed`), mida el acuerdo entre revisores y congele.
-Ver [ROADMAP.md](ROADMAP.md) y la sección 6 de [docs/DATASET.md](docs/DATASET.md).
+Fases 0 y 1 cerradas. Dataset congelado: 12 reportes × 3 formatos, 171 indicadores
+etiquetados, 119 técnicas ATT&CK y la severidad de cada reporte, anotado por Mariana
+Malagón y revisado y firmado por Juan Sebastián Ortega (revisión asistida por IA,
+declarada en la sección 6 de [docs/DATASET.md](docs/DATASET.md)). Fase 2: analista LLM,
+trazas y evaluador implementados (`aitm analyze`, `aitm evaluate`); línea base en curso.
+Ver [ROADMAP.md](ROADMAP.md).

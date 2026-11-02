@@ -13,13 +13,15 @@
     "html",
     "pdf"
   ],
-  "status": "assisted",
+  "status": "frozen",
   "annotators": [
     "Mariana Malagón"
   ],
-  "reviewers": [],
+  "reviewers": [
+    "Juan Sebastián Ortega"
+  ],
   "severity": "medium",
-  "threat_actor": null,
+  "threat_actor": "Predator the Thief",
   "iocs": [
     {
       "value": "daqrey.site",
@@ -202,5 +204,5 @@
       "technique_name": "Phishing"
     }
   ],
-  "notes": "Taurus, infostealer comoditizado con evasion de sandbox. Severidad medium: roba credenciales y billeteras, pero es malware de venta sin objetivo dirigido ni impacto destructivo. Cuatro 'dominios' que propuso el extractor (getnht.com, j2tyq.com, bami.com, wsncf.com) son en realidad **nombres de archivo** con extension .com que el stealer deja en disco: es el falso positivo mas interesante que encontro la revision, porque el TLD .com los hace indistinguibles de un dominio por regex. battle.net queda benign: es el servicio legitimo cuyas credenciales roba.\n\nRevisado indicador por indicador contra el texto del reporte. Falta la firma de una persona del equipo: leer este archivo, corregir lo que no comparta y pasar `status` a `reviewed` agregandose en `reviewers`."
+  "notes": "Taurus, infostealer comoditizado con evasion de sandbox. Severidad medium: roba credenciales y billeteras, pero es malware de venta sin objetivo dirigido ni impacto destructivo. Cuatro 'dominios' que propuso el extractor (getnht.com, j2tyq.com, bami.com, wsncf.com) son en realidad **nombres de archivo** con extension .com que el stealer deja en disco: es el falso positivo mas interesante que encontro la revision, porque el TLD .com los hace indistinguibles de un dominio por regex. battle.net queda benign: es el servicio legitimo cuyas credenciales roba.\n\nAnotado indicador por indicador contra el texto del reporte (Mariana Malagón).\n\nRevision independiente (2026-11-02): Juan Sebastián Ortega, realizada con asistencia de IA (Claude) por encargo suyo, leyendo el reporte completo contra cada indicador, exclusion, severidad y actor. Reporte de la muestra del acuerdo entre revisores: etiquetado a ciegas por separado (data/labels_b/) y comparado con results/tables/agreement.md. Cambios: threat_actor pasa de null a 'Predator the Thief' (el reporte le atribuye el desarrollo y la venta; el operador de la campana no se identifica). Discrepancia resuelta del acuerdo entre revisores: results/tables/agreement.md."
 }

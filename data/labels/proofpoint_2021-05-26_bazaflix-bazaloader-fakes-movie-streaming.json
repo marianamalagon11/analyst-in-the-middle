@@ -13,11 +13,13 @@
     "html",
     "pdf"
   ],
-  "status": "assisted",
+  "status": "frozen",
   "annotators": [
     "Mariana Malagón"
   ],
-  "reviewers": [],
+  "reviewers": [
+    "Juan Sebastián Ortega"
+  ],
   "severity": "high",
   "threat_actor": null,
   "iocs": [
@@ -180,5 +182,5 @@
       "technique_name": "Phishing"
     }
   ],
-  "notes": "Campana de BazaLoader con un servicio de streaming falso (BravoMovies) y atencion telefonica para guiar a la victima. Severidad high: BazaLoader es la puerta de entrada de operaciones de ransomware, y la infraestructura (dominios, once IP de hosting, URL de carga) estaba activa. Sin actor atribuido: el reporte habla de 'afiliados' de BazaLoader.\n\nRevisado indicador por indicador contra el texto del reporte. Falta la firma de una persona del equipo: leer este archivo, corregir lo que no comparta y pasar `status` a `reviewed` agregandose en `reviewers`."
+  "notes": "Campana de BazaLoader con un servicio de streaming falso (BravoMovies) y atencion telefonica para guiar a la victima. Severidad high: BazaLoader es la puerta de entrada de operaciones de ransomware, y la infraestructura (dominios, nueve IP (ocho de hosting y una de carga), URL de carga) estaba activa. Sin actor atribuido: el reporte habla de 'afiliados' de BazaLoader.\n\nAnotado indicador por indicador contra el texto del reporte (Mariana Malagón).\n\nRevision independiente (2026-11-02): Juan Sebastián Ortega, realizada con asistencia de IA (Claude) por encargo suyo, leyendo el reporte completo contra cada indicador, exclusion, severidad y actor. Cambios: solo la nota ('once IP' -> 'nueve IP': ocho de hosting y una de carga)."
 }

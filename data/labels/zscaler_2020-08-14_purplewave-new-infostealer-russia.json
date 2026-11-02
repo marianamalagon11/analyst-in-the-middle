@@ -13,11 +13,13 @@
     "html",
     "pdf"
   ],
-  "status": "assisted",
+  "status": "frozen",
   "annotators": [
     "Mariana Malagón"
   ],
-  "reviewers": [],
+  "reviewers": [
+    "Juan Sebastián Ortega"
+  ],
   "severity": "medium",
   "threat_actor": null,
   "iocs": [
@@ -280,5 +282,5 @@
       "technique_name": "Forge Web Credentials"
     }
   ],
-  "notes": "PurpleWave, infostealer escrito en C++ y vendido en foros rusos por 5.000 RUB. Severidad medium: robo de credenciales y capacidad de descargar mas malware, sin objetivo dirigido. Hallazgo importante de la revision: el host 'ec2-3-134-252-78.us-east-2.compute.amazonaws.com' lo habia **excluido mal** el filtro automatico, porque amazonaws.com esta en la lista de infraestructura conocida; aqui es el C2 del atacante sobre EC2 y se reincorpora como malicious. La clave de registro de Telegram queda benign: el malware solo la lee para localizar la carpeta de sesiones.\n\nRevisado indicador por indicador contra el texto del reporte. Falta la firma de una persona del equipo: leer este archivo, corregir lo que no comparta y pasar `status` a `reviewed` agregandose en `reviewers`."
+  "notes": "PurpleWave, infostealer escrito en C++ y vendido en foros rusos por 5.000 RUB. Severidad medium: robo de credenciales y capacidad de descargar mas malware, sin objetivo dirigido. Hallazgo importante de la revision: el host 'ec2-3-134-252-78.us-east-2.compute.amazonaws.com' lo habia **excluido mal** el filtro automatico, porque amazonaws.com esta en la lista de infraestructura conocida; aqui es el C2 del atacante sobre EC2 y se reincorpora como malicious. La clave de registro de Telegram queda benign: el malware solo la lee para localizar la carpeta de sesiones.\n\nAnotado indicador por indicador contra el texto del reporte (Mariana Malagón).\n\nRevision independiente (2026-11-02): Juan Sebastián Ortega, realizada con asistencia de IA (Claude) por encargo suyo, leyendo el reporte completo contra cada indicador, exclusion, severidad y actor. Sin cambios."
 }

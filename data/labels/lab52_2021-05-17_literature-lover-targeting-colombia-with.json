@@ -13,11 +13,13 @@
     "html",
     "pdf"
   ],
-  "status": "assisted",
+  "status": "frozen",
   "annotators": [
     "Mariana Malagón"
   ],
-  "reviewers": [],
+  "reviewers": [
+    "Juan Sebastián Ortega"
+  ],
   "severity": "high",
   "threat_actor": "APT-C-36",
   "iocs": [
@@ -104,6 +106,36 @@
       "type": "ipv4",
       "verdict": "malicious",
       "notes": "| 181.141.0.30 |  |"
+    },
+    {
+      "value": "https://ia601509.us.archive.org/20/items/3_20210512_20210512_1430/3.txt",
+      "type": "url",
+      "verdict": "malicious",
+      "notes": "tabla de IoCs: script de la cadena descargado desde The Internet Archive (revision: estaba excluida como referencia)"
+    },
+    {
+      "value": "https://onedrive.live.com/download?cid=A4F059D1DE692167&resid=A4F059D1DE692167%21107&authkey=AOG1a9Z-hUIFbhI",
+      "type": "url",
+      "verdict": "malicious",
+      "notes": "tabla de IoCs: descarga del .rar inicial alojado en OneDrive (revision: estaba excluida por la lista de ruido del extractor)"
+    },
+    {
+      "value": "https://ia601509.us.archive.org/28/items/1_20210512_20210512_1427/1.txt",
+      "type": "url",
+      "verdict": "malicious",
+      "notes": "tabla de IoCs: script de la cadena descargado desde The Internet Archive (revision: estaba excluida como referencia)"
+    },
+    {
+      "value": "C:\\ProgramData\\Microsoft Arts\\Start\\",
+      "type": "file_path",
+      "verdict": "suspicious",
+      "notes": "carpeta donde la cadena deja sus scripts, nombre que imita a Microsoft (revision: el extractor la corto en el espacio)"
+    },
+    {
+      "value": "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\User Shell Folders",
+      "type": "registry_key",
+      "verdict": "benign",
+      "notes": "clave estandar de Windows abusada para persistencia (revision: la regex no reconoce 'HKCU:')"
     }
   ],
   "excluded_iocs": [
@@ -112,12 +144,6 @@
       "type": "url",
       "reason": "vendor_infrastructure",
       "notes": "propuesto por el extractor (https://lab52.io/blog/wp-content/uploads/2021/05/phichin-102)"
-    },
-    {
-      "value": "https://ia601509.us.archive.org/20/items/3_20210512_20210512_1430/3.txt",
-      "type": "url",
-      "reason": "reference_only",
-      "notes": "propuesto por el extractor (https://ia601509.us.archive.org/20/items/3\\_20210512\\_202105)"
     },
     {
       "value": "https://lab52.io/blog/wp-content/uploads/2021/05/Screenshot-from-2021-05-13-16-46-32-1.png",
@@ -154,18 +180,6 @@
       "type": "url",
       "reason": "vendor_infrastructure",
       "notes": "propuesto por el extractor (https://lab52.io/blog/wp-content/uploads/2021/05/Screenshot-)"
-    },
-    {
-      "value": "https://onedrive.live.com/download?cid=A4F059D1DE692167&resid=A4F059D1DE692167%21107&authkey=AOG1a9Z-hUIFbhI",
-      "type": "url",
-      "reason": "vendor_infrastructure",
-      "notes": "propuesto por el extractor (https://onedrive.live.com/download?cid=A4F059D1DE692167&resi)"
-    },
-    {
-      "value": "https://ia601509.us.archive.org/28/items/1_20210512_20210512_1427/1.txt",
-      "type": "url",
-      "reason": "reference_only",
-      "notes": "propuesto por el extractor (https://ia601509.us.archive.org/28/items/1\\_20210512\\_202105)"
     },
     {
       "value": "https://twitter.com/1ZRR4H/status/1392789216141004802",
@@ -228,5 +242,5 @@
       "technique_name": "Phishing"
     }
   ],
-  "notes": "APT-C-36 contra objetivos en Colombia: phishing con citaciones judiciales falsas que entrega LimeRAT por una cadena de scripts. Severidad high: RAT con control remoto completo, campana dirigida y activa, seis dominios C2 en duckdns. powershell.exe, cvtres.exe y MSBuild.exe quedan benign a proposito: son binarios legitimos del sistema abusados (LOLBins) y marcarlos maliciosos seria el falso positivo que queremos poder medir. Las dos rutas excluidas las corto el extractor en el espacio y quedaron inservibles.\n\nRevisado indicador por indicador contra el texto del reporte. Falta la firma de una persona del equipo: leer este archivo, corregir lo que no comparta y pasar `status` a `reviewed` agregandose en `reviewers`."
+  "notes": "APT-C-36 contra objetivos en Colombia: phishing con citaciones judiciales falsas que entrega LimeRAT por una cadena de scripts. Severidad high: RAT con control remoto completo, campana dirigida y activa, seis dominios C2 en duckdns. powershell.exe, cvtres.exe y MSBuild.exe quedan benign a proposito: son binarios legitimos del sistema abusados (LOLBins) y marcarlos maliciosos seria el falso positivo que queremos poder medir. Las dos rutas excluidas las corto el extractor en el espacio y quedaron inservibles.\n\nAnotado indicador por indicador contra el texto del reporte (Mariana Malagón).\n\nRevision independiente (2026-11-02): Juan Sebastián Ortega, realizada con asistencia de IA (Claude) por encargo suyo, leyendo el reporte completo contra cada indicador, exclusion, severidad y actor. Cambios: tres URLs de la tabla de IoCs pasan de excluidas a malicious (descarga del .rar en OneDrive y dos scripts de la cadena en archive.org; las habia excluido la lista de ruido del extractor, el mismo patron que el C2 en EC2 de PurpleWave); se agrega la carpeta de drop 'C:\\ProgramData\\Microsoft Arts\\Start\\' (suspicious) y la clave de persistencia 'User Shell Folders' (benign), que la regex no reconoce."
 }

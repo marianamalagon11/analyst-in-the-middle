@@ -230,14 +230,15 @@ impacto. Para que sea reproducible y discutible, se fijó esta rúbrica antes de
 Los `benign` están en el ground truth a propósito, no por descuido: son los que miden si
 el modelo sabe distinguir *aparece en el reporte* de *es malicioso*. Un analista que
 marque `powershell.exe` como indicador malicioso es inservible en producción, y sin estos
-casos esa diferencia no se puede medir. Son 12 de 165 indicadores.
+casos esa diferencia no se puede medir. Son 14 de 171 indicadores.
 
-### Estado actual
+### Estado actual: congelado (2026-11-02)
 
-Los 12 reportes están en `assisted`: **165 indicadores** decididos uno por uno contra el
-texto (152 `malicious`, 12 `benign`, 1 `suspicious`), **82 exclusiones** con su motivo,
-**119 técnicas ATT&CK** tomadas de las anotaciones de experto del corpus, más severidad y
-actor por reporte.
+Los 12 reportes están en `frozen`, con las huellas sha256 en `data/labels/FROZEN.json`:
+**171 indicadores** decididos uno por uno contra el texto (154 `malicious`, 14 `benign`,
+3 `suspicious`), **108 exclusiones** con su motivo, **119 técnicas ATT&CK** tomadas de
+las anotaciones de experto del corpus, y severidad y actor por reporte. Composición
+completa en `results/tables/dataset_composition.md`.
 
 | Severidad | Reportes |
 |---|---|
@@ -245,11 +246,28 @@ actor por reporte.
 | `high` | 9 |
 | `medium` | 2 (los dos infostealers comoditizados) |
 
-**Falta la firma de un segundo revisor en los 12.** Es el paso que el esquema no deja
-saltar: otra persona del equipo debe leer cada archivo, corregir lo que no comparta,
-agregarse en `reviewers` y pasar `status` a `reviewed`. Quien tome la **Fase 2** es
-responsable de hacerlo antes de medir la línea base: medir contra un ground truth sin
-revisar no mide nada.
+### Cómo se construyó (para el informe)
+
+1. **Extracción automática** con `scripts/draft_labels.py` (regex + anotaciones ATT&CK de
+   experto del corpus).
+2. **Anotación indicador por indicador:** Mariana Malagón (estado `assisted`).
+3. **Acuerdo entre revisores** sobre una muestra de 4 reportes, uno por vendor: un
+   segundo etiquetado partiendo del borrador del extractor, sin ver los veredictos del
+   primero (`data/labels_b/`). Lo hizo **Claude (asistente de IA)** por encargo de Juan
+   Sebastián Ortega, así que es un acuerdo **persona frente a IA**, no entre dos
+   personas, y no fue ciego del todo (ver `results/tables/agreement.md`). Resultado:
+   Jaccard 1,00, kappa 1,00 en 55 veredictos y severidad 4/4. Única discrepancia: el
+   actor de Taurus, resuelta a favor de `Predator the Thief`.
+4. **Revisión independiente y firma** de las 12 etiquetas: Juan Sebastián Ortega,
+   **realizada con asistencia de IA (Claude) por encargo suyo**, leyendo cada reporte
+   completo contra cada indicador, exclusión, severidad y actor. Cada etiqueta lo dice en
+   su `notes`, junto con los cambios que hizo la revisión.
+5. **Congelado** con `scripts/freeze_dataset.py`.
+
+El informe debe declarar la asistencia de IA en los pasos 3 y 4. No es la misma
+garantía que dos analistas humanos, y además el modelo revisor es de una familia
+distinta de los tres que evalúa el proyecto, lo que evita que el error sea circular
+pero no lo elimina.
 
 ### Qué encontró el etiquetado, y que el extractor no podía ver
 
@@ -272,6 +290,27 @@ Estos cinco casos son el argumento concreto de por qué la revisión no es un tr
 5. **Rutas cortadas en el primer espacio.** `C:\ProgramData\AAM Updatesnnk` y la ruta de
    persistencia de TransparenTribe en `Start Menu\Programs\Startup` llegaban truncadas.
    Completadas a mano contra el texto.
+
+### Qué encontró la revisión independiente
+
+La firma cambió seis etiquetas. Los dos primeros casos confirman la limitación 8 de la
+sección 7: la lista de ruido del extractor esconde infraestructura alojada en servicios
+legítimos, y una revisión que no mire las exclusiones automáticas no la ve.
+
+1. **Tres URLs de entrega excluidas por error** en el reporte de APT-C-36 (el de la
+   demo): la descarga del `.rar` en OneDrive y dos scripts de la cadena en archive.org.
+   Las tres estaban en la tabla de IoCs del propio reporte; las había excluido la lista
+   de ruido (`live.com`, `archive.org`). Pasan a `malicious`.
+2. **Un C2 que la regex no veía:** `k6239847.lib` (reporte de XML-RPC), porque `.lib`, el
+   TLD de EmerDNS, no está en la lista cerrada de TLDs. Agregado como `malicious`.
+3. **`1.1.1.1` marcado `malicious`.** Es el DNS público de Cloudflare; el malware solo le
+   hace ping. Pasa a `benign`: un modelo que acertara habría contado como error.
+4. **Un artefacto genérico como `malicious`:** `%temp%\Logs.txt` (TA456) pasa a
+   `suspicious`, porque bloquear un nombre tan común no es accionable.
+5. En APT-C-36 se agregan la carpeta de drop `C:\ProgramData\Microsoft Arts\Start\`
+   (`suspicious`, la cortaba el extractor) y la clave de persistencia `User Shell
+   Folders` (`benign`; la regex no reconoce `HKCU:`).
+6. Actor de Taurus (`Predator the Thief`) y dos conteos mal escritos en las notas.
 
 ### Cómo cerrar la fase
 
@@ -303,10 +342,13 @@ Material directo para el informe.
 1. **El PDF pierde el 5,5 % de los indicadores en la extracción** (15 de 275). Al
    renderizar, las líneas largas se parten y `pypdf` devuelve el token en dos pedazos.
    Lo mitigamos poniendo cada indicador largo en su propia línea en monoespaciada de
-   7,5 pt, lo que salvó todos los hashes; **los 15 que siguen perdiéndose son URLs de
-   referencia de más de 50 caracteres** (prensa, blogs de terceros), ninguna es un
-   indicador del caso. Hay que tenerlo presente al leer las métricas por formato de la
-   Fase 2: parte de la diferencia entre txt y pdf es nuestro pipeline, no el modelo.
+   7,5 pt, lo que salvó todos los hashes. Los que siguen perdiéndose son casi todos URLs
+   de referencia de más de 50 caracteres, pero **2 de los 171 indicadores del caso
+   también se pierden en el PDF** (medido tras congelar): la URL de OneDrive de APT-C-36
+   y la ruta de persistencia de TransparenTribe, que contiene espacios y el salto de
+   línea parte. En txt y html no se pierde ninguno. Hay que tenerlo presente al leer las
+   métricas por formato de la Fase 2: esos dos fallos son de nuestro pipeline, no del
+   modelo.
 2. **El extractor de regex es un ayudante, no la verdad.** Usa una lista cerrada de
    TLDs para no confundir `loader.ps1` con un dominio, así que un TLD exótico se le
    escapa (hay que agregarlo en `iocs.py`). Decide si una IP es un número de versión
@@ -322,23 +364,25 @@ Material directo para el informe.
    se evalúa nunca ante un documento que *no* sea una amenaza.
 5. **12 reportes es poco** para hablar de significancia estadística. Es una restricción
    de hardware y de horas-persona, no una decisión metodológica, y así se reporta.
-6. **El ground truth está muy desbalanceado:** 152 de 165 indicadores son `malicious`.
-   Un modelo que respondiera siempre `malicious` acertaría el 92 % de los veredictos sin
+6. **El ground truth está muy desbalanceado:** 154 de 171 indicadores son `malicious`.
+   Un modelo que respondiera siempre `malicious` acertaría el 90 % de los veredictos sin
    analizar nada, así que la exactitud cruda del veredicto **no es una métrica
    informativa**: hay que reportar macro-F1, que pondera igual las tres clases, y
-   compararlo siempre contra esa línea base trivial. Con solo 12 casos `benign` y 1
+   compararlo siempre contra esa línea base trivial. Con solo 14 casos `benign` y 3
    `suspicious`, además, el macro-F1 será ruidoso: una sola decisión distinta mueve la
    cifra. Lo mismo vale para la severidad, donde 9 de 12 reportes son `high`.
 7. **El etiquetado lo hizo un solo integrante del equipo**, no los cuatro en paralelo
-   como planteaba el ROADMAP. Por eso la firma del segundo revisor no es un trámite: es
-   la única revisión independiente que va a tener el ground truth, y el esquema impide
-   congelar sin ella. Conviene describir el método así en el informe: extracción
-   automática, decisión por indicador, revisión independiente y acuerdo medido.
+   como planteaba el ROADMAP, y la revisión independiente y el acuerdo se hicieron con
+   asistencia de IA (sección 6, "Cómo se construyó"). El método se describe así en el
+   informe: extracción automática, decisión por indicador, acuerdo persona-IA medido en
+   una muestra y revisión independiente asistida por IA.
 8. **La lista de dominios "de ruido" puede tapar indicadores reales.** Excluir
    `amazonaws.com` o `githubusercontent.com` por defecto descartó un C2 real alojado en
-   EC2 (sección 6). La exclusión automática solo propone; sin revisión, ese indicador se
-   habría perdido del ground truth sin que nadie lo notara.
-6. **El lector de reportes es deliberadamente ingenuo.** Arrastra el texto oculto por
+   EC2 (sección 6), y la revisión independiente encontró tres URLs de entrega más
+   (OneDrive y archive.org) en la misma situación. La exclusión automática solo propone;
+   sin revisión, esos indicadores se habrían perdido del ground truth sin que nadie lo
+   notara.
+9. **El lector de reportes es deliberadamente ingenuo.** Arrastra el texto oculto por
    CSS, los comentarios HTML y los metadatos del PDF, porque es lo que haría cualquier
    pipeline que conecte un LLM a su flujo de reportes sin pensar en inyección. Si
    filtrara, tres de los cinco vectores morirían por construcción y mediríamos cero

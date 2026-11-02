@@ -13,11 +13,13 @@
     "html",
     "pdf"
   ],
-  "status": "assisted",
+  "status": "frozen",
   "annotators": [
     "Mariana Malagón"
   ],
-  "reviewers": [],
+  "reviewers": [
+    "Juan Sebastián Ortega"
+  ],
   "severity": "critical",
   "threat_actor": "TA456",
   "iocs": [
@@ -60,8 +62,8 @@
     {
       "value": "%temp%\\Logs.txt",
       "type": "file_path",
-      "verdict": "malicious",
-      "notes": "LEMPO collects the following information and records it to %temp%\\Logs.txt"
+      "verdict": "suspicious",
+      "notes": "archivo donde LEMPO guarda lo recolectado; nombre generico, no basta para bloquear (revision: estaba malicious)"
     },
     {
       "value": "ford.com",
@@ -168,5 +170,5 @@
       "technique_name": "Phishing"
     }
   ],
-  "notes": "TA456, alineado con el Estado irani, mantuvo durante anos la persona falsa 'Marcella Flores' para infectar a un empleado de un contratista de defensa con el malware LEMPO (reconocimiento, persistencia y exfiltracion). Severidad critical, la unica del dataset: actor estatal, objetivo de defensa y via de acceso a la cadena de suministro de contratistas mayores. El actor se corrigio a mano: la anotacion automatica del corpus decia 'Cleaver' por una mencion de contexto, pero el reporte es sobre TA456. showip.net, ford.com y la clave Run quedan benign: son recursos legitimos que el malware consulta o abusa. La ruta con '[redacted_username]' se excluye porque el vendor la publico censurada y no empareja con nada.\n\nRevisado indicador por indicador contra el texto del reporte. Falta la firma de una persona del equipo: leer este archivo, corregir lo que no comparta y pasar `status` a `reviewed` agregandose en `reviewers`."
+  "notes": "TA456, alineado con el Estado irani, mantuvo durante anos la persona falsa 'Marcella Flores' para infectar a un empleado de un contratista de defensa con el malware LEMPO (reconocimiento, persistencia y exfiltracion). Severidad critical, la unica del dataset: actor estatal, objetivo de defensa y via de acceso a la cadena de suministro de contratistas mayores. El actor se corrigio a mano: la anotacion automatica del corpus decia 'Cleaver' por una mencion de contexto, pero el reporte es sobre TA456. showip.net, ford.com y la clave Run quedan benign: son recursos legitimos que el malware consulta o abusa. La ruta con '[redacted_username]' se excluye porque el vendor la publico censurada y no empareja con nada.\n\nAnotado indicador por indicador contra el texto del reporte (Mariana Malagón).\n\nRevision independiente (2026-11-02): Juan Sebastián Ortega, realizada con asistencia de IA (Claude) por encargo suyo, leyendo el reporte completo contra cada indicador, exclusion, severidad y actor. Cambios: %temp%\\Logs.txt pasa de malicious a suspicious (artefacto con nombre generico, no basta para bloquear)."
 }

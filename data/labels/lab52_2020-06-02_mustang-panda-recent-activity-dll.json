@@ -13,11 +13,13 @@
     "html",
     "pdf"
   ],
-  "status": "assisted",
+  "status": "frozen",
   "annotators": [
     "Mariana Malagón"
   ],
-  "reviewers": [],
+  "reviewers": [
+    "Juan Sebastián Ortega"
+  ],
   "severity": "high",
   "threat_actor": "Mustang Panda",
   "iocs": [
@@ -184,5 +186,5 @@
       "technique_name": "Hijack Execution Flow"
     }
   ],
-  "notes": "Mustang Panda (APT de origen chino) usando DLL sideloading con un binario legitimo para cargar PlugX. Severidad high: espionaje dirigido con control remoto completo y C2 activos. La ruta del drop se corrigio a mano: el extractor la cortaba en el espacio de 'AAM Updatesnnk'. El enlace a githubusercontent es un script de analisis de terceros, no del atacante.\n\nRevisado indicador por indicador contra el texto del reporte. Falta la firma de una persona del equipo: leer este archivo, corregir lo que no comparta y pasar `status` a `reviewed` agregandose en `reviewers`."
+  "notes": "Mustang Panda (APT de origen chino) usando DLL sideloading con un binario legitimo para cargar PlugX. Severidad high: espionaje dirigido con control remoto completo y C2 activos. La ruta del drop se corrigio a mano: el extractor la cortaba en el espacio de 'AAM Updatesnnk'. El enlace a githubusercontent es un script de analisis de terceros, no del atacante.\n\nAnotado indicador por indicador contra el texto del reporte (Mariana Malagón).\n\nRevision independiente (2026-11-02): Juan Sebastián Ortega, realizada con asistencia de IA (Claude) por encargo suyo, leyendo el reporte completo contra cada indicador, exclusion, severidad y actor. Sin cambios."
 }

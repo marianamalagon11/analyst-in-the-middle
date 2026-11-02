@@ -13,70 +13,72 @@
     "html",
     "pdf"
   ],
-  "status": "draft",
-  "annotators": [],
+  "status": "assisted",
+  "annotators": [
+    "Claude (asistente IA)"
+  ],
   "reviewers": [],
-  "severity": "medium",
+  "severity": "high",
   "threat_actor": "TA575",
   "iocs": [
     {
       "value": "149.56.106.83",
       "type": "ipv4",
-      "verdict": "suspicious",
+      "verdict": "malicious",
       "notes": "| 149.56.106.83:443  | Dridex “22201” & “22204” C2  |"
     },
     {
       "value": "45.79.248.254",
       "type": "ipv4",
-      "verdict": "suspicious",
+      "verdict": "malicious",
       "notes": "| 45.79.248.254:2222  | Dridex “22201” & “22204” C2  |"
     },
     {
       "value": "144.91.110.55",
       "type": "ipv4",
-      "verdict": "suspicious",
+      "verdict": "malicious",
       "notes": "| 144.91.110.55:3978  | Dridex “22201” & “22204” C2  |"
     },
     {
       "value": "94.177.217.88",
       "type": "ipv4",
-      "verdict": "suspicious",
+      "verdict": "malicious",
       "notes": "| 94.177.217.88:808  | Dridex “22201” & “22204” C2  |"
     },
     {
       "value": "185.4.135.165",
       "type": "ipv4",
-      "verdict": "suspicious",
+      "verdict": "malicious",
       "notes": "| 185.4.135.165:5228  | Dridex “22201” & “22204” C2  |"
     },
     {
       "value": "afceea7c2fc2d273a60c73d209f4a700b98aa2d8df9740fb0a08c3ae47890539",
       "type": "sha256",
-      "verdict": "suspicious",
+      "verdict": "malicious",
       "notes": "| afceea7c2fc2d273a60c73d209f4a700b98aa2d8df9740fb0a08c3ae47890539  | Dridex SHA256   |"
     },
     {
       "value": "b61f624589d5ad3584e09f3174f8e3e1ac38958f260eee526b0abaf7389d7932",
       "type": "sha256",
-      "verdict": "suspicious",
+      "verdict": "malicious",
       "notes": "| b61f624589d5ad3584e09f3174f8e3e1ac38958f260eee526b0abaf7389d7932  | Dridex SHA256  |"
     },
     {
       "value": "7f7aef4e87411653743576c1de6933c3736e6153faae926fbfb9add35ac2f93f",
       "type": "sha256",
-      "verdict": "suspicious",
+      "verdict": "malicious",
       "notes": "| 7f7aef4e87411653743576c1de6933c3736e6153faae926fbfb9add35ac2f93f  | Dridex SHA256  |"
     },
     {
       "value": "aef59db50378667cff8b3181421445c59a27932d835d47f016a879ced1f04dd7",
       "type": "sha256",
-      "verdict": "suspicious",
+      "verdict": "malicious",
       "notes": "| aef59db50378667cff8b3181421445c59a27932d835d47f016a879ced1f04dd7  | Dridex SHA256  |"
     },
     {
       "value": "4f6b068caf0cdbb62c0daaf4ee2f861820563c62853bfcad43a0e6d88cfdbe68",
       "type": "sha256",
-      "verdict": "suspicious",
+      "verdict": "malicious",
       "notes": "| 4f6b068caf0cdbb62c0daaf4ee2f861820563c62853bfcad43a0e6d88cfdbe68  | Dridex SHA256  |"
     }
   ],
@@ -114,5 +116,5 @@
       "technique_name": "Phishing"
     }
   ],
-  "notes": "PENDIENTE DE REVISION. La severidad es un valor por defecto, no una medicion: hay que fijarla leyendo el reporte. Los veredictos de los IoCs son propuestas del extractor. Al terminar, poner `status` en `reviewed` y llenar `annotators` y `reviewers` (personas distintas)."
+  "notes": "Etiquetado ciego B (Claude, asistente IA, por encargo de Juan Sebastián Ortega). 5 IPs C2 y 5 sha256 de Dridex de la tabla de IoCs: malicious. Severidad high: malware de distribución masiva que entrega un troyano bancario (Dridex)."
 }
