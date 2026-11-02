@@ -8,12 +8,17 @@ una tautologia.
 Flujo:
 
 ```bash
-mkdir data/labels_b
-cp data/labels/*.json data/labels_b/          # punto de partida comun
-# una persona edita data/labels/, otra edita data/labels_b/, sin mirarse
-python scripts/agreement.py --other data/labels_b
-python scripts/agreement.py --other data/labels_b --sample 4   # solo una muestra
+# El segundo etiquetado parte del BORRADOR del extractor, no de una copia de
+# data/labels/: copiar las decisiones del primer anotador ancla al segundo y el
+# acuerdo sale inflado.
+python scripts/draft_labels.py --out data/labels_b --report-id X --report-id Y ...
+# la segunda persona decide en data/labels_b/ sin abrir data/labels/ de esos reportes
+python scripts/agreement.py --other data/labels_b   # compara solo los compartidos
 ```
+
+`--sample N` toma los N primeros en orden alfabetico, que en este dataset son casi
+todos del mismo vendor; para una muestra representativa conviene elegir los reportes
+con `--report-id` al generar los borradores.
 
 Que se mide (la logica esta en `src/aitm/evaluation/agreement.py`):
 

@@ -156,6 +156,11 @@ def render_pdf(
     Se usa `platypus` en vez de dibujar en el canvas a mano porque parte el texto en
     paginas solo; `wordWrap="CJK"` es necesario para que un sha256 de 64 caracteres
     no desborde el margen.
+
+    `invariant=True` fija la fecha de creacion y el `/ID` del documento, que reportlab
+    por defecto llena con la hora y un valor aleatorio. Sin eso dos renders del mismo
+    texto dan bytes distintos, y la Fase 3 no podria garantizar que el PDF limpio y el
+    envenenado difieren solo en la inyeccion.
     """
     from reportlab.lib.enums import TA_LEFT
     from reportlab.lib.pagesizes import LETTER
@@ -180,6 +185,7 @@ def render_pdf(
         author=merged_metadata.get("author", ""),
         subject=merged_metadata.get("subject", ""),
         keywords=merged_metadata.get("keywords", report_id),
+        invariant=True,
     )
 
     sheet = getSampleStyleSheet()

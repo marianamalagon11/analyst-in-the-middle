@@ -9,8 +9,8 @@ from __future__ import annotations
 import hashlib
 import json
 from functools import lru_cache
-from pathlib import Path
-from typing import Literal
+from pathlib import Path, PurePath
+from typing import Any, Literal
 
 import yaml
 from pydantic import BaseModel, ConfigDict, Field, field_validator
@@ -108,15 +108,31 @@ class Config(_Base):
 
     @property
     def config_hash(self) -> str:
-        """Huella estable de la configuracion (12 hex)."""
+        """Huella estable de la configuracion (12 hex), igual en Windows y en macOS.
+
+        Las rutas se serializan siempre con `/`: con `mode="json"` Pydantic usa el
+        separador del sistema, y el mismo config.yaml daba un hash en Windows y otro
+        en macOS, lo que rompia la trazabilidad entre equipos del grupo.
+        """
         payload = json.dumps(
-            self.model_dump(mode="json"), sort_keys=True, ensure_ascii=False
+            _portable(self.model_dump()), sort_keys=True, ensure_ascii=False
         )
         return hashlib.sha256(payload.encode("utf-8")).hexdigest()[:12]
 
     def resolve(self, path: Path) -> Path:
         """Convierte una ruta del YAML en absoluta, relativa a la raiz del repo."""
         return path if path.is_absolute() else project_root() / path
+
+
+def _portable(value: Any) -> Any:
+    """Convierte las rutas a texto con `/` para que el hash no dependa del sistema."""
+    if isinstance(value, PurePath):
+        return value.as_posix()
+    if isinstance(value, dict):
+        return {key: _portable(item) for key, item in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [_portable(item) for item in value]
+    return value
 
 
 def project_root(start: Path | None = None) -> Path:

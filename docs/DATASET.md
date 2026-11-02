@@ -280,9 +280,14 @@ python scripts/validate_labels.py         # esquema, cobertura y consistencia co
 python scripts/freeze_dataset.py --check  # dice si ya se puede congelar
 
 # Acuerdo entre revisores: los dos etiquetados deben hacerse SIN verse.
-mkdir data/labels_b
-cp data/labels/*.json data/labels_b/
-python scripts/agreement.py --other data/labels_b --sample 4
+# El segundo parte del borrador del extractor (no de una copia de data/labels/,
+# que lo anclaria a las decisiones del primero). Muestra de 4, un vendor cada uno:
+python scripts/draft_labels.py --out data/labels_b \
+  --report-id intel471_2021-04-07_ettersilent-maldoc-builder-macro-trickbot \
+  --report-id proofpoint_2021-12-09_holiday-feelin-ta575-brings-warm \
+  --report-id zscaler_2020-06-26_taurus-new-stealer-town \
+  --report-id quoteintelligence_2020-08-07_blackwater-malware-leveraging-beirut-tragedy
+python scripts/agreement.py --other data/labels_b
 
 python scripts/freeze_dataset.py          # congela y escribe la composición final
 ```

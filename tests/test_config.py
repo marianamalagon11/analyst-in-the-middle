@@ -24,6 +24,17 @@ def test_hash_estable_y_sensible_al_cambio() -> None:
     assert otra.config_hash != config.config_hash
 
 
+def test_hash_no_depende_del_separador_del_sistema() -> None:
+    """El mismo config.yaml debe dar el mismo hash en Windows y en macOS."""
+    from pathlib import PurePosixPath, PureWindowsPath
+
+    from aitm.config import _portable
+
+    windows = _portable({"p": PureWindowsPath("src\\aitm\\llm\\prompts\\a.md")})
+    posix = _portable({"p": PurePosixPath("src/aitm/llm/prompts/a.md")})
+    assert windows == posix == {"p": "src/aitm/llm/prompts/a.md"}
+
+
 def test_clave_desconocida_falla(tmp_path) -> None:
     raw = yaml.safe_load((project_root() / "config.yaml").read_text(encoding="utf-8"))
     raw["ollama"]["puerto"] = 11434  # typo tipico

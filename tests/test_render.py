@@ -78,6 +78,17 @@ def test_el_html_tiene_estructura_de_blog() -> None:
     assert 'data-report-id="r1"' in html
 
 
+def test_el_pdf_es_determinista(tmp_path) -> None:
+    """Dos renders del mismo texto deben dar los mismos bytes.
+
+    La Fase 3 compara el PDF limpio con el envenenado: si el render metiera la hora o
+    un id aleatorio, la diferencia no seria solo la inyeccion.
+    """
+    primero = render_pdf(REPORTE, tmp_path / "a.pdf", report_id="r1")
+    segundo = render_pdf(REPORTE, tmp_path / "b.pdf", report_id="r1")
+    assert primero.read_bytes() == segundo.read_bytes()
+
+
 def test_el_pdf_lleva_los_metadatos_del_reporte(tmp_path) -> None:
     pdf = render_pdf(REPORTE, tmp_path / "r.pdf", report_id="r1")
     _, metadata = parse_pdf(pdf)

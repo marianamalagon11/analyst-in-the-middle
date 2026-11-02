@@ -1,0 +1,204 @@
+{
+  "report_id": "zscaler_2020-06-26_taurus-new-stealer-town",
+  "source": {
+    "corpus": "AnnoCTR",
+    "file": "AnnoCTR/all/text/zscaler_2020-06-26_taurus-new-stealer-town.txt",
+    "vendor": "zscaler",
+    "published": "2020-06-26",
+    "license": "CC-BY-SA-4.0",
+    "url": null
+  },
+  "formats": [
+    "txt",
+    "html",
+    "pdf"
+  ],
+  "status": "draft",
+  "annotators": [],
+  "reviewers": [],
+  "severity": "medium",
+  "threat_actor": null,
+  "iocs": [
+    {
+      "value": "daqrey.site",
+      "type": "domain",
+      "verdict": "suspicious",
+      "notes": "Received: from daqrey.site (unknown [91.191.184.35])"
+    },
+    {
+      "value": "91.191.184.35",
+      "type": "ipv4",
+      "verdict": "suspicious",
+      "notes": "Received: from daqrey.site (unknown [91.191.184.35])"
+    },
+    {
+      "value": "getnht.com",
+      "type": "domain",
+      "verdict": "suspicious",
+      "notes": "1.**GeTNht.com** → saved with the name *“****j2tyq.com****” →* Legitimate AutoIt3.exe"
+    },
+    {
+      "value": "j2tyq.com",
+      "type": "domain",
+      "verdict": "suspicious",
+      "notes": "1.**GeTNht.com** → saved with the name *“****j2tyq.com****” →* Legitimate AutoIt3.exe"
+    },
+    {
+      "value": "bami.com",
+      "type": "domain",
+      "verdict": "suspicious",
+      "notes": "2.**bAMI.com →** saved with the name **“st6zh” →** Base64-encoded AutoIt script having certificate header"
+    },
+    {
+      "value": "wsncf.com",
+      "type": "domain",
+      "verdict": "suspicious",
+      "notes": "3.**wsNcf.com** → saved with the name **“wsNcf.com”** → Taurus Stealer"
+    },
+    {
+      "value": "battle.net",
+      "type": "domain",
+      "verdict": "suspicious",
+      "notes": "* Stealing account information of the Battle.Net service"
+    },
+    {
+      "value": "eccd93cfa03a1f1f4b2af649adcceb97",
+      "type": "md5",
+      "verdict": "malicious",
+      "notes": "ECCD93CFA03A1F1F4B2AF649ADCCEB97 - **Doc file**"
+    },
+    {
+      "value": "3e08e18ccc55b17eeaeedf3864abca78",
+      "type": "md5",
+      "verdict": "malicious",
+      "notes": "3E08E18CCC55B17EEAEEDF3864ABCA78 - **Encrypted AutoIT script**"
+    },
+    {
+      "value": "221bbac7c895453e973e47f9bce5bfdc",
+      "type": "md5",
+      "verdict": "malicious",
+      "notes": "221BBAC7C895453E973E47F9BCE5BFDC - **Encrypted Taurus Stealer**"
+    },
+    {
+      "value": "5e3ea2152589df8ae64ba4cbb0b2bd3b",
+      "type": "md5",
+      "verdict": "malicious",
+      "notes": "5E3EA2152589DF8AE64BA4CBB0B2BD3B - **Decrypted Taurus Stealer**"
+    },
+    {
+      "value": "bit-browser.gq",
+      "type": "domain",
+      "verdict": "suspicious",
+      "notes": "bit-browser.gq"
+    },
+    {
+      "value": "atest001.website",
+      "type": "domain",
+      "verdict": "suspicious",
+      "notes": "Atest001.website"
+    },
+    {
+      "value": "64.225.22.106",
+      "type": "ipv4",
+      "verdict": "suspicious",
+      "notes": "64.225.22.106/#/login"
+    }
+  ],
+  "excluded_iocs": [
+    {
+      "value": "https://twitter.com/3xp0rtblog/status/1254079067810336768",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://twitter.com/3xp0rtblog/status/1254079067810336768)"
+    },
+    {
+      "value": "https://www.virustotal.com/gui/file/4a30ef818603b0a0f2b8153d9ba6e9494447373e86599bcc7c461135732e64b2/detection",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://www.virustotal.com/gui/file/4a30ef818603b0a0f2b8153d)"
+    },
+    {
+      "value": "https://twitter.com/MalwareInt/status/1257838534993621002/photo/3",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://twitter.com/MalwareInt/status/1257838534993621002/ph)"
+    },
+    {
+      "value": "https://twitter.com/3xp0rtblog/status/1254079343581675525/photo/2",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://twitter.com/3xp0rtblog/status/1254079343581675525/ph)"
+    },
+    {
+      "value": "https://threatlibrary.zscaler.com/threats/3e4e094a-66e1-407a-8b42-7a683a54bfb1/",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://threatlibrary.zscaler.com/threats/3e4e094a-66e1-407a)"
+    },
+    {
+      "value": "https://threatlibrary.zscaler.com/threats/b26933a4-31f8-4618-a6cf-775f8a383116/",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://threatlibrary.zscaler.com/threats/b26933a4-31f8-4618)"
+    }
+  ],
+  "mitre_attack": [
+    {
+      "technique_id": "T1020",
+      "technique_name": "Automated Exfiltration"
+    },
+    {
+      "technique_id": "T1027",
+      "technique_name": "Obfuscated Files or Information"
+    },
+    {
+      "technique_id": "T1055",
+      "technique_name": "Process Injection"
+    },
+    {
+      "technique_id": "T1059",
+      "technique_name": "Command and Scripting Interpreter"
+    },
+    {
+      "technique_id": "T1082",
+      "technique_name": "System Information Discovery"
+    },
+    {
+      "technique_id": "T1105",
+      "technique_name": "Ingress Tool Transfer"
+    },
+    {
+      "technique_id": "T1140",
+      "technique_name": "Deobfuscate/Decode Files or Information"
+    },
+    {
+      "technique_id": "T1204",
+      "technique_name": "User Execution"
+    },
+    {
+      "technique_id": "T1497",
+      "technique_name": "Virtualization/Sandbox Evasion"
+    },
+    {
+      "technique_id": "T1518",
+      "technique_name": "Software Discovery"
+    },
+    {
+      "technique_id": "T1528",
+      "technique_name": "Steal Application Access Token"
+    },
+    {
+      "technique_id": "T1539",
+      "technique_name": "Steal Web Session Cookie"
+    },
+    {
+      "technique_id": "T1555",
+      "technique_name": "Credentials from Password Stores"
+    },
+    {
+      "technique_id": "T1566",
+      "technique_name": "Phishing"
+    }
+  ],
+  "notes": "PENDIENTE DE REVISION. La severidad es un valor por defecto, no una medicion: hay que fijarla leyendo el reporte. Los veredictos de los IoCs son propuestas del extractor. Al terminar, poner `status` en `reviewed` y llenar `annotators` y `reviewers` (personas distintas)."
+}

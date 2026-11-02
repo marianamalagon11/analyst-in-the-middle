@@ -6,7 +6,9 @@ Licencia CC-BY-SA 4.0, que es lo que lo hace usable aqui: ver docs/DATASET.md.
 
 El repositorio se descarga **fijado a un commit**, no a `main`, para que dos personas
 del equipo que corran esto en semanas distintas obtengan exactamente el mismo corpus.
-El commit, el sha256 del archivo y el inventario quedan en `manifest.json`.
+El commit, el inventario y una huella del contenido extraido quedan en `manifest.json`.
+La huella es del contenido y no del zip porque GitHub regenera los zip de codeload y
+sus bytes cambian aunque el commit sea el mismo.
 
 Uso:
     python scripts/fetch_dataset.py                  # descarga e instala el corpus
@@ -91,6 +93,17 @@ def sha256_of(path: Path) -> str:
     return digest.hexdigest()
 
 
+def content_sha256(root: Path, files: list[str]) -> str:
+    """Huella estable del corpus extraido: ruta y sha256 de cada archivo, ordenados.
+
+    A diferencia del sha256 del zip, no depende de como GitHub comprima el archivo.
+    """
+    digest = hashlib.sha256()
+    for name in sorted(files):
+        digest.update(f"{name}\0{sha256_of(root / name)}\n".encode("utf-8"))
+    return digest.hexdigest()
+
+
 def _wanted(member: str) -> bool:
     """El zip de GitHub prefija todo con `<repo>-<commit>/`; se compara sin ese prefijo."""
     inner = member.split("/", 1)[1] if "/" in member else member
@@ -141,12 +154,20 @@ def main() -> int:
     target = config.resolve(config.paths.data_raw) / "annoctr"
     manifest_path = target / "manifest.json"
 
-    if manifest_path.exists() and not args.force:
-        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-        if manifest.get("commit") == args.commit:
-            print(f"[ok] el corpus ya esta en {target} ({manifest['n_reports']} reportes)")
-            print("     usa --force para volver a extraerlo")
-            return 0
+    # El manifiesto esta versionado, asi que existe en cualquier clon recien hecho:
+    # no basta para decir que el corpus esta. Hay que ver los textos en disco.
+    previous = (
+        json.loads(manifest_path.read_text(encoding="utf-8"))
+        if manifest_path.exists()
+        else {}
+    )
+    same_commit = previous.get("commit") == args.commit
+    text_dir = target / "AnnoCTR" / "all" / "text"
+    present = len(list(text_dir.glob("*.txt"))) if text_dir.is_dir() else 0
+    if same_commit and present and present == previous.get("n_reports") and not args.force:
+        print(f"[ok] el corpus ya esta en {target} ({present} reportes)")
+        print("     usa --force para volver a extraerlo")
+        return 0
 
     archive = args.archive
     downloaded_here = False
@@ -168,12 +189,44 @@ def main() -> int:
     annotations = [
         name for name in files if name.startswith("AnnoCTR/all/linking_mitre_only/")
     ]
+    content_hash = content_sha256(target, files)
+
+    # La huella que vale es la del contenido. GitHub genera los zip de codeload al
+    # vuelo y sus bytes cambian con el tiempo aunque el commit sea el mismo, asi que
+    # el sha256 del zip solo se conserva como dato informativo.
+    expected_content = previous.get("content_sha256") if same_commit else None
+    if expected_content and content_hash != expected_content:
+        print(
+            "[--] el contenido extraido no coincide con el del manifiesto versionado:\n"
+            f"     esperado {expected_content}\n     obtenido {content_hash}\n"
+            "     El corpus descargado no es el mismo con el que se construyo el dataset."
+        )
+        return 1
+    if same_commit and not expected_content and archive_hash != previous.get(
+        "archive_sha256"
+    ):
+        print(
+            "[!!] el sha256 del zip difiere del registrado (GitHub regenera los zip).\n"
+            "     El manifiesto no tenia huella de contenido: se agrega ahora. Verifica\n"
+            "     el texto de los 12 reportes con `build_dataset.py`, que lo compara\n"
+            "     contra los sha256 de data/processed/dataset.json."
+        )
+
+    if expected_content and previous.get("files") == len(files):
+        # Mismo commit y mismo contenido: el manifiesto versionado sigue siendo
+        # verdad. No se reescribe para no ensuciar el diff con `fetched_at`.
+        if downloaded_here and not args.keep_archive:
+            archive.unlink()
+        print(f"[ok] {len(reports)} reportes, {len(annotations)} con anotaciones MITRE")
+        print(f"[ok] contenido verificado contra {manifest_path.name}")
+        return 0
 
     manifest = {
         "corpus": "AnnoCTR",
         "repo": REPO,
         "commit": args.commit,
         "archive_sha256": archive_hash,
+        "content_sha256": content_hash,
         "license": LICENSE,
         "citation": CITATION,
         "fetched_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),

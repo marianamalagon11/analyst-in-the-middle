@@ -2,20 +2,19 @@
 
 Comprueba que la configuracion carga, que Ollama responde, que los modelos
 estan descargados, cuanto tarda cada uno y si repiten la misma salida con la
-misma semilla. Escribe una tabla en results/setup_report.md.
+misma semilla. Escribe una tabla en results/setup_report.md, o donde diga `--out`.
+Si ese reporte ya existe, exige `--out`: el original tiene analisis escrito a mano.
 
 Uso:
     python scripts/check_setup.py             # todos los modelos de models.compare
     python scripts/check_setup.py --quick     # solo el modelo analista
     python scripts/check_setup.py --no-llm    # solo config, sin tocar Ollama
+    python scripts/check_setup.py --out results/setup_report_m5.md
 """
 
 from __future__ import annotations
 
 import argparse
-import ctypes
-import os
-import platform
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -23,6 +22,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from aitm.config import Config, load_config, project_root  # noqa: E402
+from aitm.hostinfo import hardware_summary  # noqa: E402
 from aitm.llm.ollama_client import OllamaClient, OllamaError  # noqa: E402
 
 # Pregunta corta y cerrada: nos interesa el determinismo y la latencia,
@@ -41,32 +41,6 @@ PROBE_MESSAGES = [
 OK = "[ok]"
 FAIL = "[--]"
 WARN = "[!!]"
-
-
-def hardware_summary() -> str:
-    """Descripcion del equipo, para que la tabla de latencias sea interpretable."""
-    cpu = platform.processor() or platform.machine()
-    cores = os.cpu_count() or "?"
-    ram = ""
-    if sys.platform == "win32":
-        class _MemoryStatus(ctypes.Structure):
-            _fields_ = [
-                ("dwLength", ctypes.c_ulong),
-                ("dwMemoryLoad", ctypes.c_ulong),
-                ("ullTotalPhys", ctypes.c_ulonglong),
-                ("ullAvailPhys", ctypes.c_ulonglong),
-                ("ullTotalPageFile", ctypes.c_ulonglong),
-                ("ullAvailPageFile", ctypes.c_ulonglong),
-                ("ullTotalVirtual", ctypes.c_ulonglong),
-                ("ullAvailVirtual", ctypes.c_ulonglong),
-                ("ullAvailExtendedVirtual", ctypes.c_ulonglong),
-            ]
-
-        status = _MemoryStatus()
-        status.dwLength = ctypes.sizeof(_MemoryStatus)
-        if ctypes.windll.kernel32.GlobalMemoryStatusEx(ctypes.byref(status)):
-            ram = f", {status.ullTotalPhys / 1024**3:.1f} GB RAM"
-    return f"{cpu} ({cores} hilos{ram}), {platform.system()} {platform.release()}"
 
 
 def check_config() -> Config:
@@ -126,8 +100,9 @@ def probe_model(client: OllamaClient, model: str) -> dict[str, object]:
     return result
 
 
-def write_report(config: Config, results: list[dict[str, object]]) -> Path:
-    report_path = project_root() / "results" / "setup_report.md"
+def write_report(
+    config: Config, results: list[dict[str, object]], report_path: Path
+) -> Path:
     report_path.parent.mkdir(parents=True, exist_ok=True)
     stamp = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
 
@@ -166,7 +141,27 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Verificacion de setup (Fase 0)")
     parser.add_argument("--quick", action="store_true", help="solo el modelo analista")
     parser.add_argument("--no-llm", action="store_true", help="no llamar a Ollama")
+    parser.add_argument(
+        "--out",
+        type=Path,
+        help="donde escribir el reporte (por defecto results/setup_report.md)",
+    )
     args = parser.parse_args()
+
+    # results/setup_report.md tiene analisis escrito a mano (hallazgos de hardware,
+    # presupuesto de computo). Medir en otro equipo no debe borrarlo sin querer.
+    default_report = project_root() / "results" / "setup_report.md"
+    report_path = args.out if args.out else default_report
+    if not report_path.is_absolute():
+        report_path = project_root() / report_path
+    if args.out is None and default_report.exists() and not args.no_llm:
+        print(
+            f"{FAIL} {default_report.relative_to(project_root())} ya existe y tiene "
+            "analisis escrito a mano.\n"
+            "     Usa --out para escribir en otro archivo, p. ej.:\n"
+            "     python scripts/check_setup.py --out results/setup_report_<equipo>.md"
+        )
+        return 1
 
     config = check_config()
     if args.no_llm:
@@ -189,7 +184,7 @@ def main() -> int:
     )
     results = [probe_model(client, model) for model in models]
 
-    report_path = write_report(config, results)
+    report_path = write_report(config, results, report_path)
     print(f"\n{OK} reporte escrito en {report_path.relative_to(project_root())}")
 
     usable = [r for r in results if r.get("available") and not r.get("error")]

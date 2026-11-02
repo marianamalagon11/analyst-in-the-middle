@@ -28,6 +28,11 @@ Uso:
     python scripts/draft_labels.py              # crea los que falten
     python scripts/draft_labels.py --force      # rehace todos (destruye revisiones)
     python scripts/draft_labels.py --report-id X
+    python scripts/draft_labels.py --out data/labels_b --report-id X --report-id Y
+
+`--out` existe para el acuerdo entre revisores: el segundo etiquetado tiene que partir
+del borrador del extractor, **no** de una copia de `data/labels/`. Si parte de las
+decisiones del primer anotador, el acuerdo que se mida sale inflado por anclaje.
 """
 
 from __future__ import annotations
@@ -195,13 +200,21 @@ def build_draft(
 def main() -> int:
     parser = argparse.ArgumentParser(description="Borradores de ground truth")
     parser.add_argument("--force", action="store_true", help="sobreescribe lo existente")
-    parser.add_argument("--report-id", help="solo este reporte")
+    parser.add_argument(
+        "--report-id", action="append", help="solo este reporte (se puede repetir)"
+    )
+    parser.add_argument(
+        "--out",
+        type=Path,
+        help="carpeta de salida (por defecto paths.labels). Para el etiquetado ciego "
+        "del acuerdo entre revisores: --out data/labels_b",
+    )
     args = parser.parse_args()
 
     config = load_config()
     data_raw = config.resolve(config.paths.data_raw)
     processed = config.resolve(config.paths.data_processed)
-    labels_dir = config.resolve(config.paths.labels)
+    labels_dir = config.resolve(args.out) if args.out else config.resolve(config.paths.labels)
 
     dataset_path = processed / "dataset.json"
     if not dataset_path.is_file():
@@ -210,10 +223,11 @@ def main() -> int:
     dataset = json.loads(dataset_path.read_text(encoding="utf-8"))
     wanted = {entry["report_id"] for entry in dataset["reports"]}
     if args.report_id:
-        if args.report_id not in wanted:
-            print(f"[--] {args.report_id} no esta en el dataset")
+        unknown = sorted(set(args.report_id) - wanted)
+        if unknown:
+            print(f"[--] no estan en el dataset: {unknown}")
             return 1
-        wanted = {args.report_id}
+        wanted = set(args.report_id)
 
     corpus = {report.report_id: report for report in annoctr.load_corpus(data_raw)}
     license_name = dataset["corpus"]["license"]
