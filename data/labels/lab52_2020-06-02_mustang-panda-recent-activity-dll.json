@@ -1,0 +1,188 @@
+{
+  "report_id": "lab52_2020-06-02_mustang-panda-recent-activity-dll",
+  "source": {
+    "corpus": "AnnoCTR",
+    "file": "AnnoCTR/all/text/lab52_2020-06-02_mustang-panda-recent-activity-dll.txt",
+    "vendor": "lab52",
+    "published": "2020-06-02",
+    "license": "CC-BY-SA-4.0",
+    "url": null
+  },
+  "formats": [
+    "txt",
+    "html",
+    "pdf"
+  ],
+  "status": "assisted",
+  "annotators": [
+    "integrante del equipo"
+  ],
+  "reviewers": [],
+  "severity": "high",
+  "threat_actor": "Mustang Panda",
+  "iocs": [
+    {
+      "value": "http://miandfish.store/player/install_flash_player.exe",
+      "type": "url",
+      "verdict": "malicious",
+      "notes": "The sample in question is downloaded from the following link “http://miandfish.store/player/install\\_flash\\_player.exe” and although in previous months, it had another hash, currently the sample hoste"
+    },
+    {
+      "value": "c56ac01b3af452fedc0447d9e0fe184d093d3fd3c6631aa8182c752463de570c",
+      "type": "sha256",
+      "verdict": "malicious",
+      "notes": "The sample in question is downloaded from the following link “http://miandfish.store/player/install\\_flash\\_player.exe” and although in previous months, it had another hash, currently the sample hoste"
+    },
+    {
+      "value": "C:\\ProgramData\\AAM Updatesnnk",
+      "type": "file_path",
+      "verdict": "malicious",
+      "notes": "The binary consists of an installer, which drops in the folder “C:\\ProgramData\\AAM Updatesnnk” the legitimate binary vulnerable to dll sideload, the small dll that acts as a loader for the final threa"
+    },
+    {
+      "value": "www.destroy2013.com",
+      "type": "domain",
+      "verdict": "malicious",
+      "notes": "This particular sample has the domains “www.destroy2013.com” and “www.fitehook.com” as c2 servers, and we have seen that they have a very characteristic behavior, since most of the day they resolve to"
+    },
+    {
+      "value": "www.fitehook.com",
+      "type": "domain",
+      "verdict": "malicious",
+      "notes": "This particular sample has the domains “www.destroy2013.com” and “www.fitehook.com” as c2 servers, and we have seen that they have a very characteristic behavior, since most of the day they resolve to"
+    },
+    {
+      "value": "107.150.112.250",
+      "type": "ipv4",
+      "verdict": "malicious",
+      "notes": "This particular sample has the domains “www.destroy2013.com” and “www.fitehook.com” as c2 servers, and we have seen that they have a very characteristic behavior, since most of the day they resolve to"
+    },
+    {
+      "value": "81.16.28.30",
+      "type": "ipv4",
+      "verdict": "malicious",
+      "notes": "| IP | 81.16.28.30 |"
+    },
+    {
+      "value": "miandfish.store",
+      "type": "domain",
+      "verdict": "malicious",
+      "notes": "| DOMAIN | miandfish.store |"
+    },
+    {
+      "value": "9c0f6f54e5ab9a86955f1a4beffd6f57c553e34b548a9d93f4207e6a7a6c8135",
+      "type": "sha256",
+      "verdict": "malicious",
+      "notes": "| SHA256 | 9c0f6f54e5ab9a86955f1a4beffd6f57c553e34b548a9d93f4207e6a7a6c8135 |"
+    }
+  ],
+  "excluded_iocs": [
+    {
+      "value": "https://lab52.io/blog/wp-content/uploads/2019/08/Captura-de-pantalla-de-2020-05-19-17-05-20-2.png",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://lab52.io/blog/wp-content/uploads/2019/08/Captura-de-)"
+    },
+    {
+      "value": "https://lab52.io/blog/wp-content/uploads/2019/08/Captura-de-pantalla-de-2020-05-19-17-07-14-3.png",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://lab52.io/blog/wp-content/uploads/2019/08/Captura-de-)"
+    },
+    {
+      "value": "https://lab52.io/blog/wp-content/uploads/2019/08/Captura-de-pantalla-de-2020-05-19-17-21-53-2.png",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://lab52.io/blog/wp-content/uploads/2019/08/Captura-de-)"
+    },
+    {
+      "value": "https://lab52.io/blog/wp-content/uploads/2019/08/Captura-de-pantalla-de-2020-05-19-17-11-06-2.png",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://lab52.io/blog/wp-content/uploads/2019/08/Captura-de-)"
+    },
+    {
+      "value": "https://raw.githubusercontent.com/Bondey/PlugxScripts/master/PlugDecoder.py",
+      "type": "url",
+      "reason": "reference_only",
+      "notes": "propuesto por el extractor (https://raw.githubusercontent.com/Bondey/PlugxScripts/master)"
+    },
+    {
+      "value": "https://lab52.io/blog/wp-content/uploads/2019/08/Captura-de-pantalla-de-2020-05-19-17-27-10-2.png",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://lab52.io/blog/wp-content/uploads/2019/08/Captura-de-)"
+    },
+    {
+      "value": "https://lab52.io/blog/wp-content/uploads/2019/08/Captura-de-pantalla-de-2020-05-19-17-29-56-2.png",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://lab52.io/blog/wp-content/uploads/2019/08/Captura-de-)"
+    },
+    {
+      "value": "https://lab52.io/blog/wp-content/uploads/2019/08/Captura-de-pantalla-de-2020-05-19-17-32-07-2.png",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://lab52.io/blog/wp-content/uploads/2019/08/Captura-de-)"
+    },
+    {
+      "value": "127.0.0.1",
+      "type": "ipv4",
+      "reason": "internal_address",
+      "notes": "propuesto por el extractor (127.0.0.1)"
+    },
+    {
+      "value": "https://www.anomali.com/blog/covid-19-themes-are-being-utilized-by-threat-actors-of-varying-sophistication",
+      "type": "url",
+      "reason": "reference_only",
+      "notes": "movido en la revision"
+    },
+    {
+      "value": "https://blog.vincss.net/2020/03/re012-phan-tich-ma-doc-loi-dung-dich-COVID-19-de-phat-tan-gia-mao-chi-thi-cua-thu-tuong-Nguyen-Xuan-Phuc.html",
+      "type": "url",
+      "reason": "reference_only",
+      "notes": "movido en la revision"
+    },
+    {
+      "value": "https://blog.vincss.net/2020/03/re012-phan-tich-ma-doc-loi-dung-dich-COVID-19-de-phat-tan-gia-mao-chi-thi-cua-thu-tuong-Nguyen-Xuan-Phuc-phan2.html",
+      "type": "url",
+      "reason": "reference_only",
+      "notes": "movido en la revision"
+    }
+  ],
+  "mitre_attack": [
+    {
+      "technique_id": "T1001",
+      "technique_name": "Data Obfuscation"
+    },
+    {
+      "technique_id": "T1036",
+      "technique_name": "Masquerading"
+    },
+    {
+      "technique_id": "T1055",
+      "technique_name": "Process Injection"
+    },
+    {
+      "technique_id": "T1071",
+      "technique_name": "Application Layer Protocol"
+    },
+    {
+      "technique_id": "T1083",
+      "technique_name": "File and Directory Discovery"
+    },
+    {
+      "technique_id": "T1140",
+      "technique_name": "Deobfuscate/Decode Files or Information"
+    },
+    {
+      "technique_id": "T1203",
+      "technique_name": "Exploitation for Client Execution"
+    },
+    {
+      "technique_id": "T1574",
+      "technique_name": "Hijack Execution Flow"
+    }
+  ],
+  "notes": "Mustang Panda (APT de origen chino) usando DLL sideloading con un binario legitimo para cargar PlugX. Severidad high: espionaje dirigido con control remoto completo y C2 activos. La ruta del drop se corrigio a mano: el extractor la cortaba en el espacio de 'AAM Updatesnnk'. El enlace a githubusercontent es un script de analisis de terceros, no del atacante.\n\nRevisado indicador por indicador contra el texto del reporte. Falta la firma de una persona del equipo: leer este archivo, corregir lo que no comparta y pasar `status` a `reviewed` agregandose en `reviewers`."
+}

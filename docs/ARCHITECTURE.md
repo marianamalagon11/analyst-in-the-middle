@@ -254,9 +254,13 @@ analyst-in-the-middle/
 │   │   ├── ollama_client.py     # cliente HTTP, seed/temperatura, reintentos
 │   │   └── prompts/             # system prompts versionados (base, reforzado, juez)
 │   ├── analyst/
-│   │   ├── parsers.py           # txt / html / pdf → texto normalizado
+│   │   ├── parsers.py           # txt / html / pdf → texto normalizado (ingenuo a propósito)
+│   │   ├── iocs.py              # extracción y normalización de IoCs (refang, tipos)
 │   │   ├── schema.py            # modelos Pydantic del JSON de salida
 │   │   └── pipeline.py          # orquesta parser → prompt → LLM → validación
+│   ├── dataset/
+│   │   ├── annoctr.py           # acceso al corpus descargado
+│   │   └── render.py            # texto → txt / html / pdf limpios
 │   ├── attacks/
 │   │   ├── base.py              # interfaz AttackVector
 │   │   ├── plaintext.py
@@ -274,6 +278,7 @@ analyst-in-the-middle/
 │   │   ├── llm_judge.py
 │   │   └── registry.py
 │   └── evaluation/
+│       ├── labels.py            # formato y validación del ground truth
 │       ├── matching.py          # normalización y emparejamiento de IoCs
 │       ├── metrics.py           # exactitud, ASR, FP del juez, latencia
 │       ├── runner.py            # ejecuta la matriz de experimentos
@@ -303,6 +308,21 @@ analyst-in-the-middle/
 > **Nota sobre `attacks/` y `defenses/`:** viven dentro de `src/aitm/` como paquetes Python
 > importables y testeables; `data/poisoned/` guarda los *artefactos* que esos módulos generan.
 > Así no se mezcla código con datos.
+
+---
+
+## 6.1 El lector de reportes es ingenuo a propósito
+
+`src/aitm/analyst/parsers.py` arrastra al modelo el texto oculto por CSS, los
+comentarios HTML, los metadatos del PDF y el texto en modo de render invisible. No es
+un descuido: es el pipeline que tendría cualquier analista que conecte un LLM a su flujo
+de reportes sin pensar en inyección, y es el objeto de estudio. Si el parser filtrara lo
+oculto, los vectores `html_hidden`, `pdf_hidden` y `unicode_invisible` morirían por
+construcción y el experimento mediría cero sin haber probado nada.
+
+El filtrado vive en `src/aitm/defenses/sanitizer.py` (Fase 4) y las tres banderas del
+parser están en `config.yaml` (`analyst.parser`), de modo que cada corrida deja
+constancia en el hash de la configuración de con qué lector se hizo.
 
 ---
 

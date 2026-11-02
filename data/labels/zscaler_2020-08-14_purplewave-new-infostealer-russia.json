@@ -1,0 +1,284 @@
+{
+  "report_id": "zscaler_2020-08-14_purplewave-new-infostealer-russia",
+  "source": {
+    "corpus": "AnnoCTR",
+    "file": "AnnoCTR/all/text/zscaler_2020-08-14_purplewave-new-infostealer-russia.txt",
+    "vendor": "zscaler",
+    "published": "2020-08-14",
+    "license": "CC-BY-SA-4.0",
+    "url": null
+  },
+  "formats": [
+    "txt",
+    "html",
+    "pdf"
+  ],
+  "status": "assisted",
+  "annotators": [
+    "integrante del equipo"
+  ],
+  "reviewers": [],
+  "severity": "medium",
+  "threat_actor": null,
+  "iocs": [
+    {
+      "value": "HKCU\\Software\\Classes\\tdesktop.tg\\DefaultIcon",
+      "type": "registry_key",
+      "verdict": "benign",
+      "notes": "It reads the value of the default key in the system registry branch “HKCU\\Software\\Classes\\tdesktop.tg\\DefaultIcon” to obtain a path of Telegram and collects all the files starts with “map” in the “D8"
+    },
+    {
+      "value": "b18bcb300ae480b16a0e0b9110e1c06c",
+      "type": "md5",
+      "verdict": "malicious",
+      "notes": "B18BCB300AE480B16A0E0B9110E1C06C"
+    },
+    {
+      "value": "d8a36dce73e91780b52b6f387c5cfd78",
+      "type": "md5",
+      "verdict": "malicious",
+      "notes": "D8A36DCE73E91780B52B6F387C5CFD78"
+    },
+    {
+      "value": "9e4d3f4439ed39c01f3346fbdb7488ae",
+      "type": "md5",
+      "verdict": "malicious",
+      "notes": "9E4D3F4439ED39C01F3346FBDB7488AE"
+    },
+    {
+      "value": "657c3ddaff433067c7f74f3453c7eb37",
+      "type": "md5",
+      "verdict": "malicious",
+      "notes": "657C3DDAFF433067C7F74F3453C7EB37"
+    },
+    {
+      "value": "e770544551f94296b9a867e42435206f",
+      "type": "md5",
+      "verdict": "malicious",
+      "notes": "E770544551F94296B9A867E42435206F"
+    },
+    {
+      "value": "e23ded17cdf532790f708e8a550969eb",
+      "type": "md5",
+      "verdict": "malicious",
+      "notes": "E23DED17CDF532790F708E8A550969EB"
+    },
+    {
+      "value": "bc693652d5f57e792551c3a62049ba0b",
+      "type": "md5",
+      "verdict": "malicious",
+      "notes": "BC693652D5F57E792551C3A62049BA0B"
+    },
+    {
+      "value": "b5fb35be12c66f16f55af2c2abc77e55",
+      "type": "md5",
+      "verdict": "malicious",
+      "notes": "B5FB35BE12C66F16F55AF2C2ABC77E55"
+    },
+    {
+      "value": "ad24a6614c528de81283fe4a618682c7",
+      "type": "md5",
+      "verdict": "malicious",
+      "notes": "AD24A6614C528DE81283FE4A618682C7"
+    },
+    {
+      "value": "ac17a56355914e231b2ad52e45d6f779",
+      "type": "md5",
+      "verdict": "malicious",
+      "notes": "AC17A56355914E231B2AD52E45D6F779"
+    },
+    {
+      "value": "7a728f42940f5bcb50ac9a5c57c1d361",
+      "type": "md5",
+      "verdict": "malicious",
+      "notes": "7A728F42940F5BCB50AC9A5C57C1D361"
+    },
+    {
+      "value": "53bc8e68a9028c58941b78e4ad867b83",
+      "type": "md5",
+      "verdict": "malicious",
+      "notes": "53BC8E68A9028C58941B78E4AD867B83"
+    },
+    {
+      "value": "394298eed78d455416e1e4cf0deb4802",
+      "type": "md5",
+      "verdict": "malicious",
+      "notes": "394298EED78D455416E1E4CF0DEB4802"
+    },
+    {
+      "value": "30898909fd4bf93fe23c62e6962bed11",
+      "type": "md5",
+      "verdict": "malicious",
+      "notes": "30898909FD4BF93FE23C62E6962BED11"
+    },
+    {
+      "value": "02350ffa6b82cd2079797ed4ba1dd240",
+      "type": "md5",
+      "verdict": "malicious",
+      "notes": "02350FFA6B82CD2079797ED4BA1DD240"
+    },
+    {
+      "value": "0212eb9562992da05ab28effb9d64d8a",
+      "type": "md5",
+      "verdict": "malicious",
+      "notes": "0212EB9562992DA05AB28EFFB9D64D8A"
+    },
+    {
+      "value": "01c8d886bd213f983d0fd5ad35d78a9a",
+      "type": "md5",
+      "verdict": "malicious",
+      "notes": "01C8D886BD213F983D0FD5AD35D78A9A"
+    },
+    {
+      "value": "sh1213709.a.had.su",
+      "type": "domain",
+      "verdict": "malicious",
+      "notes": "sh1213709.a.had.su/config"
+    },
+    {
+      "value": "manget6z.beget.tech",
+      "type": "domain",
+      "verdict": "malicious",
+      "notes": "manget6z.beget.tech/config"
+    },
+    {
+      "value": "bibaiboba.beget.tech",
+      "type": "domain",
+      "verdict": "malicious",
+      "notes": "bibaiboba.beget.tech/config"
+    },
+    {
+      "value": "sumakokl.beget.tech",
+      "type": "domain",
+      "verdict": "malicious",
+      "notes": "sumakokl.beget.tech/config"
+    },
+    {
+      "value": "ikaschyn.beget.tech",
+      "type": "domain",
+      "verdict": "malicious",
+      "notes": "ikaschyn.beget.tech/config"
+    },
+    {
+      "value": "h98801x4.beget.tech",
+      "type": "domain",
+      "verdict": "malicious",
+      "notes": "h98801x4.beget.tech/config"
+    },
+    {
+      "value": "ec2-3-134-252-78.us-east-2.compute.amazonaws.com",
+      "type": "domain",
+      "verdict": "malicious",
+      "notes": "excluido por error del filtro automatico; reincorporado"
+    }
+  ],
+  "excluded_iocs": [
+    {
+      "value": "https://threatlibrary.zscaler.com/?keyword=Win32.PWS.PurpleWave",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://threatlibrary.zscaler.com/?keyword=Win32.PWS.PurpleW)"
+    },
+    {
+      "value": "https://attack.mitre.org/",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://attack.mitre.org/)"
+    },
+    {
+      "value": "%AppData%\\Local\\{Browser}\\User",
+      "type": "file_path",
+      "reason": "extraction_artifact",
+      "notes": "movido en la revision"
+    },
+    {
+      "value": "\\\\Valve\\\\Steam",
+      "type": "file_path",
+      "reason": "extraction_artifact",
+      "notes": "movido en la revision"
+    }
+  ],
+  "mitre_attack": [
+    {
+      "technique_id": "T1005",
+      "technique_name": "Data from Local System"
+    },
+    {
+      "technique_id": "T1016",
+      "technique_name": "System Network Configuration Discovery"
+    },
+    {
+      "technique_id": "T1020",
+      "technique_name": "Automated Exfiltration"
+    },
+    {
+      "technique_id": "T1027",
+      "technique_name": "Obfuscated Files or Information"
+    },
+    {
+      "technique_id": "T1033",
+      "technique_name": "System Owner/User Discovery"
+    },
+    {
+      "technique_id": "T1041",
+      "technique_name": "Exfiltration Over C2 Channel"
+    },
+    {
+      "technique_id": "T1059",
+      "technique_name": "Command and Scripting Interpreter"
+    },
+    {
+      "technique_id": "T1071",
+      "technique_name": "Application Layer Protocol"
+    },
+    {
+      "technique_id": "T1078",
+      "technique_name": "Valid Accounts"
+    },
+    {
+      "technique_id": "T1082",
+      "technique_name": "System Information Discovery"
+    },
+    {
+      "technique_id": "T1083",
+      "technique_name": "File and Directory Discovery"
+    },
+    {
+      "technique_id": "T1105",
+      "technique_name": "Ingress Tool Transfer"
+    },
+    {
+      "technique_id": "T1113",
+      "technique_name": "Screen Capture"
+    },
+    {
+      "technique_id": "T1124",
+      "technique_name": "System Time Discovery"
+    },
+    {
+      "technique_id": "T1140",
+      "technique_name": "Deobfuscate/Decode Files or Information"
+    },
+    {
+      "technique_id": "T1217",
+      "technique_name": "Browser Bookmark Discovery"
+    },
+    {
+      "technique_id": "T1528",
+      "technique_name": "Steal Application Access Token"
+    },
+    {
+      "technique_id": "T1539",
+      "technique_name": "Steal Web Session Cookie"
+    },
+    {
+      "technique_id": "T1555",
+      "technique_name": "Credentials from Password Stores"
+    },
+    {
+      "technique_id": "T1606",
+      "technique_name": "Forge Web Credentials"
+    }
+  ],
+  "notes": "PurpleWave, infostealer escrito en C++ y vendido en foros rusos por 5.000 RUB. Severidad medium: robo de credenciales y capacidad de descargar mas malware, sin objetivo dirigido. Hallazgo importante de la revision: el host 'ec2-3-134-252-78.us-east-2.compute.amazonaws.com' lo habia **excluido mal** el filtro automatico, porque amazonaws.com esta en la lista de infraestructura conocida; aqui es el C2 del atacante sobre EC2 y se reincorpora como malicious. La clave de registro de Telegram queda benign: el malware solo la lee para localizar la carpeta de sesiones.\n\nRevisado indicador por indicador contra el texto del reporte. Falta la firma de una persona del equipo: leer este archivo, corregir lo que no comparta y pasar `status` a `reviewed` agregandose en `reviewers`."
+}

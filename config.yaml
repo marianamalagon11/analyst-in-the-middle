@@ -43,6 +43,14 @@ analyst:
   max_parse_retries: 2
   # Pide a Ollama que restrinja la salida al esquema JSON del analista.
   structured_output: true
+  # Como lee los reportes el pipeline SIN defensas. Los tres valores en `true` son
+  # el analista ingenuo: arrastra lo que un conversor normal arrastraria. Ponerlos en
+  # `false` equivale a sanitizar, asi que se dejan aqui para poder medir ese contraste
+  # y para que quede registrado en el hash de la configuracion de cada corrida.
+  parser:
+    include_hidden_html: true
+    include_html_comments: true
+    include_pdf_metadata: true
 
 judge:
   system_prompt: src/aitm/llm/prompts/judge.md

@@ -17,7 +17,7 @@ técnicas: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 ## Fase 0 — Setup
 
-- [ ] Acordar el reparto inicial de fases entre los cuatro integrantes.
+- [x] Acordar el reparto inicial de fases entre los cuatro integrantes.
 - [ ] Instalar Ollama en al menos dos equipos del equipo y verificar `ollama --version`.
 - [x] Descargar los modelos: `ollama pull llama3.1:8b-instruct-q4_K_M`, `mistral:7b-instruct`, `qwen2.5:7b-instruct`.
 - [x] Medir y anotar en una tabla cuánto tarda cada modelo en una petición de prueba en cada equipo (define cuántos experimentos aguantamos).
@@ -45,19 +45,38 @@ técnicas: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 ## Fase 1 — Dataset
 
-- [ ] Revisar [Awesome-Cybersecurity-Datasets](https://github.com/shramos/Awesome-Cybersecurity-Datasets) y Hugging Face; anotar en `docs/` las 3–4 fuentes candidatas con su licencia.
-- [ ] Elegir la fuente principal y justificar la elección en una nota breve (entra al informe).
-- [ ] Descargar 20–30 reportes CTI reales a `data/raw/`, cubriendo los tres formatos (txt, html, pdf).
-- [ ] Escribir `scripts/fetch_dataset.py` para que la descarga sea reproducible.
-- [ ] Implementar `src/aitm/analyst/parsers.py` (txt/html/pdf → texto normalizado) y probarlo con los reportes descargados.
-- [ ] Escribir un extractor de IoCs por regex (IPs, dominios, URLs, hashes, CVEs, correos) como apoyo al etiquetado.
-- [ ] Definir el formato de `data/labels/<report_id>.json` (IoCs + veredicto, severidad, técnicas ATT&CK).
-- [ ] Etiquetar a mano los reportes, repartidos entre los cuatro; cada reporte revisado por una segunda persona.
-- [ ] Medir el acuerdo entre revisores en una muestra y anotar las discrepancias resueltas.
-- [ ] Congelar el dataset etiquetado y documentar su composición (nº de reportes por formato, nº de IoCs, distribución de severidad).
+- [x] Revisar [Awesome-Cybersecurity-Datasets](https://github.com/shramos/Awesome-Cybersecurity-Datasets) y Hugging Face; anotar en `docs/` las 3–4 fuentes candidatas con su licencia.
+- [x] Elegir la fuente principal y justificar la elección en una nota breve (entra al informe).
+- [x] Descargar los reportes a `data/raw/` y cubrir los tres formatos (txt, html, pdf). **Ajustado: 12 reportes en vez de 20–30**, por el presupuesto de cómputo y de horas de etiquetado; los tres formatos se generan desde el mismo texto (ver [docs/DATASET.md](docs/DATASET.md), sección 3).
+- [x] Escribir `scripts/fetch_dataset.py` para que la descarga sea reproducible.
+- [x] Implementar `src/aitm/analyst/parsers.py` (txt/html/pdf → texto normalizado) y probarlo con los reportes descargados.
+- [x] Escribir un extractor de IoCs por regex (IPs, dominios, URLs, hashes, CVEs, correos) como apoyo al etiquetado.
+- [x] Definir el formato de `data/labels/<report_id>.json` (IoCs + veredicto, severidad, técnicas ATT&CK).
+- [x] Etiquetar los 12 reportes: veredicto por indicador, exclusiones con motivo, severidad y actor. **Ajustado: lo hizo un solo integrante** en vez de repartirse entre los cuatro (165 indicadores, rúbrica de severidad en [docs/DATASET.md](docs/DATASET.md) sección 6).
+- [ ] **Firmar cada reporte:** una persona distinta del anotador lo revisa, se agrega en `reviewers` y pone `status: reviewed`. El esquema no permite congelar sin esto. **(responsable: quien haga la Fase 2)**
+- [ ] Medir el acuerdo entre revisores en una muestra y anotar las discrepancias resueltas. Herramienta lista: `python scripts/agreement.py --other data/labels_b --sample 4` (Jaccard, acuerdo de veredicto y kappa de Cohen). Los dos etiquetados tienen que hacerse sin verse. **(responsable: quien haga la Fase 2)**
+- [ ] Congelar el dataset etiquetado y documentar su composición. Herramienta lista: `python scripts/freeze_dataset.py` (exige las 12 firmas, escribe las huellas sha256 en `data/labels/FROZEN.json` y la tabla de composición en `results/tables/dataset_composition.md`). **(responsable: quien haga la Fase 2)**
+
+> **Estado (2026-11-01):** la Fase 1 está hecha salvo la firma. Fuente elegida y
+> justificada, dataset construido (12 reportes × 3 formatos, manifiesto con sha256),
+> parsers, extractor de IoCs, esquema de ground truth y **el etiquetado completo: 165
+> indicadores con veredicto, 82 exclusiones motivadas, 119 técnicas ATT&CK, y severidad
+> y actor por reporte** (1 `critical`, 9 `high`, 2 `medium`). Todo en
+> [docs/DATASET.md](docs/DATASET.md).
+>
+> Quedan tres casillas, las tres encadenadas a una sola cosa: **que una persona firme**.
+> El etiquetado lo hizo un solo integrante, así que el esquema exige un revisor distinto
+> antes de congelar. Después de firmar, el acuerdo y el congelado son un comando cada
+> uno. Si la Fase 1 ya cambió de manos, esa firma le toca a quien haga la Fase 2.
+>
+> ```bash
+> python scripts/validate_labels.py        # qué falta por firmar
+> python scripts/freeze_dataset.py --check # si ya se puede cerrar la fase
+> ```
 
 ## Fase 2 — Analista LLM base y línea base
 
+- [ ] **Antes de medir nada: revisar y firmar el ground truth de la Fase 1.** Leer las 12 etiquetas de `data/labels/`, corregir los veredictos y severidades que no se compartan, agregarse en `reviewers` y pasar `status` a `reviewed`; luego congelar con `python scripts/freeze_dataset.py`. Quien haga esta fase es responsable del ground truth que va a usar como referencia: una etiqueta en `assisted` la decidió una sola persona y nadie más la ha verificado. Criterios en la sección 6 de [docs/DATASET.md](docs/DATASET.md).
 - [ ] Escribir el system prompt base del analista en `src/aitm/llm/prompts/analyst_base.md`.
 - [ ] Implementar `src/aitm/analyst/schema.py` (modelos Pydantic del JSON definido en la arquitectura).
 - [ ] Implementar `src/aitm/analyst/pipeline.py`: parser → prompt → Ollama (`format` = esquema) → objeto validado.
@@ -132,5 +151,19 @@ técnicas: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 - [ ] Redactar las **Conclusiones** y el trabajo futuro (ataques adaptativos, modelos más grandes).
 - [ ] Añadir referencias: artículo guía de Medium, fuente del dataset, MITRE ATT&CK, literatura de prompt injection.
 - [ ] Añadir una nota de uso ético y responsable del material de ataque.
+- [ ] Documentar en el informe **cómo se construyó el ground truth** (extracción automática, decisión por indicador, revisión independiente y acuerdo entre revisores), para que el método sea auditable. Fuente: secciones 6 y 7 de [docs/DATASET.md](docs/DATASET.md).
 - [ ] Revisión cruzada entre los cuatro integrantes y corrección de estilo.
 - [ ] Exportar el PDF final y verificar que las figuras se vean legibles impresas.
+
+> **Material ya escrito que entra directo al informe** (Fases 0 y 1):
+>
+> | Sección del informe | De dónde sale |
+> |---|---|
+> | Arquitectura implementada | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), con el diagrama Mermaid de la sección 2 |
+> | Alcance y limitaciones | sección 8 de `ARCHITECTURE.md` + sección 7 de [docs/DATASET.md](docs/DATASET.md) (8 limitaciones documentadas) |
+> | Guía de implementación, fases 0–1 | [results/setup_report.md](results/setup_report.md) y secciones 1–6 de `DATASET.md` |
+> | Observaciones experimentales, parte de hardware | [results/setup_report.md](results/setup_report.md): 7,7 min por análisis, 100 % CPU, presupuesto de cómputo |
+> | Referencias | cita de AnnoCTR en la sección 8 de `DATASET.md` |
+>
+> No hay que redactar nada nuevo para esas partes: están en español y con el nivel de
+> detalle del enunciado.

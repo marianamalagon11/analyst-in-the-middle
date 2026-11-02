@@ -48,10 +48,19 @@ class GenerationConfig(_Base):
     num_predict: int = Field(2048, gt=0)
 
 
+class ParserConfig(_Base):
+    """Que tan ingenuo es el lector de reportes. Ver src/aitm/analyst/parsers.py."""
+
+    include_hidden_html: bool = True
+    include_html_comments: bool = True
+    include_pdf_metadata: bool = True
+
+
 class AnalystConfig(_Base):
     system_prompt: Path
     max_parse_retries: int = Field(2, ge=0)
     structured_output: bool = True
+    parser: ParserConfig = Field(default_factory=ParserConfig)
 
 
 class JudgeConfig(_Base):

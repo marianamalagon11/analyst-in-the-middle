@@ -1,0 +1,184 @@
+{
+  "report_id": "proofpoint_2021-05-26_bazaflix-bazaloader-fakes-movie-streaming",
+  "source": {
+    "corpus": "AnnoCTR",
+    "file": "AnnoCTR/all/text/proofpoint_2021-05-26_bazaflix-bazaloader-fakes-movie-streaming.txt",
+    "vendor": "proofpoint",
+    "published": "2021-05-26",
+    "license": "CC-BY-SA-4.0",
+    "url": null
+  },
+  "formats": [
+    "txt",
+    "html",
+    "pdf"
+  ],
+  "status": "assisted",
+  "annotators": [
+    "integrante del equipo"
+  ],
+  "reviewers": [],
+  "severity": "high",
+  "threat_actor": null,
+  "iocs": [
+    {
+      "value": "urbancinema.net",
+      "type": "domain",
+      "verdict": "malicious",
+      "notes": "| urbancinema.net | Domain | Landing Page | 2021-05-05 |"
+    },
+    {
+      "value": "bravomovies.net",
+      "type": "domain",
+      "verdict": "malicious",
+      "notes": "| bravomovies.net | Domain | Landing Page | 2021-05-01 |"
+    },
+    {
+      "value": "bvcinema.net",
+      "type": "domain",
+      "verdict": "malicious",
+      "notes": "| bvcinema.net | Domain | Landing Page | 2021-05-06 |"
+    },
+    {
+      "value": "47.91.77.83",
+      "type": "ipv4",
+      "verdict": "malicious",
+      "notes": "| 47.91.77.83 | IP | BravoMovies Website Host | 2021-05-05 |"
+    },
+    {
+      "value": "8.209.65.249",
+      "type": "ipv4",
+      "verdict": "malicious",
+      "notes": "| 8.209.65.249 | IP | BravoMovies Website Host | 2021-05-01 |"
+    },
+    {
+      "value": "8.209.92.183",
+      "type": "ipv4",
+      "verdict": "malicious",
+      "notes": "| 8.209.92.183 | IP | BravoMovies Website Host | 2021-05-04 |"
+    },
+    {
+      "value": "8.209.75.180",
+      "type": "ipv4",
+      "verdict": "malicious",
+      "notes": "| 8.209.75.180 | IP | BravoMovies Website Host | 2021-05-04 |"
+    },
+    {
+      "value": "8.211.4.26",
+      "type": "ipv4",
+      "verdict": "malicious",
+      "notes": "| 8.211.4.26 | IP | BravoMovies Website Host | 2021-05-06 |"
+    },
+    {
+      "value": "8.211.6.4",
+      "type": "ipv4",
+      "verdict": "malicious",
+      "notes": "| 8.211.6.4 | IP | BravoMovies Website Host | 2021-05-06 |"
+    },
+    {
+      "value": "8.209.67.183",
+      "type": "ipv4",
+      "verdict": "malicious",
+      "notes": "| 8.209.67.183 | IP | BravoMovies Website Host | 2021-05-10 |"
+    },
+    {
+      "value": "47.91.74.88",
+      "type": "ipv4",
+      "verdict": "malicious",
+      "notes": "| 47.91.74.88 | IP | BravoMovies Website Host | 2021-05-15 |"
+    },
+    {
+      "value": "176.111.174.60",
+      "type": "ipv4",
+      "verdict": "malicious",
+      "notes": "| 176.111.174.60 | IP | BazaLoader Excel Payload Host | 2021-05-04 |"
+    },
+    {
+      "value": "https://18.237.242.195/g1_262/bt_64_g1_262",
+      "type": "url",
+      "verdict": "malicious",
+      "notes": "| https://18.237.242.195/g1\\_262/bt\\_64\\_g1\\_262 | URL | BazaLoader C2 | 2021-05-04 |"
+    },
+    {
+      "value": "http://noise1.xyz/campo/n/o",
+      "type": "url",
+      "verdict": "malicious",
+      "notes": "| http://noise1.xyz/campo/n/o | URL | BazaLoader Excel Payload | 2021-05-04 |"
+    },
+    {
+      "value": "9663dc275239aa93ceccedae7a0d54e10def18dd177d231264a323a4175a23d4",
+      "type": "sha256",
+      "verdict": "malicious",
+      "notes": "| 9663dc275239aa93ceccedae7a0d54e10def18dd177d231264a323a4175a23d4 | SHA256 | BazaLoader Hash | 2020-04-25 |"
+    }
+  ],
+  "excluded_iocs": [
+    {
+      "value": "https://www.proofpoint.com/us/threat-reference/malware",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://www.proofpoint.com/us/threat-reference/malware)"
+    },
+    {
+      "value": "https://www2.deloitte.com/us/en/insights/industry/technology/video-streaming-services-churn-rate.html",
+      "type": "url",
+      "reason": "reference_only",
+      "notes": "propuesto por el extractor (https://www2.deloitte.com/us/en/insights/industry/technology)"
+    },
+    {
+      "value": "https://www.proofpoint.com/us/resources/webinars/what-healthcare-industry-should-know-about-ryuk-ransomware",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://www.proofpoint.com/us/resources/webinars/what-health)"
+    },
+    {
+      "value": "https://www.proofpoint.com/us/threat-reference/ransomware",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://www.proofpoint.com/us/threat-reference/ransomware)"
+    },
+    {
+      "value": "https://unit42.paloaltonetworks.com/bazarloader-malware/",
+      "type": "url",
+      "reason": "reference_only",
+      "notes": "propuesto por el extractor (https://unit42.paloaltonetworks.com/bazarloader-malware/)"
+    },
+    {
+      "value": "https://www.proofpoint.com/us/blog/threat-insight/baza-valentines-day",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://www.proofpoint.com/us/blog/threat-insight/baza-valen)"
+    },
+    {
+      "value": "https://www.motionpictures.org/press/global-subscriptions-to-online-video-services-exceeds-one-billion-for-first-time-ever-new-mpa-report-finds/",
+      "type": "url",
+      "reason": "reference_only",
+      "notes": "propuesto por el extractor (https://www.motionpictures.org/press/global-subscriptions-to)"
+    },
+    {
+      "value": "https://fortune.com/2021/04/19/netflix-earnings-subscriber-numbers-profit-first-quarter-q1-nflx/",
+      "type": "url",
+      "reason": "reference_only",
+      "notes": "propuesto por el extractor (https://fortune.com/2021/04/19/netflix-earnings-subscriber-n)"
+    }
+  ],
+  "mitre_attack": [
+    {
+      "technique_id": "T1059",
+      "technique_name": "Command and Scripting Interpreter"
+    },
+    {
+      "technique_id": "T1105",
+      "technique_name": "Ingress Tool Transfer"
+    },
+    {
+      "technique_id": "T1486",
+      "technique_name": "Data Encrypted for Impact"
+    },
+    {
+      "technique_id": "T1566",
+      "technique_name": "Phishing"
+    }
+  ],
+  "notes": "Campana de BazaLoader con un servicio de streaming falso (BravoMovies) y atencion telefonica para guiar a la victima. Severidad high: BazaLoader es la puerta de entrada de operaciones de ransomware, y la infraestructura (dominios, once IP de hosting, URL de carga) estaba activa. Sin actor atribuido: el reporte habla de 'afiliados' de BazaLoader.\n\nRevisado indicador por indicador contra el texto del reporte. Falta la firma de una persona del equipo: leer este archivo, corregir lo que no comparta y pasar `status` a `reviewed` agregandose en `reviewers`."
+}

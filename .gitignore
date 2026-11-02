@@ -218,3 +218,31 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# --- Datos del laboratorio -------------------------------------------------
+# El corpus descargado y los reportes renderizados se reconstruyen de forma
+# reproducible con `scripts/fetch_dataset.py` y `scripts/build_dataset.py` (commit
+# fijado), pesan decenas de MB y son material de terceros bajo CC-BY-SA: no se
+# versionan. Si se versionan, en cambio, los dos manifiestos: son la procedencia
+# exacta del dataset (commit del corpus, sha256 de cada archivo, criterios de
+# seleccion) y es lo que hace reproducible el experimento.
+data/raw/*
+!data/raw/.gitkeep
+!data/raw/annoctr/
+data/raw/annoctr/*
+!data/raw/annoctr/manifest.json
+
+data/processed/*
+!data/processed/.gitkeep
+!data/processed/dataset.json
+
+data/poisoned/*
+!data/poisoned/.gitkeep
+
+# El ground truth etiquetado a mano es trabajo nuestro y es lo que hace comparables
+# las corridas entre si: ese va al repositorio completo.
+
+# Trazas crudas de cada corrida: se regeneran y pesan. Las tablas y figuras del
+# informe si se versionan.
+results/runs/*
+!results/runs/.gitkeep

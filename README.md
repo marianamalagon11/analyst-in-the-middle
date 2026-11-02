@@ -14,7 +14,9 @@ Escuela Colombiana de Ingeniería Julio Garavito.
 ## Documentación
 
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — arquitectura, componentes, formato JSON de salida y decisiones técnicas.
+- [docs/DATASET.md](docs/DATASET.md) — fuentes candidatas y sus licencias, fuente elegida, composición del dataset y formato del ground truth.
 - [ROADMAP.md](ROADMAP.md) — plan de trabajo por fases.
+- [results/setup_report.md](results/setup_report.md) — medición del equipo: latencia, determinismo y presupuesto de cómputo.
 
 ## Requisitos
 
@@ -64,6 +66,48 @@ Pruebas:
 pytest
 ```
 
+## Dataset
+
+El corpus no se versiona (material de terceros, decenas de MB): se reconstruye con dos
+comandos. Detalles y justificación en [docs/DATASET.md](docs/DATASET.md).
+
+```bash
+python scripts/fetch_dataset.py      # corpus AnnoCTR, commit fijado (~88 MB)
+python scripts/build_dataset.py      # selecciona 12 reportes y los renderiza a txt/html/pdf
+python scripts/build_dataset.py --dry-run   # solo muestra qué elegiría
+```
+
+Ground truth (`data/labels/`, un JSON por reporte, sí versionado):
+
+```bash
+python scripts/draft_labels.py            # borradores pre-llenados desde el extractor
+python scripts/validate_labels.py         # esquema, cobertura y consistencia con el texto
+python scripts/agreement.py --other data/labels_b --sample 4   # acuerdo entre revisores
+python scripts/freeze_dataset.py          # congela y escribe la composición final
+```
+
+Las etiquetas pasan por cuatro estados: `draft` (salida del extractor) →
+`assisted` (un integrante decidió veredicto por indicador y severidad) → `reviewed` (firmada
+por una segunda persona) → `frozen` (congelada, con huellas sha256). Solo las dos
+últimas sirven para medir, y el esquema **no permite que el revisor sea la misma persona
+que anotó**. Criterios de severidad y convenciones de veredicto en la sección 6 de
+[docs/DATASET.md](docs/DATASET.md).
+
+Los scripts protegen el trabajo manual: `draft_labels.py` nunca sobreescribe una
+etiqueta existente sin `--force`, y `build_dataset.py` se niega a reconstruir el dataset
+si ya hay etiquetas firmadas, porque eso cambiaría la selección y las dejaría huérfanas.
+
+## Medición de capacidad
+
+```bash
+python scripts/bench_analyst.py                          # costo real de un análisis
+python scripts/bench_analyst.py --model mistral:7b-instruct
+```
+
+En el equipo de referencia (i5-1135G7, sin GPU) un análisis cuesta **7,7 min**. De ahí
+sale el tamaño de los experimentos de las fases 3 y 5; ver
+[results/setup_report.md](results/setup_report.md).
+
 ## Configuración
 
 Todo lo que afecta un resultado vive en [`config.yaml`](config.yaml): modelos, semilla,
@@ -72,4 +116,8 @@ guarda el hash de esa configuración para poder reconstruirla después.
 
 ## Estado
 
-Fase 0 (setup) completa. Fase 1 (dataset) en curso — ver [ROADMAP.md](ROADMAP.md).
+Fase 0 (setup) completa. Fase 1 (dataset) hecha salvo la firma: 12 reportes
+seleccionados y renderizados a los tres formatos, con 165 indicadores etiquetados, 119
+técnicas ATT&CK y la severidad de cada reporte. Falta que una persona del equipo revise
+y firme cada etiqueta (`status: reviewed`), mida el acuerdo entre revisores y congele.
+Ver [ROADMAP.md](ROADMAP.md) y la sección 6 de [docs/DATASET.md](docs/DATASET.md).
