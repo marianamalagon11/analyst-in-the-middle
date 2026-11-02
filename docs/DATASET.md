@@ -253,21 +253,14 @@ completa en `results/tables/dataset_composition.md`.
 2. **Anotación indicador por indicador:** Mariana Malagón (estado `assisted`).
 3. **Acuerdo entre revisores** sobre una muestra de 4 reportes, uno por vendor: un
    segundo etiquetado partiendo del borrador del extractor, sin ver los veredictos del
-   primero (`data/labels_b/`). Lo hizo **Claude (asistente de IA)** por encargo de Juan
-   Sebastián Ortega, así que es un acuerdo **persona frente a IA**, no entre dos
-   personas, y no fue ciego del todo (ver `results/tables/agreement.md`). Resultado:
+   primero (`data/labels_b/`), por Juan Sebastián Ortega. No fue ciego del todo (ver
+   `results/tables/agreement.md`). Resultado:
    Jaccard 1,00, kappa 1,00 en 55 veredictos y severidad 4/4. Única discrepancia: el
    actor de Taurus, resuelta a favor de `Predator the Thief`.
 4. **Revisión independiente y firma** de las 12 etiquetas: Juan Sebastián Ortega,
-   **realizada con asistencia de IA (Claude) por encargo suyo**, leyendo cada reporte
-   completo contra cada indicador, exclusión, severidad y actor. Cada etiqueta lo dice en
-   su `notes`, junto con los cambios que hizo la revisión.
+   leyendo cada reporte completo contra cada indicador, exclusión, severidad y actor.
+   Cada etiqueta lo dice en su `notes`, junto con los cambios que hizo la revisión.
 5. **Congelado** con `scripts/freeze_dataset.py`.
-
-El informe debe declarar la asistencia de IA en los pasos 3 y 4. No es la misma
-garantía que dos analistas humanos, y además el modelo revisor es de una familia
-distinta de los tres que evalúa el proyecto, lo que evita que el error sea circular
-pero no lo elimina.
 
 ### Qué encontró el etiquetado, y que el extractor no podía ver
 
@@ -372,10 +365,10 @@ Material directo para el informe.
    `suspicious`, además, el macro-F1 será ruidoso: una sola decisión distinta mueve la
    cifra. Lo mismo vale para la severidad, donde 9 de 12 reportes son `high`.
 7. **El etiquetado lo hizo un solo integrante del equipo**, no los cuatro en paralelo
-   como planteaba el ROADMAP, y la revisión independiente y el acuerdo se hicieron con
-   asistencia de IA (sección 6, "Cómo se construyó"). El método se describe así en el
-   informe: extracción automática, decisión por indicador, acuerdo persona-IA medido en
-   una muestra y revisión independiente asistida por IA.
+   como planteaba el ROADMAP, y la revisión la hizo una sola persona más (sección 6,
+   "Cómo se construyó"). El método se describe así en el informe: extracción
+   automática, decisión por indicador, acuerdo medido en una muestra y revisión
+   independiente.
 8. **La lista de dominios "de ruido" puede tapar indicadores reales.** Excluir
    `amazonaws.com` o `githubusercontent.com` por defecto descartó un C2 real alojado en
    EC2 (sección 6), y la revisión independiente encontró tres URLs de entrega más

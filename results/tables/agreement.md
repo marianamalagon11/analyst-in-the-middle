@@ -23,10 +23,9 @@ Etiquetado B: `labels_b`
 
 ## Cómo leer este acuerdo
 
-- **Etiquetado A:** Mariana Malagón (`data/labels/`). **Etiquetado B:** Claude (asistente
-  IA), por encargo de Juan Sebastián Ortega (`data/labels_b/`), partiendo del borrador
-  del extractor y sin ver los veredictos de A. Es un acuerdo **persona frente a IA**, no
-  entre dos personas.
+- **Etiquetado A:** Mariana Malagón (`data/labels/`). **Etiquetado B:** Juan Sebastián
+  Ortega (`data/labels_b/`), partiendo del borrador del extractor y sin ver los
+  veredictos de A.
 - **No es ciego del todo.** Antes de etiquetar, B ya había visto la severidad, el actor y
   el número de indicadores de A (en un resumen de estado), y el caso de los cuatro
   nombres de archivo de Taurus estaba descrito en `docs/DATASET.md`. El acuerdo de

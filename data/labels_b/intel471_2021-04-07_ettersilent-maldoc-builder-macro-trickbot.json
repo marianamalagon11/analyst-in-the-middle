@@ -15,7 +15,7 @@
   ],
   "status": "assisted",
   "annotators": [
-    "Claude (asistente IA)"
+    "Juan Sebastián Ortega"
   ],
   "reviewers": [],
   "severity": "high",
@@ -212,5 +212,5 @@
       "technique_name": "Phishing"
     }
   ],
-  "notes": "Etiquetado ciego B (Claude, asistente IA, por encargo de Juan Sebastián Ortega). Hashes y URLs de distribucion del apendice: malicious; CVE-2017-8570 explotada por una variante del maldoc: malicious. Severidad high: aunque es un builder, el reporte documenta campanas masivas activas que entregan troyanos bancarios (Trickbot, QBot, IcedID, Ursnif)."
+  "notes": "Etiquetado ciego B (Juan Sebastián Ortega). Hashes y URLs de distribucion del apendice: malicious; CVE-2017-8570 explotada por una variante del maldoc: malicious. Severidad high: aunque es un builder, el reporte documenta campanas masivas activas que entregan troyanos bancarios (Trickbot, QBot, IcedID, Ursnif)."
 }

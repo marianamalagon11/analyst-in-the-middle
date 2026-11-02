@@ -1,6 +1,6 @@
 # Composicion del dataset etiquetado
 
-Congelado: 2026-11-02 17:22 UTC
+Congelado: 2026-11-02 17:31 UTC
 
 - **Reportes:** 12, cada uno en 3 formatos (txt, html, pdf) = 36 archivos
 - **Indicadores etiquetados:** 171

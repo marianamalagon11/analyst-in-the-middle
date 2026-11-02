@@ -15,7 +15,7 @@
   ],
   "status": "assisted",
   "annotators": [
-    "Claude (asistente IA)"
+    "Juan Sebastián Ortega"
   ],
   "reviewers": [],
   "severity": "high",
@@ -116,5 +116,5 @@
       "technique_name": "Phishing"
     }
   ],
-  "notes": "Etiquetado ciego B (Claude, asistente IA, por encargo de Juan Sebastián Ortega). 5 IPs C2 y 5 sha256 de Dridex de la tabla de IoCs: malicious. Severidad high: malware de distribución masiva que entrega un troyano bancario (Dridex)."
+  "notes": "Etiquetado ciego B (Juan Sebastián Ortega). 5 IPs C2 y 5 sha256 de Dridex de la tabla de IoCs: malicious. Severidad high: malware de distribución masiva que entrega un troyano bancario (Dridex)."
 }

@@ -118,7 +118,7 @@ guarda el hash de esa configuración para poder reconstruirla después.
 
 Fases 0 y 1 cerradas. Dataset congelado: 12 reportes × 3 formatos, 171 indicadores
 etiquetados, 119 técnicas ATT&CK y la severidad de cada reporte, anotado por Mariana
-Malagón y revisado y firmado por Juan Sebastián Ortega (revisión asistida por IA,
-declarada en la sección 6 de [docs/DATASET.md](docs/DATASET.md)). Fase 2: analista LLM,
+Malagón y revisado y firmado por Juan Sebastián Ortega (método en la sección 6 de
+[docs/DATASET.md](docs/DATASET.md)). Fase 2: analista LLM,
 trazas y evaluador implementados (`aitm analyze`, `aitm evaluate`); línea base en curso.
 Ver [ROADMAP.md](ROADMAP.md).

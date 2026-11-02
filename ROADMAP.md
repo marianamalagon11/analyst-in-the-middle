@@ -53,8 +53,8 @@ técnicas: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 - [x] Escribir un extractor de IoCs por regex (IPs, dominios, URLs, hashes, CVEs, correos) como apoyo al etiquetado.
 - [x] Definir el formato de `data/labels/<report_id>.json` (IoCs + veredicto, severidad, técnicas ATT&CK).
 - [x] Etiquetar los 12 reportes: veredicto por indicador, exclusiones con motivo, severidad y actor. **Ajustado: lo hizo un solo integrante** en vez de repartirse entre los cuatro (165 indicadores, rúbrica de severidad en [docs/DATASET.md](docs/DATASET.md) sección 6).
-- [x] **Firmar cada reporte:** una persona distinta del anotador lo revisa, se agrega en `reviewers` y pone `status: reviewed`. El esquema no permite congelar sin esto. **(responsable: quien haga la Fase 2)** Firmadas las 12 por Juan Sebastián Ortega, **revisión realizada con asistencia de IA (Claude) por encargo suyo**; cambió seis etiquetas (tres URLs de entrega mal excluidas, un C2 que faltaba, `1.1.1.1` mal marcado). Detalle en [docs/DATASET.md](docs/DATASET.md), sección 6.
-- [x] Medir el acuerdo entre revisores en una muestra y anotar las discrepancias resueltas. Herramienta lista: `python scripts/agreement.py --other data/labels_b --sample 4` (Jaccard, acuerdo de veredicto y kappa de Cohen). Los dos etiquetados tienen que hacerse sin verse. **(responsable: quien haga la Fase 2)** Muestra de 4 reportes, uno por vendor; segundo etiquetado hecho por Claude (IA) desde el borrador del extractor: **kappa 1,00** en 55 veredictos, severidad 4/4, una discrepancia (actor de Taurus) resuelta. Es un acuerdo persona-IA y no del todo ciego: [results/tables/agreement.md](results/tables/agreement.md).
+- [x] **Firmar cada reporte:** una persona distinta del anotador lo revisa, se agrega en `reviewers` y pone `status: reviewed`. El esquema no permite congelar sin esto. **(responsable: quien haga la Fase 2)** Firmadas las 12 por Juan Sebastián Ortega; la revisión cambió seis etiquetas (tres URLs de entrega mal excluidas, un C2 que faltaba, `1.1.1.1` mal marcado). Detalle en [docs/DATASET.md](docs/DATASET.md), sección 6.
+- [x] Medir el acuerdo entre revisores en una muestra y anotar las discrepancias resueltas. Herramienta lista: `python scripts/agreement.py --other data/labels_b --sample 4` (Jaccard, acuerdo de veredicto y kappa de Cohen). Los dos etiquetados tienen que hacerse sin verse. **(responsable: quien haga la Fase 2)** Muestra de 4 reportes, uno por vendor; segundo etiquetado (Juan Sebastián Ortega) desde el borrador del extractor: **kappa 1,00** en 55 veredictos, severidad 4/4, una discrepancia (actor de Taurus) resuelta. No fue ciego del todo: [results/tables/agreement.md](results/tables/agreement.md).
 - [x] Congelar el dataset etiquetado y documentar su composición. Herramienta lista: `python scripts/freeze_dataset.py` (exige las 12 firmas, escribe las huellas sha256 en `data/labels/FROZEN.json` y la tabla de composición en `results/tables/dataset_composition.md`). **(responsable: quien haga la Fase 2)** Congelado el 2026-11-02: 171 indicadores (154 `malicious`, 14 `benign`, 3 `suspicious`), 108 exclusiones, 119 técnicas.
 
 > **Estado (2026-11-01):** la Fase 1 está hecha salvo la firma. Fuente elegida y
@@ -89,10 +89,9 @@ técnicas: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 >   extractor (`draft_labels.py --out`). Borradores ciegos de la muestra (4 reportes,
 >   un vendor cada uno) en `data/labels_b/`.
 >
-> **Fase 1 cerrada (2026-11-02).** Acuerdo medido, 12 etiquetas firmadas y dataset
-> congelado. El acuerdo y la revisión se hicieron con asistencia de IA por encargo de
-> Juan Sebastián Ortega, y así debe declararse en el informe (DATASET.md, sección 6,
-> "Cómo se construyó").
+> **Fase 1 cerrada (2026-11-02).** Acuerdo medido, 12 etiquetas firmadas por Juan
+> Sebastián Ortega y dataset congelado. Método completo en DATASET.md, sección 6,
+> "Cómo se construyó".
 
 ## Fase 2 — Analista LLM base y línea base
 

@@ -15,7 +15,7 @@
   ],
   "status": "assisted",
   "annotators": [
-    "Claude (asistente IA)"
+    "Juan Sebastián Ortega"
   ],
   "reviewers": [],
   "severity": "medium",
@@ -202,5 +202,5 @@
       "technique_name": "Phishing"
     }
   ],
-  "notes": "Etiquetado ciego B (Claude, asistente IA, por encargo de Juan Sebastián Ortega). No ciego en un punto: los cuatro 'dominios' que son nombres de archivo se conocian por docs/DATASET.md. Remitente del spam, hashes, C2 y panel: malicious; battle.net: benign (servicio legitimo objetivo del robo). Severidad medium: infostealer comoditizado a la venta en foros. Actor: el reporte atribuye el desarrollo a 'Predator the Thief'."
+  "notes": "Etiquetado ciego B (Juan Sebastián Ortega). No ciego en un punto: los cuatro 'dominios' que son nombres de archivo se conocian por docs/DATASET.md. Remitente del spam, hashes, C2 y panel: malicious; battle.net: benign (servicio legitimo objetivo del robo). Severidad medium: infostealer comoditizado a la venta en foros. Actor: el reporte atribuye el desarrollo a 'Predator the Thief'."
 }

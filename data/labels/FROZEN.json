@@ -1,20 +1,20 @@
 {
-  "frozen_at": "2026-11-02T17:22:53Z",
+  "frozen_at": "2026-11-02T17:31:03Z",
   "config_hash": "08a6cd5a4a9e",
   "corpus_commit": "d510b6949e1938d47c93a43eedd562dc538439dc",
   "n_reports": 12,
   "labels_sha256": {
-    "intel471_2021-04-07_ettersilent-maldoc-builder-macro-trickbot": "2aa811fbddb1091fe799f6de51c3624b1d63a20cccc6421a1f7274e31ee0f0d3",
-    "lab52_2020-06-02_mustang-panda-recent-activity-dll": "e17160ebf45fa97b8bab876bb8cc7016910141271e97877998a2c67f66734f88",
-    "lab52_2021-04-29_chimera-apt-updates-on-its": "f4020dcd10b83876aa831561d646621d7c3d5724d598dc7272e7e0a8646d2675",
-    "lab52_2021-05-17_literature-lover-targeting-colombia-with": "43cf52741f87dcf976c2d67f01c74eac93ce6564c4d02a38c7309afae4304542",
-    "lab52_2022-01-24_new-transparentribe-operation-targeting-india": "2be3b35ee4b49873111669b65200a2dfe83176cb00ffbfe70c35fb40094f1d81",
-    "proofpoint_2021-05-26_bazaflix-bazaloader-fakes-movie-streaming": "e15f3f90f462c38c044ff0b8ae73ca6a0a00ce28864891f308356d07d37f32c1",
-    "proofpoint_2021-07-28_i-knew-you-were-trouble": "d738cc4d7ef0e98d06e6c317a1a219991ef3f82f2d830f35ccc59cfe6362176e",
-    "proofpoint_2021-12-09_holiday-feelin-ta575-brings-warm": "24930fe05f4f34c6e0582c95594a92ca51169876694a9f50b9c939bfcee5726e",
-    "quoteintelligence_2020-08-07_blackwater-malware-leveraging-beirut-tragedy": "339bc66c4c8d84f99c5831c32716db20803433285881ac08a24273063f14e0bf",
-    "zscaler_2020-06-26_taurus-new-stealer-town": "2d9176db64c911e5c4d20c612368daef0c52724de9b1369ce5ae60621f283328",
-    "zscaler_2020-08-14_purplewave-new-infostealer-russia": "c1d74f5a4ac602787be2201f6263b61d4b005e592c208706c117ce80c2ba8f81",
-    "zscaler_2020-09-16_malware-leveraging-xml-rpc-vulnerability": "e4040ca0e6a56ea0a5ab59a531f2294e6db7ee5569bee57996434e6689c46004"
+    "intel471_2021-04-07_ettersilent-maldoc-builder-macro-trickbot": "253212e694e0a8f8aaddfa442bcaafe1eebbf0d37506b8658c24363e24efe26b",
+    "lab52_2020-06-02_mustang-panda-recent-activity-dll": "a037325731f9da012f3c5f571655925daac254e2adc3a38051bec22fd91ae901",
+    "lab52_2021-04-29_chimera-apt-updates-on-its": "1213486fba344dacb832abebafe1cf4accd449c830d95abf60021f5bd65a4d49",
+    "lab52_2021-05-17_literature-lover-targeting-colombia-with": "d512c5303290aecdc7cdd6dd0bfc81d9effdfac977e889e12b36cd38b922fa69",
+    "lab52_2022-01-24_new-transparentribe-operation-targeting-india": "74eab3d5080765657ae411f6b823f67377fa3efe9fc9bdfcc58879b4c0c724a2",
+    "proofpoint_2021-05-26_bazaflix-bazaloader-fakes-movie-streaming": "649de601230b3259c574b3c9b7dc1a7e2b21fb541c84b1337cddce0198d0a786",
+    "proofpoint_2021-07-28_i-knew-you-were-trouble": "60ff38a30328e737e8300e6b9293e933ba769bf5ade864e5354650393c952eed",
+    "proofpoint_2021-12-09_holiday-feelin-ta575-brings-warm": "83a4fe22d36e79ce37ecff2dadb14264f48c48c03265373150d52c3ec3a59088",
+    "quoteintelligence_2020-08-07_blackwater-malware-leveraging-beirut-tragedy": "166f765b219b21fe5b64207f502651667403555fff526bebd350771f47030e6c",
+    "zscaler_2020-06-26_taurus-new-stealer-town": "1151ee0034294b320d8e7a73898ceee0c928f6303976067eb5b27e83cac88e6f",
+    "zscaler_2020-08-14_purplewave-new-infostealer-russia": "775bb1dc5985543c3fff430318436f4dfd2a9c131672379f50f5dd6b83d4e85d",
+    "zscaler_2020-09-16_malware-leveraging-xml-rpc-vulnerability": "06e138ab72b0ea05ace2843c53cbfbbcee9189d7ae24f01b4da210227ee0de5d"
   }
 }
