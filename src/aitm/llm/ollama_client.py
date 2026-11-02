@@ -47,6 +47,17 @@ class OllamaClient:
         payload = self._get("/api/tags")
         return sorted(m["name"] for m in payload.get("models", []))
 
+    def model_digest(self, name: str) -> str | None:
+        """Digest de los pesos instalados con ese nombre.
+
+        Es la huella que identifica el modelo exacto: la misma etiqueta
+        (`mistral:7b-instruct`) puede apuntar a pesos distintos en dos equipos.
+        """
+        for model in self._get("/api/tags").get("models", []):
+            if model.get("name") in (name, f"{name}:latest"):
+                return model.get("digest")
+        return None
+
     def has_model(self, name: str) -> bool:
         """Compara tolerando el sufijo `:latest` que Ollama agrega solo."""
         available = self.list_models()

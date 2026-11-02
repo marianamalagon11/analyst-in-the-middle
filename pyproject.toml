@@ -24,6 +24,14 @@ dependencies = [
 dev = [
     "pytest>=8.0",
 ]
+# Verificacion visual de los reportes envenenados (Fase 3): rasteriza los PDF para
+# compararlos pixel a pixel. Las capturas de HTML usan Chrome headless del sistema.
+visual = [
+    "pypdfium2>=4.30",
+]
+
+[project.scripts]
+aitm = "aitm.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

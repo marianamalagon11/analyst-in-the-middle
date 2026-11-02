@@ -34,8 +34,12 @@ generation:
   top_p: 1.0
   top_k: 1
   repeat_penalty: 1.0
-  num_ctx: 8192
-  num_predict: 2048
+  # Medido en la Fase 2 (results/baseline_report.md): el reporte mas largo ocupa
+  # ~5.600 tokens de prompt reales (los hashes tokenizan mal; chars/4 subestima casi a
+  # la mitad) y un JSON con 25 IoCs + 20 tecnicas ronda los 3.000 tokens. Con 8192 /
+  # 2048 el margen era de ~500 tokens: un payload de la Fase 3 no cabia.
+  num_ctx: 12288
+  num_predict: 4096
 
 analyst:
   system_prompt: src/aitm/llm/prompts/analyst_base.md

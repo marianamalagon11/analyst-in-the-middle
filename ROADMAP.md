@@ -18,7 +18,7 @@ técnicas: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 ## Fase 0 — Setup
 
 - [x] Acordar el reparto inicial de fases entre los cuatro integrantes.
-- [ ] Instalar Ollama en al menos dos equipos del equipo y verificar `ollama --version`.
+- [x] Instalar Ollama en al menos dos equipos del equipo y verificar `ollama --version`. **Segundo equipo: Apple M5 de Juan Sebastián** (Ollama 0.40.13, inferencia en GPU, 26–28 tok/s, determinista): [results/setup_report_m5.md](results/setup_report_m5.md).
 - [x] Descargar los modelos: `ollama pull llama3.1:8b-instruct-q4_K_M`, `mistral:7b-instruct`, `qwen2.5:7b-instruct`.
 - [x] Medir y anotar en una tabla cuánto tarda cada modelo en una petición de prueba en cada equipo (define cuántos experimentos aguantamos).
 - [x] Crear el entorno virtual (`python -m venv .venv`) y el `pyproject.toml` con las dependencias base: `requests`, `pydantic`, `pyyaml`, `beautifulsoup4`, `lxml`, `pypdf`, `pandas`, `matplotlib`, `pytest`.
@@ -73,20 +73,50 @@ técnicas: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 > python scripts/validate_labels.py        # qué falta por firmar
 > python scripts/freeze_dataset.py --check # si ya se puede cerrar la fase
 > ```
+>
+> **Estado (2026-11-02, Juan Sebastián):** preparado todo lo que no es la firma humana.
+> - `annotators` ya dice `Mariana Malagón` en las 12 etiquetas (antes decía
+>   "integrante del equipo", con lo que la regla revisor ≠ anotador no protegía nada).
+> - Corregidos dos bugs que rompían la reproducibilidad entre equipos:
+>   `fetch_dataset.py` no descargaba nada en un clon nuevo (miraba solo el manifiesto
+>   versionado) y verificaba el sha256 del zip, que GitHub regenera; ahora usa una
+>   huella del contenido. Y el `config_hash` daba distinto en Windows y en macOS por
+>   el separador de rutas.
+> - Corpus verificado en el segundo equipo: los 12 textos son idénticos byte a byte a
+>   los etiquetados. El PDF ahora es determinista (`invariant`).
+> - Acuerdo entre revisores: el flujo documentado copiaba `data/labels/` como punto de
+>   partida, lo que ancla al segundo etiquetador. Ahora parte del borrador del
+>   extractor (`draft_labels.py --out`). Borradores ciegos de la muestra (4 reportes,
+>   un vendor cada uno) en `data/labels_b/`.
+>
+> **Falta, y solo lo puede hacer una persona:** etiquetar a ciegas los 4 borradores de
+> `data/labels_b/` antes de abrir esos reportes en `data/labels/`, medir el acuerdo,
+> revisar y firmar las 12 etiquetas y congelar.
 
 ## Fase 2 — Analista LLM base y línea base
 
 - [ ] **Antes de medir nada: revisar y firmar el ground truth de la Fase 1.** Leer las 12 etiquetas de `data/labels/`, corregir los veredictos y severidades que no se compartan, agregarse en `reviewers` y pasar `status` a `reviewed`; luego congelar con `python scripts/freeze_dataset.py`. Quien haga esta fase es responsable del ground truth que va a usar como referencia: una etiqueta en `assisted` la decidió una sola persona y nadie más la ha verificado. Criterios en la sección 6 de [docs/DATASET.md](docs/DATASET.md).
-- [ ] Escribir el system prompt base del analista en `src/aitm/llm/prompts/analyst_base.md`.
-- [ ] Implementar `src/aitm/analyst/schema.py` (modelos Pydantic del JSON definido en la arquitectura).
-- [ ] Implementar `src/aitm/analyst/pipeline.py`: parser → prompt → Ollama (`format` = esquema) → objeto validado.
-- [ ] Añadir el comando `aitm analyze <ruta>` en `src/aitm/cli.py` y probarlo con un reporte real.
-- [ ] Implementar el guardado de trazas en `results/runs/<timestamp>/*.jsonl` con latencia y hash de configuración.
-- [ ] Implementar `src/aitm/evaluation/matching.py`: normalización de IoCs (defanging, mayúsculas) y emparejamiento con el ground truth.
-- [ ] Implementar `src/aitm/evaluation/metrics.py`: precisión/recall de IoCs, macro-F1 del veredicto, acierto de severidad, recall de ATT&CK.
+- [x] Escribir el system prompt base del analista en `src/aitm/llm/prompts/analyst_base.md`. En español; sin ninguna instrucción anti-inyección (eso es `analyst_hardened.md`, Fase 4).
+- [x] Implementar `src/aitm/analyst/schema.py` (modelos Pydantic del JSON definido en la arquitectura).
+- [x] Implementar `src/aitm/analyst/pipeline.py`: parser → prompt → Ollama (`format` = esquema) → objeto validado. Ganchos `pre_hooks` / `message_builder` / `post_hooks` listos y vacíos para la Fase 4.
+- [x] Añadir el comando `aitm analyze <ruta>` en `src/aitm/cli.py` y probarlo con un reporte real. También `aitm evaluate <run-dir>`.
+- [x] Implementar el guardado de trazas en `results/runs/<timestamp>/*.jsonl` con latencia y hash de configuración (`src/aitm/evaluation/traces.py`; además sha256 del prompt, digest del modelo y equipo). Reanudable con `--run-dir`.
+- [x] Implementar `src/aitm/evaluation/matching.py`: normalización de IoCs (defanging, mayúsculas) y emparejamiento con el ground truth.
+- [x] Implementar `src/aitm/evaluation/metrics.py`: precisión/recall de IoCs, macro-F1 del veredicto, acierto de severidad, recall de ATT&CK. Con dos líneas base sin LLM: "siempre `malicious`" y el extractor regex.
 - [ ] Correr la línea base sobre todo el dataset limpio con los tres modelos y guardar los resultados.
 - [ ] Construir la tabla de línea base por modelo y elegir el **modelo principal** del proyecto; justificar la elección.
 - [ ] Anotar los modos de fallo observados sin ataque (alucinaciones, IoCs partidos, severidad inestable) — material para "Observaciones experimentales".
+
+> **Estado (2026-11-02, Juan Sebastián):** código de la fase completo y probado (106
+> pruebas). Línea base corriendo en el M5: 12 reportes × 3 formatos × 3 modelos = 108
+> análisis, ~100 s cada uno. Criterios de selección del modelo escritos **antes** de
+> ver resultados, en [results/baseline_report.md](results/baseline_report.md), junto
+> con los primeros modos de fallo (bucle de enumeración de ATT&CK con decodificación
+> greedy, tipos de hash equivocados). Ajustes de config hechos en las pruebas de humo:
+> `num_ctx` 12288 y `num_predict` 4096 (el prompt real del reporte más largo son 5.637
+> tokens, no los ~3.200 que daba chars/4). Las métricas finales se calculan cuando se
+> congele el ground truth: el evaluador es puro y se re-ejecuta sobre las mismas
+> trazas, sin repetir la inferencia.
 
 ## Fase 3 — Ataques
 
