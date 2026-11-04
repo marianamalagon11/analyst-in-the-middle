@@ -20,12 +20,16 @@ from typing import Any, Callable, Iterable
 from aitm.config import Config
 from aitm.defenses.base import CANONICAL_ORDER, Composition, Defense, compose
 from aitm.defenses.sanitizer import Sanitizer
+from aitm.defenses.schema_validator import SchemaValidator
+from aitm.defenses.spotlighting import Spotlighting
 
 #: Cada fabrica recibe la configuracion y el cliente de Ollama (el juez lo necesita).
 Factory = Callable[[Config, Any], Defense]
 
 _FACTORIES: dict[str, Factory] = {
     "sanitizer": lambda config, client: Sanitizer(),
+    "spotlighting": lambda config, client: Spotlighting(config),
+    "schema_validation": lambda config, client: SchemaValidator(),
 }
 
 
