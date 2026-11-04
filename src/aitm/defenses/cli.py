@@ -1,4 +1,4 @@
-"""Subcomandos de la Fase 4 que no necesitan al LLM.
+"""Subcomandos de la Fase 4: `sanitize-check` (sin LLM) y `judge` (ver `judge_cli.py`).
 
 ```bash
 aitm sanitize-check            # sanitizador contra toda la matriz envenenada + costo en limpios
@@ -40,6 +40,10 @@ def register(sub) -> None:
     check.add_argument("--manifest", help="manifiesto de envenenados (por defecto paths.poisoned)")
     check.add_argument("--table", help="escribe la tabla Markdown aqui (y el CSV al lado)")
     check.set_defaults(handler=cmd_sanitize_check)
+
+    from aitm.defenses.judge_cli import register as register_judge
+
+    register_judge(sub)
 
 
 def _verdict(reach: int, survived: int) -> str:

@@ -155,9 +155,9 @@ técnicas: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 - [x] Probar el sanitizador contra cada vector y anotar cuáles neutraliza por completo y cuáles no. `aitm sanitize-check` sobre los 1056 envenenados: neutraliza **100 %** de `html_hidden` y `pdf_hidden` y `unicode_invisible` en `tags`/`zero_width`; **no** neutraliza `plaintext`, `author_note` ni `bidi` (contenido visible). Costo en limpios: 36/36 idénticos. Tabla en [results/tables/sanitizer_coverage.md](results/tables/sanitizer_coverage.md).
 - [x] Implementar `spotlighting.py`: delimitadores irrepetibles + system prompt reforzado (`analyst_hardened.md`). Marcas `«INICIO_REPORTE_<código>»` con código de 16 hex ausente del texto (determinista por semilla, para reproducir), marcas falsas del reporte neutralizadas y la regla repetida tras el bloque. El reforzado contiene el base línea por línea (lo verifica una prueba): solo cambia la defensa, no la tarea.
 - [x] Implementar `schema_validator.py`: validación estricta + regla de que todo IoC reportado exista literalmente en el texto de entrada. Además, forma del valor según su tipo y sin duplicados. Filtra, nunca bloquea; lo descartado queda en la traza.
-- [ ] Escribir el prompt del juez (`judge.md`) e implementar `llm_judge.py` como segunda llamada independiente.
-- [ ] Hacer que las defensas se activen/desactiven desde `config.yaml` y se puedan componer en cualquier orden.
-- [ ] Medir los falsos positivos del juez sobre los reportes limpios.
+- [x] Escribir el prompt del juez (`judge.md`) e implementar `llm_judge.py` como segunda llamada independiente. Otro modelo (`models.judge` = qwen2.5) y otro prompt; ve el documento entre las marcas del spotlighting, no la respuesta. Bloquea si `injection` y `confidence >= judge.threshold`; si falla no bloquea (*fail-open*) y se cuenta aparte. Bloquear no borra la salida del analista.
+- [x] Hacer que las defensas se activen/desactiven desde `config.yaml` y se puedan componer en cualquier orden. `defenses.enabled` o `aitm analyze --defenses a,b` (el override no cambia el hash de la config: una sola config para toda la matriz de la Fase 5). Cualquier orden da el mismo pipeline (prueba con las 24 permutaciones).
+- [ ] Medir los falsos positivos del juez sobre los reportes limpios. **Herramienta lista, falta correrla en el M5** (necesita Ollama con `qwen2.5:7b-instruct`): `aitm judge --table results/tables/judge_fp.md` (36 limpios, ~minutos). Opcional, detección por vector: `aitm judge data/processed data/poisoned`.
 - [x] Pruebas unitarias del sanitizador y del validador de esquema. (Más las de spotlighting y composición: 337 pruebas.)
 
 > **Estado (2026-11-04, Juan Carlos):** interfaz de defensas y sanitizador listos.
@@ -182,6 +182,22 @@ técnicas: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 > El prompt reforzado y su plantilla no van en `config.yaml` a propósito: cambiarla
 > cambia el hash y rompe la comparación con la línea base; la traza guarda su ruta y
 > sha256.
+
+> **Estado (2026-11-04, Juan Carlos):** código de la Fase 4 completo: las cuatro
+> defensas, su composición y su activación por config o CLI. 350 pruebas en verde.
+> Falta solo **una medición que necesita Ollama**: los falsos positivos del juez en
+> los 36 limpios (comando en la casilla). En Ollama del M5:
+>
+> ```bash
+> ollama pull qwen2.5:7b-instruct
+> aitm judge --table results/tables/judge_fp.md
+> ```
+>
+> Para la Fase 5: `aitm analyze --defenses ...` ya produce trazas con `defenses`,
+> `blocked`, `judge` y `defense_notes`, y la clave de celda incluye las defensas, así
+> que el runner puede recorrer `reporte × ataque × defensas × modelo` reanudando sin
+> mezclar celdas. El ASR con defensa debe contar una corrida bloqueada como ataque
+> fallido (y reportar aparte la tasa de bloqueo, como pide la arquitectura).
 
 ## Fase 5 — Experimentos y métricas
 
