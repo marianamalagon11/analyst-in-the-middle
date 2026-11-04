@@ -77,7 +77,11 @@ class RunRecord(_Base):
     defenses: list[str] = Field(default_factory=list)
     #: Veredicto del juez (Fase 4).
     judge: dict[str, Any] | None = None
+    #: Alguna defensa detuvo la corrida. La salida del analista se conserva igual: la
+    #: Fase 5 mide tanto la deteccion como lo que habria pasado sin el bloqueo.
     blocked: bool = False
+    #: Que hizo cada defensa activa ("sanitizer: quito 312 caracteres: ...").
+    defense_notes: list[str] = Field(default_factory=list)
 
     prompt: PromptInfo
     status: RunStatus
