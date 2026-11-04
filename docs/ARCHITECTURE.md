@@ -326,6 +326,24 @@ constancia en el hash de la configuración de con qué lector se hizo.
 
 ---
 
+## 6.2 Las defensas tal como quedaron implementadas (Fase 4)
+
+| Defensa | Etapa | Qué hace | Qué no puede hacer |
+|---|---|---|---|
+| `sanitizer` | `pre` | Relee el documento original y deja solo lo visible: comentarios y nodos ocultos por CSS (en línea y `<style>` simple), Unicode de formato (`Cf`) y selectores de variación, metadatos y texto en modo de render invisible del PDF. | Nada contra lo visible (`plaintext`, `author_note`) ni `bidi` (las letras quedan). Supone fondo blanco y PDF sin capa OCR. |
+| `spotlighting` | `prompt` | Reporte entre `«INICIO_REPORTE_<código>»…«FIN_REPORTE_<código>»` (16 hex, ausente del texto, derivado de la semilla), marcas falsas neutralizadas, regla repetida al final y `analyst_hardened.md` (el base + una sección de seguridad). | Es una instrucción al modelo, no una garantía; un 7B puede ignorarla. |
+| `schema_validation` | `post` | Descarta IoCs que no estén literalmente en el texto (tras refang), con forma distinta a su tipo o duplicados. Filtra, nunca bloquea. | No ve un veredicto volteado, una omisión ni una severidad rebajada: siguen siendo coherentes con el texto. |
+| `llm_judge` | `post` | Otro modelo y otro prompt (`judge.md`) clasifican el documento. Bloquea si `injection` y `confidence ≥ judge.threshold`. Si falla, no bloquea (*fail-open*). | Es tan inyectable como el analista (ataque adaptativo, fuera de alcance). |
+
+Reglas comunes (`src/aitm/defenses/base.py`):
+
+- El orden de declaración no importa: se ordena por etapa y orden canónico.
+- Todo lo que una defensa quita, filtra o bloquea queda en la traza (`defense_notes`, `blocked`, `judge`, `latency_ms.judge`).
+- Bloquear no borra la salida del analista.
+- Las defensas se eligen con `defenses.enabled` o con `aitm analyze --defenses`; el override no cambia el hash de la configuración, y el prompt reforzado tampoco vive en `config.yaml` por la misma razón: la línea base de la Fase 2 sigue siendo comparable.
+
+---
+
 ## 7. Decisiones técnicas y justificación
 
 | Decisión | Justificación |

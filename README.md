@@ -108,6 +108,25 @@ En el equipo de referencia (i5-1135G7, sin GPU) un análisis cuesta **7,7 min**.
 sale el tamaño de los experimentos de las fases 3 y 5; ver
 [results/setup_report.md](results/setup_report.md).
 
+## Defensas (Fase 4)
+
+Cuatro defensas componibles (`src/aitm/defenses/`): `sanitizer` (quita lo que un
+humano no vería: HTML oculto, comentarios, Unicode invisible, metadatos y texto
+invisible del PDF), `spotlighting` (reporte entre marcas irrepetibles + prompt
+reforzado), `schema_validation` (todo IoC debe estar literalmente en el texto) y
+`llm_judge` (un segundo modelo decide si el documento trae inyección).
+
+```bash
+aitm analyze data/processed --defenses sanitizer,spotlighting   # o defenses.enabled en config.yaml
+aitm analyze data/processed --defenses none                     # sin defensas
+aitm sanitize-check --table results/tables/sanitizer_coverage.md   # qué vectores neutraliza (sin LLM)
+aitm judge --table results/tables/judge_fp.md                   # falsos positivos del juez en limpios
+aitm judge data/processed data/poisoned                         # + detección por vector
+```
+
+`sanitize-check` y `judge` sobre envenenados necesitan la matriz de la Fase 3 en
+`data/poisoned/` (`aitm attack` la regenera, idéntica al manifiesto versionado).
+
 ## Configuración
 
 Todo lo que afecta un resultado vive en [`config.yaml`](config.yaml): modelos, semilla,
@@ -120,5 +139,6 @@ Fases 0 y 1 cerradas. Dataset congelado: 12 reportes × 3 formatos, 171 indicado
 etiquetados, 119 técnicas ATT&CK y la severidad de cada reporte, anotado por Mariana
 Malagón y revisado y firmado por Juan Sebastián Ortega (método en la sección 6 de
 [docs/DATASET.md](docs/DATASET.md)). Fase 2: analista LLM,
-trazas y evaluador implementados (`aitm analyze`, `aitm evaluate`); línea base en curso.
-Ver [ROADMAP.md](ROADMAP.md).
+trazas, evaluador y línea base de 108 análisis (modelo principal `llama3.1:8b`). Fase 3:
+1056 reportes envenenados con 5 vectores. Fase 4: cuatro defensas componibles; falta medir
+los falsos positivos del juez con Ollama. Ver [ROADMAP.md](ROADMAP.md).

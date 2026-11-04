@@ -1,9 +1,10 @@
-"""Linea de comandos del laboratorio: `aitm analyze | evaluate | attack | sanitize-check`.
+"""Linea de comandos del laboratorio: `aitm analyze | evaluate | attack | sanitize-check | judge`.
 
 ```bash
 aitm analyze data/processed/html/<reporte>.html            # un reporte, modelo analista
 aitm analyze data/processed --model mistral:7b-instruct     # todo el dataset limpio
 aitm analyze data/processed --run-dir results/runs/<ts>     # reanuda una corrida cortada
+aitm analyze data/processed --defenses sanitizer,llm_judge  # con defensas (Fase 4)
 aitm evaluate results/runs/<ts>                              # metricas sobre las trazas
 ```
 
@@ -80,10 +81,17 @@ def _open_run(config: Config, run_dir: Path | None, argv: Sequence[str]) -> RunL
 
 
 def cmd_analyze(args: argparse.Namespace, argv: Sequence[str]) -> int:
-    from aitm.analyst.pipeline import Analyst
+    from aitm.defenses.registry import available, build_analyst, parse_names
     from aitm.llm.ollama_client import OllamaClient
 
     config = load_config()
+    defenses = parse_names(args.defenses)
+    if defenses is None:
+        defenses = list(config.defenses.enabled)
+    unknown = [name for name in defenses if name not in available()]
+    if unknown:
+        print(f"{FAIL} defensas desconocidas: {unknown}. Implementadas: {available()}")
+        return 1
     formats = set(args.formats.split(",")) if args.formats else None
     documents = collect_documents([Path(p) for p in args.paths], formats)
     if not documents:
@@ -95,7 +103,8 @@ def cmd_analyze(args: argparse.Namespace, argv: Sequence[str]) -> int:
         print(f"{FAIL} Ollama no responde en {config.ollama.host} (`ollama serve`)")
         return 1
     models = args.model or [config.models.analyst]
-    missing = [model for model in models if not client.has_model(model)]
+    needed = models + ([config.models.judge] if "llm_judge" in defenses else [])
+    missing = [model for model in needed if not client.has_model(model)]
     if missing:
         print(f"{FAIL} modelos no descargados: {missing}  ->  ollama pull <modelo>")
         return 1
@@ -103,11 +112,12 @@ def cmd_analyze(args: argparse.Namespace, argv: Sequence[str]) -> int:
     log = _open_run(config, Path(args.run_dir) if args.run_dir else None, argv)
     done = log.completed_keys()
     print(f"{OK} corrida en {log.run_dir}  (config {config.config_hash})")
+    print(f"     defensas: {', '.join(defenses) or 'ninguna'}")
     print(f"     {len(documents)} documentos x {len(models)} modelos; {len(done)} ya hechos\n")
 
     failures = 0
     for model in models:
-        analyst = Analyst(config=config, client=client, model=model)
+        analyst = build_analyst(config, client, model=model, defenses=defenses)
         pending = [doc for doc in documents if analyst.cell_key(doc) not in done]
         if args.limit:
             pending = pending[: args.limit]
@@ -123,6 +133,7 @@ def cmd_analyze(args: argparse.Namespace, argv: Sequence[str]) -> int:
                 f"{record.source_format:4} {record.status:12} "
                 f"{record.latency_ms.get('analyst', 0) / 1000:6.1f} s  "
                 f"{n_iocs:3} IoCs  sev={severity}"
+                + ("  BLOQUEADO" if record.blocked else "")
             )
             if record.context_warning:
                 print(f"     {WARN} {record.context_warning}")
@@ -300,6 +311,11 @@ def build_parser() -> argparse.ArgumentParser:
     analyze.add_argument("--formats", help="filtrar por formato, p. ej. txt,html")
     analyze.add_argument("--run-dir", help="carpeta de una corrida a reanudar")
     analyze.add_argument("--limit", type=int, help="maximo de analisis nuevos por modelo")
+    analyze.add_argument(
+        "--defenses",
+        help="defensas separadas por coma (sanitizer,spotlighting,schema_validation,llm_judge) "
+        "o 'none'; por defecto defenses.enabled de config.yaml. No cambia el hash de la config",
+    )
     analyze.set_defaults(handler=cmd_analyze)
 
     evaluate = sub.add_parser("evaluate", help="metricas sobre las trazas de una corrida")
