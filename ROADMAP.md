@@ -153,12 +153,12 @@ técnicas: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 - [x] Definir la interfaz `Defense` en `src/aitm/defenses/base.py` (fase `pre` sobre el texto, fase `post` sobre la salida). Tres etapas (`pre`, `prompt`, `post`); `compose()` ordena por etapa y orden canónico, así que el orden de declaración no cambia el pipeline ni la clave de celda. Lo que hace cada defensa queda en la traza (`defense_notes`, `blocked`, `judge`).
 - [x] Implementar `sanitizer.py`: quitar nodos ocultos por CSS, comentarios HTML, caracteres invisibles/bidi y metadatos PDF. Además, el texto PDF en modo de render invisible (reescribe el content stream) y las reglas de `<style>` con selectores simples.
 - [x] Probar el sanitizador contra cada vector y anotar cuáles neutraliza por completo y cuáles no. `aitm sanitize-check` sobre los 1056 envenenados: neutraliza **100 %** de `html_hidden` y `pdf_hidden` y `unicode_invisible` en `tags`/`zero_width`; **no** neutraliza `plaintext`, `author_note` ni `bidi` (contenido visible). Costo en limpios: 36/36 idénticos. Tabla en [results/tables/sanitizer_coverage.md](results/tables/sanitizer_coverage.md).
-- [ ] Implementar `spotlighting.py`: delimitadores irrepetibles + system prompt reforzado (`analyst_hardened.md`).
-- [ ] Implementar `schema_validator.py`: validación estricta + regla de que todo IoC reportado exista literalmente en el texto de entrada.
+- [x] Implementar `spotlighting.py`: delimitadores irrepetibles + system prompt reforzado (`analyst_hardened.md`). Marcas `«INICIO_REPORTE_<código>»` con código de 16 hex ausente del texto (determinista por semilla, para reproducir), marcas falsas del reporte neutralizadas y la regla repetida tras el bloque. El reforzado contiene el base línea por línea (lo verifica una prueba): solo cambia la defensa, no la tarea.
+- [x] Implementar `schema_validator.py`: validación estricta + regla de que todo IoC reportado exista literalmente en el texto de entrada. Además, forma del valor según su tipo y sin duplicados. Filtra, nunca bloquea; lo descartado queda en la traza.
 - [ ] Escribir el prompt del juez (`judge.md`) e implementar `llm_judge.py` como segunda llamada independiente.
 - [ ] Hacer que las defensas se activen/desactiven desde `config.yaml` y se puedan componer en cualquier orden.
 - [ ] Medir los falsos positivos del juez sobre los reportes limpios.
-- [ ] Pruebas unitarias del sanitizador y del validador de esquema.
+- [x] Pruebas unitarias del sanitizador y del validador de esquema. (Más las de spotlighting y composición: 337 pruebas.)
 
 > **Estado (2026-11-04, Juan Carlos):** interfaz de defensas y sanitizador listos.
 > El sanitizador hace lo que promete y nada más: quita lo que un humano no vería, así
@@ -170,6 +170,18 @@ técnicas: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 > compuesto lo rodea: ataque adaptativo, fuera de alcance). Matriz de la Fase 3
 > regenerada desde cero en otro equipo: manifiesto byte a byte idéntico al
 > versionado.
+
+> **Estado (2026-11-04, Juan Carlos):** spotlighting y validador estricto listos. Una
+> advertencia para leer bien la Fase 5: **el validador no puede bajar el ASR de
+> nuestros cuatro objetivos.** Ninguno introduce IoCs nuevos (voltean un veredicto,
+> quitan un indicador, bajan la severidad o quitan una técnica), así que la salida
+> manipulada sigue siendo coherente con el texto. Su valor está contra IoCs alucinados
+> o inyectados, y su costo se verá en IoCs reales perdidos por un refang mal hecho
+> (`defang_error` en la línea base). El prompt reforzado y las marcas agregan ~500 tokens: con el
+> reporte más largo (5.637) + `num_predict` 4.096 sigue cabiendo en `num_ctx` 12.288.
+> El prompt reforzado y su plantilla no van en `config.yaml` a propósito: cambiarla
+> cambia el hash y rompe la comparación con la línea base; la traza guarda su ruta y
+> sha256.
 
 ## Fase 5 — Experimentos y métricas
 
