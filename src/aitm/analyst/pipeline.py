@@ -8,10 +8,15 @@ archivo ─► parse() ─► pre_hooks ─► build_messages() ─► Ollama (f
 
 Puntos de diseno que importan para las fases siguientes:
 
-- **Los ganchos de defensa ya existen, vacios.** `pre_hooks` reciben el reporte ya
-  leido (ahi va el sanitizador), `message_builder` arma los mensajes (ahi va el
-  spotlighting) y `post_hooks` reciben la salida validada (validador estricto, juez).
-  La Fase 4 los llena sin tocar este archivo.
+- **Los ganchos de defensa.** `pre_hooks` reciben el reporte ya leido (ahi va el
+  sanitizador), `message_builder` arma los mensajes (ahi va el spotlighting) y
+  `post_hooks` reciben la salida validada (validador estricto, juez). La Fase 4 los
+  llena desde `src/aitm/defenses/` (`registry.build_analyst`). Cada analisis crea un
+  `DefenseContext` nuevo que viaja por todos los ganchos: lo que las defensas quitan,
+  filtran o bloquean termina en la traza (`defense_notes`, `blocked`, `judge`).
+- **Los `post_hooks` corren aunque el analista falle** (con salida `None`): el juez
+  evalua el documento, no la respuesta. Solo se saltan si Ollama no respondio
+  (`error`), porque esa celda se va a repetir de todos modos.
 - **El analista no sabe si lo estan atacando.** El ataque solo viaja a la traza
   (`attack`) para que el evaluador lo use; nunca llega al prompt.
 - **Los reintentos cambian el prompt.** Con temperatura 0 y semilla fija, repetir la
@@ -29,11 +34,12 @@ import json
 import logging
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Callable, Protocol
+from typing import Any, Protocol
 
 from aitm.analyst.parsers import ParsedReport, detect_format, parse
 from aitm.analyst.schema import OutputError, ValidatedOutput, ollama_schema, validate_output
 from aitm.config import Config, project_root
+from aitm.defenses.base import DefenseContext, MessageBuilder, PostHook, PreHook
 from aitm.evaluation.traces import Attempt, PromptInfo, RunRecord, RunStatus, run_key, utc_now
 from aitm.hostinfo import hardware_summary
 from aitm.llm.ollama_client import ChatResponse, OllamaError
@@ -67,9 +73,7 @@ class ChatClient(Protocol):
     ) -> ChatResponse: ...
 
 
-PreHook = Callable[[ParsedReport], ParsedReport]
-PostHook = Callable[[ValidatedOutput, ParsedReport], ValidatedOutput]
-MessageBuilder = Callable[[str, ParsedReport], list[dict[str, str]]]
+__all__ = ["Analyst", "Environment", "MessageBuilder", "PostHook", "PreHook", "build_messages"]
 
 
 def build_messages(system_prompt: str, report: ParsedReport) -> list[dict[str, str]]:
@@ -121,7 +125,11 @@ class Analyst:
     pre_hooks: list[PreHook] = field(default_factory=list)
     post_hooks: list[PostHook] = field(default_factory=list)
     message_builder: MessageBuilder = build_messages
-    #: Nombres de las defensas activas, solo para la traza.
+    #: Texto que identifica la plantilla del mensaje de usuario (su sha256 va a la
+    #: traza). `None` = la plantilla ingenua de este modulo.
+    user_template_fingerprint: str | None = None
+    #: Nombres de las defensas activas, en orden canonico. Van a la traza y a la clave
+    #: de la celda.
     defenses: list[str] = field(default_factory=list)
     environment: Environment | None = None
 
@@ -135,7 +143,9 @@ class Analyst:
         self.prompt_info = PromptInfo(
             system_path=_display_path(self.system_prompt_path),
             system_sha256=sha256_text(self.system_prompt),
-            user_template_sha256=sha256_text(USER_TEMPLATE + RETRY_TEMPLATE),
+            user_template_sha256=sha256_text(
+                (self.user_template_fingerprint or USER_TEMPLATE) + RETRY_TEMPLATE
+            ),
         )
         if self.environment is None:
             self.environment = self._probe_environment()
@@ -186,8 +196,9 @@ class Analyst:
         path = Path(path)
         source_sha256 = sha256_bytes(path.read_bytes())
         report = self.read(path, report_id=report_id)
+        context = DefenseContext()
         for hook in self.pre_hooks:
-            report = hook(report)
+            report = hook(report, context)
 
         messages = self.message_builder(self.system_prompt, report)
         conversation = list(messages)
@@ -245,10 +256,12 @@ class Analyst:
             status, error = "ok", None
             break
 
+        if status != "error":
+            for hook in self.post_hooks:
+                validated = hook(validated, report, context)
+
         output = None
         if validated is not None:
-            for hook in self.post_hooks:
-                validated = hook(validated, report)
             validated.output.report_id = report.report_id
             output = validated.output
             warnings = validated.warnings
@@ -270,13 +283,16 @@ class Analyst:
             parser=self.config.analyst.parser.model_dump(),
             attack=attack,
             defenses=list(self.defenses),
+            judge=context.judge,
+            blocked=context.blocked,
+            defense_notes=context.notes,
             prompt=self.prompt_info,
             status=status,
             error=error,
             parse_retries=max(0, len(attempts) - 1),
             validation_warnings=warnings,
             context_warning=self._context_warning(attempts),
-            latency_ms={"analyst": sum(a.latency_ms for a in attempts)},
+            latency_ms={"analyst": sum(a.latency_ms for a in attempts), **context.latency_ms},
             tokens={
                 "prompt": sum(a.prompt_tokens or 0 for a in attempts),
                 "completion": sum(a.completion_tokens or 0 for a in attempts),

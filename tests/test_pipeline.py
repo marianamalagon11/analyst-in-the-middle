@@ -136,20 +136,54 @@ def test_ganchos_de_defensa(reporte) -> None:
     """La Fase 4 enchufa aqui sus defensas; el pipeline solo tiene que llamarlas."""
     vistos = []
 
-    def pre(report):
+    def pre(report, context):
         vistos.append("pre")
+        context.note("pre", "visto")
         return report
 
-    def post(validated, report):
+    def post(validated, report, context):
         vistos.append("post")
+        context.judge = {"injection": False}
+        context.latency_ms["judge"] = 7
         return validated
 
     cliente = ClienteFalso([json.dumps(VALIDA)])
     analyst = analista(cliente)
     analyst.pre_hooks.append(pre)
     analyst.post_hooks.append(post)
-    analyst.analyze(reporte)
+    record = analyst.analyze(reporte)
     assert vistos == ["pre", "post"]
+    # Lo que dejan las defensas en el contexto llega a la traza.
+    assert record.defense_notes == ["pre: visto"]
+    assert record.judge == {"injection": False}
+    assert record.latency_ms == {"analyst": 10, "judge": 7}
+
+
+def test_post_hooks_corren_aunque_el_analista_falle(reporte) -> None:
+    """El juez evalua el documento: su veredicto vale aunque la respuesta no sirva."""
+    vistos = []
+
+    def post(validated, report, context):
+        vistos.append(validated)
+        context.block("juez", "inyeccion")
+        return validated
+
+    cliente = ClienteFalso(["no es json"] * 3)
+    analyst = analista(cliente)
+    analyst.post_hooks.append(post)
+    record = analyst.analyze(reporte)
+    assert record.status == "parse_failed"
+    assert vistos == [None]
+    assert record.blocked is True
+
+
+def test_post_hooks_no_corren_si_ollama_no_responde(reporte) -> None:
+    vistos = []
+    cliente = ClienteFalso([OllamaError("caido")])
+    analyst = analista(cliente)
+    analyst.post_hooks.append(lambda v, r, c: vistos.append(v) or v)
+    assert analyst.analyze(reporte).status == "error"
+    assert vistos == []
 
 
 def test_traza_completa_y_reanudable(reporte, tmp_path) -> None:

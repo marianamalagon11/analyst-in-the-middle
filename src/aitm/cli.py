@@ -1,4 +1,4 @@
-"""Linea de comandos del laboratorio: `aitm analyze | evaluate | attack`.
+"""Linea de comandos del laboratorio: `aitm analyze | evaluate | attack | sanitize-check`.
 
 ```bash
 aitm analyze data/processed/html/<reporte>.html            # un reporte, modelo analista
@@ -313,6 +313,10 @@ def build_parser() -> argparse.ArgumentParser:
     from aitm.attacks.cli import register as register_attack  # Fase 3
 
     register_attack(sub)
+
+    from aitm.defenses.cli import register as register_defenses  # Fase 4
+
+    register_defenses(sub)
     return parser
 
 

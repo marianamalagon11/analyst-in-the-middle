@@ -150,15 +150,26 @@ técnicas: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 ## Fase 4 — Defensas
 
-- [ ] Definir la interfaz `Defense` en `src/aitm/defenses/base.py` (fase `pre` sobre el texto, fase `post` sobre la salida).
-- [ ] Implementar `sanitizer.py`: quitar nodos ocultos por CSS, comentarios HTML, caracteres invisibles/bidi y metadatos PDF.
-- [ ] Probar el sanitizador contra cada vector y anotar cuáles neutraliza por completo y cuáles no.
+- [x] Definir la interfaz `Defense` en `src/aitm/defenses/base.py` (fase `pre` sobre el texto, fase `post` sobre la salida). Tres etapas (`pre`, `prompt`, `post`); `compose()` ordena por etapa y orden canónico, así que el orden de declaración no cambia el pipeline ni la clave de celda. Lo que hace cada defensa queda en la traza (`defense_notes`, `blocked`, `judge`).
+- [x] Implementar `sanitizer.py`: quitar nodos ocultos por CSS, comentarios HTML, caracteres invisibles/bidi y metadatos PDF. Además, el texto PDF en modo de render invisible (reescribe el content stream) y las reglas de `<style>` con selectores simples.
+- [x] Probar el sanitizador contra cada vector y anotar cuáles neutraliza por completo y cuáles no. `aitm sanitize-check` sobre los 1056 envenenados: neutraliza **100 %** de `html_hidden` y `pdf_hidden` y `unicode_invisible` en `tags`/`zero_width`; **no** neutraliza `plaintext`, `author_note` ni `bidi` (contenido visible). Costo en limpios: 36/36 idénticos. Tabla en [results/tables/sanitizer_coverage.md](results/tables/sanitizer_coverage.md).
 - [ ] Implementar `spotlighting.py`: delimitadores irrepetibles + system prompt reforzado (`analyst_hardened.md`).
 - [ ] Implementar `schema_validator.py`: validación estricta + regla de que todo IoC reportado exista literalmente en el texto de entrada.
 - [ ] Escribir el prompt del juez (`judge.md`) e implementar `llm_judge.py` como segunda llamada independiente.
 - [ ] Hacer que las defensas se activen/desactiven desde `config.yaml` y se puedan componer en cualquier orden.
 - [ ] Medir los falsos positivos del juez sobre los reportes limpios.
 - [ ] Pruebas unitarias del sanitizador y del validador de esquema.
+
+> **Estado (2026-11-04, Juan Carlos):** interfaz de defensas y sanitizador listos.
+> El sanitizador hace lo que promete y nada más: quita lo que un humano no vería, así
+> que **solo puede ganar contra los vectores ocultos**. Contra `plaintext`,
+> `author_note` y `bidi` el payload pasa entero (en `bidi`, quitar los controles deja
+> el texto incluso más legible para el modelo); para esos quedan el spotlighting y el
+> juez. Supuestos declarados en `sanitizer.py`: fondo blanco (texto blanco = oculto),
+> render 3 = oculto (rompería un PDF escaneado con OCR) y CSS sin cascada (un selector
+> compuesto lo rodea: ataque adaptativo, fuera de alcance). Matriz de la Fase 3
+> regenerada desde cero en otro equipo: manifiesto byte a byte idéntico al
+> versionado.
 
 ## Fase 5 — Experimentos y métricas
 
