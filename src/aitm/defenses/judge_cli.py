@@ -6,7 +6,12 @@ aitm judge data/processed data/poisoned      # + deteccion sobre los envenenados
 aitm judge data/poisoned --sanitize          # el juez ve el texto ya sanitizado
 aitm judge --run-dir results/runs/<ts>       # reanuda
 aitm judge --run-dir results/runs/<ts> --table results/tables/judge_fp.md   # solo resume
+aitm judge --run-dir results/runs/<ts> --regrade --table ...   # re-califica sin LLM
 ```
+
+`--regrade` vuelve a aplicar la regla de evidencia actual a las respuestas guardadas
+de una corrida, sin llamar al modelo (`judge_regraded.jsonl`). Es como se obtuvo la
+tabla final del juez: las respuestas de la v1 con la regla agregada despues.
 
 Es la medicion de la Fase 4 "falsos positivos del juez sobre los reportes limpios", y de
 paso su tasa de deteccion por vector. Correr el juez aparte cuesta una fraccion de un
@@ -48,6 +53,7 @@ from aitm.hostinfo import hardware_summary
 
 OK, FAIL, WARN = "[ok]", "[--]", "[!!]"
 JUDGE_FILE = "judge.jsonl"
+REGRADED_FILE = "judge_regraded.jsonl"
 
 
 class JudgeRecord(BaseModel):
@@ -88,6 +94,11 @@ def register(sub) -> None:
     judge.add_argument("--run-dir", help="carpeta de una corrida a reanudar o resumir")
     judge.add_argument("--limit", type=int, help="maximo de documentos nuevos")
     judge.add_argument("--table", help="copia el resumen Markdown aqui")
+    judge.add_argument(
+        "--regrade",
+        action="store_true",
+        help="con --run-dir: re-aplica la regla de evidencia a las respuestas guardadas, sin LLM",
+    )
     judge.set_defaults(handler=cmd_judge)
 
 
@@ -131,6 +142,17 @@ def cmd_judge(args, argv) -> int:
     run_dir.mkdir(parents=True, exist_ok=True)
     log_path = run_dir / JUDGE_FILE
     records = _read_records(log_path)
+
+    if args.regrade:
+        if not records:
+            print(f"{FAIL} --regrade necesita --run-dir con un {JUDGE_FILE}")
+            return 1
+        records = regrade(records, config)
+        with (run_dir / REGRADED_FILE).open("w", encoding="utf-8", newline="\n") as handle:
+            for record in records:
+                handle.write(record.model_dump_json() + "\n")
+        print(f"{OK} {len(records)} veredictos re-calificados en {run_dir / REGRADED_FILE}")
+        summary_only = True
 
     if not summary_only:
         documents = collect_documents(paths, None)
@@ -216,10 +238,11 @@ def cmd_judge(args, argv) -> int:
                 f"inj={v.injection} conf={v.confidence} {v.latency_ms / 1000:5.1f} s"
             )
 
-    report_md = summarize(records, config, run_dir)
-    (run_dir / "judge_summary.md").write_text(report_md, encoding="utf-8")
+    report_md = summarize(records, config, run_dir, regraded=args.regrade)
+    summary_path = run_dir / ("judge_summary_regraded.md" if args.regrade else "judge_summary.md")
+    summary_path.write_text(report_md, encoding="utf-8")
     print("\n" + report_md)
-    print(f"{OK} {run_dir / 'judge_summary.md'}")
+    print(f"{OK} {summary_path}")
     if args.table:
         destination = config.resolve(Path(args.table))
         destination.parent.mkdir(parents=True, exist_ok=True)
@@ -228,11 +251,44 @@ def cmd_judge(args, argv) -> int:
     return 0
 
 
+def regrade(records: list[JudgeRecord], config: Config) -> list[JudgeRecord]:
+    """Re-aplica la regla de evidencia a respuestas ya guardadas. Determinista, sin LLM.
+
+    Relee cada documento con las mismas banderas del parser (y el sanitizador si la
+    corrida lo uso) para comprobar la cita contra el mismo texto que vio el juez.
+    """
+    sanitizer = Sanitizer()
+    out = []
+    for record in records:
+        verdict = record.verdict
+        if verdict.status == "ok" and verdict.injection:
+            path = config.resolve(Path(record.source_path))
+            report = parse(
+                path,
+                report_id=record.report_id,
+                include_hidden_html=config.analyst.parser.include_hidden_html,
+                include_html_comments=config.analyst.parser.include_html_comments,
+                include_pdf_metadata=config.analyst.parser.include_pdf_metadata,
+            )
+            if record.sanitized:
+                report = sanitizer.apply(report, DefenseContext())
+            grounded = evidence_grounded(verdict.evidence, report.text)
+            verdict = verdict.model_copy(
+                update={
+                    "evidence_grounded": grounded,
+                    "blocked": bool(grounded and verdict.confidence is not None
+                                    and verdict.confidence >= verdict.threshold),
+                }
+            )
+        out.append(record.model_copy(update={"verdict": verdict}))
+    return out
+
+
 def _rate(hits: int, total: int) -> str:
     return f"{hits}/{total} ({hits / total:.0%})" if total else "-"
 
 
-def summarize(records: list[JudgeRecord], config: Config, run_dir: Path) -> str:
+def summarize(records: list[JudgeRecord], config: Config, run_dir: Path, *, regraded: bool = False) -> str:
     """Tabla de falsos positivos (limpios) y deteccion (envenenados) del juez."""
     latest: dict[str, JudgeRecord] = {}
     for record in records:
@@ -261,6 +317,15 @@ def summarize(records: list[JudgeRecord], config: Config, run_dir: Path) -> str:
         "",
         f"Equipo: {'; '.join(hosts)}",
         "",
+        *(
+            [
+                "**Re-calificado sin LLM** (`--regrade`): son las respuestas guardadas de esta",
+                "corrida con la regla de evidencia actual aplicada después.",
+                "",
+            ]
+            if regraded
+            else []
+        ),
         "Bloquea = `injection`, `confidence >= umbral` y la cita del juez aparece en el",
         "documento. Las tasas se calculan sobre las respuestas válidas; los fallos del juez",
         "no bloquean (*fail-open*) y se cuentan aparte.",

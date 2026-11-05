@@ -122,6 +122,7 @@ aitm analyze data/processed --defenses none                     # sin defensas
 aitm sanitize-check --table results/tables/sanitizer_coverage.md   # qué vectores neutraliza (sin LLM)
 aitm judge --table results/tables/judge_fp.md                   # falsos positivos del juez en limpios
 aitm judge data/processed data/poisoned                         # + detección por vector
+aitm judge --run-dir results/runs/<ts> --regrade                # re-aplica la regla de evidencia, sin LLM
 ```
 
 `sanitize-check` y `judge` sobre envenenados necesitan la matriz de la Fase 3 en
@@ -140,5 +141,5 @@ etiquetados, 119 técnicas ATT&CK y la severidad de cada reporte, anotado por Ma
 Malagón y revisado y firmado por Juan Sebastián Ortega (método en la sección 6 de
 [docs/DATASET.md](docs/DATASET.md)). Fase 2: analista LLM,
 trazas, evaluador y línea base de 108 análisis (modelo principal `llama3.1:8b`). Fase 3:
-1056 reportes envenenados con 5 vectores. Fase 4: cuatro defensas componibles; falta medir
-los falsos positivos del juez con Ollama. Ver [ROADMAP.md](ROADMAP.md).
+1056 reportes envenenados con 5 vectores. Fase 4: cuatro defensas componibles; el juez bloquea
+el 17 % de los reportes limpios (`results/tables/judge_fp.md`). Ver [ROADMAP.md](ROADMAP.md).

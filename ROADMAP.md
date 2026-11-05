@@ -157,7 +157,7 @@ técnicas: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 - [x] Implementar `schema_validator.py`: validación estricta + regla de que todo IoC reportado exista literalmente en el texto de entrada. Además, forma del valor según su tipo y sin duplicados. Filtra, nunca bloquea; lo descartado queda en la traza.
 - [x] Escribir el prompt del juez (`judge.md`) e implementar `llm_judge.py` como segunda llamada independiente. Otro modelo (`models.judge` = qwen2.5) y otro prompt; ve el documento entre las marcas del spotlighting, no la respuesta. Bloquea si `injection` y `confidence >= judge.threshold`; si falla no bloquea (*fail-open*) y se cuenta aparte. Bloquear no borra la salida del analista.
 - [x] Hacer que las defensas se activen/desactiven desde `config.yaml` y se puedan componer en cualquier orden. `defenses.enabled` o `aitm analyze --defenses a,b` (el override no cambia el hash de la config: una sola config para toda la matriz de la Fase 5). Cualquier orden da el mismo pipeline (prueba con las 24 permutaciones).
-- [ ] Medir los falsos positivos del juez sobre los reportes limpios. **v1 medida: 8/36 (22 %)**, [results/tables/judge_fp_v1.md](results/tables/judge_fp_v1.md). **Falta correr la v2** (prompt y regla de evidencia nuevos): `aitm judge --table results/tables/judge_fp.md` (~15 min en el MacBook Air). Opcional, detección por vector: `aitm judge data/processed data/poisoned`.
+- [x] Medir los falsos positivos del juez sobre los reportes limpios. **Final: 6/36 (17 %)** con el prompt v1 + regla de evidencia, [results/tables/judge_fp.md](results/tables/judge_fp.md). Historial: v1 sin regla 8/36 (22 %, [judge_fp_v1.md](results/tables/judge_fp_v1.md)); v2 con prompt nuevo 11/36 (31 %, [judge_fp_v2.md](results/tables/judge_fp_v2.md), descartada). Los 6 FP finales son promoción del proveedor en 3 reportes. Latencia p50 22,6 s / p95 32,6 s por documento (MacBook Air M4).
 - [x] Pruebas unitarias del sanitizador y del validador de esquema. (Más las de spotlighting y composición: 337 pruebas.)
 
 > **Estado (2026-11-04, Juan Carlos):** interfaz de defensas y sanitizador listos.
@@ -223,6 +223,22 @@ técnicas: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 > envenenadas. Un bloqueo cuenta como *detección* solo si la cita del juez cae dentro
 > del payload (`JudgeRecord.detected`); el resumen de `aitm judge` ya separa
 > *bloqueados* de *detectados*, y el ASR con defensas debe usar el mismo criterio.
+
+> **Fase 4 cerrada (2026-11-05, Juan Carlos).** Se probó el juez v2 y **empeoró**: 11/36
+> falsos positivos (31 %). Siguió marcando la promoción del proveedor que el prompt
+> excluía de forma explícita, y empezó a marcar contenido del atacante (PowerShell
+> ofuscado, un dominio de duckdns) que la v1 dejaba pasar. Conclusión: con un 7B, el
+> juez basado solo en prompt es **inestable**; un cambio razonable del prompt movió la
+> tasa de FP del 22 % al 31 % y cambió qué reportes marca, con la confianza siempre en
+> 0,90–1,00. Seguir ajustando el prompt sobre los mismos 12 reportes habría sido elegir
+> ruido, así que se cerró así: **prompt v1 + regla de evidencia**, la regla aplicada a
+> las respuestas v1 sin volver a inferir (`aitm judge --regrade`): **6/36 (17 %)**. Las
+> tres tablas van al informe.
+>
+> **Para la Fase 5:** con un 17 % de bloqueo en limpios, el juez "detectaría" una parte
+> parecida de los envenenados por azar. Por eso la detección se cuenta solo si la cita
+> cae dentro del payload (`JudgeRecord.detected`), y el informe debe poner la tasa de
+> detección al lado de la de FP.
 
 ## Fase 5 — Experimentos y métricas
 
