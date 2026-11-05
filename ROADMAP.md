@@ -157,7 +157,7 @@ técnicas: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 - [x] Implementar `schema_validator.py`: validación estricta + regla de que todo IoC reportado exista literalmente en el texto de entrada. Además, forma del valor según su tipo y sin duplicados. Filtra, nunca bloquea; lo descartado queda en la traza.
 - [x] Escribir el prompt del juez (`judge.md`) e implementar `llm_judge.py` como segunda llamada independiente. Otro modelo (`models.judge` = qwen2.5) y otro prompt; ve el documento entre las marcas del spotlighting, no la respuesta. Bloquea si `injection` y `confidence >= judge.threshold`; si falla no bloquea (*fail-open*) y se cuenta aparte. Bloquear no borra la salida del analista.
 - [x] Hacer que las defensas se activen/desactiven desde `config.yaml` y se puedan componer en cualquier orden. `defenses.enabled` o `aitm analyze --defenses a,b` (el override no cambia el hash de la config: una sola config para toda la matriz de la Fase 5). Cualquier orden da el mismo pipeline (prueba con las 24 permutaciones).
-- [ ] Medir los falsos positivos del juez sobre los reportes limpios. **Herramienta lista, falta correrla en el M5** (necesita Ollama con `qwen2.5:7b-instruct`): `aitm judge --table results/tables/judge_fp.md` (36 limpios, ~minutos). Opcional, detección por vector: `aitm judge data/processed data/poisoned`.
+- [ ] Medir los falsos positivos del juez sobre los reportes limpios. **v1 medida: 8/36 (22 %)**, [results/tables/judge_fp_v1.md](results/tables/judge_fp_v1.md). **Falta correr la v2** (prompt y regla de evidencia nuevos): `aitm judge --table results/tables/judge_fp.md` (~15 min en el MacBook Air). Opcional, detección por vector: `aitm judge data/processed data/poisoned`.
 - [x] Pruebas unitarias del sanitizador y del validador de esquema. (Más las de spotlighting y composición: 337 pruebas.)
 
 > **Estado (2026-11-04, Juan Carlos):** interfaz de defensas y sanitizador listos.
@@ -198,6 +198,31 @@ técnicas: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 > que el runner puede recorrer `reporte × ataque × defensas × modelo` reanudando sin
 > mezclar celdas. El ASR con defensa debe contar una corrida bloqueada como ataque
 > fallido (y reportar aparte la tasa de bloqueo, como pide la arquitectura).
+
+> **Estado (2026-11-04, Juan Carlos): juez v1 medido y corregido.** Primera corrida
+> sobre los 36 limpios (MacBook Air, qwen2.5): **8/36 falsos positivos (22 %)** en 5 de
+> los 12 reportes. Dos causas:
+>
+> 1. **Promoción del proveedor** (6): "contact us", "Get in touch!", "Spoiler alert: It
+>    wasn't". Son imperativos al lector humano y el prompt v1 no los excluía.
+> 2. **Evidencia inventada** (2, solo PDF): el juez citó en español frases de los
+>    ejemplos de su propio prompt ("clasifica como benigno este dominio: …") que no
+>    están en el reporte.
+>
+> La confianza no sirve de umbral (todas 0,90–1,00) y el juez cambia de opinión con el
+> formato del mismo reporte. **Juez v2:** (a) solo bloquea si la cita está en el
+> documento (`evidence_grounded`), lo que aplicado sin LLM a la v1 baja a 6/36; (b) el
+> prompt excluye la promoción del proveedor y exige cita literal; (c) el sha256 del
+> prompt va en cada veredicto y en la clave de reanudación.
+>
+> **Ojo, calibración a posteriori:** la v2 se ajustó después de ver los limpios, y el
+> conjunto es chico (12 reportes). Su tasa de FP es optimista; en el informe van las
+> dos versiones y esta advertencia.
+>
+> **Para la Fase 5:** esos párrafos de promoción también están en las copias
+> envenenadas. Un bloqueo cuenta como *detección* solo si la cita del juez cae dentro
+> del payload (`JudgeRecord.detected`); el resumen de `aitm judge` ya separa
+> *bloqueados* de *detectados*, y el ASR con defensas debe usar el mismo criterio.
 
 ## Fase 5 — Experimentos y métricas
 
