@@ -1,0 +1,19 @@
+# Experimento 3: ASR con cada defensa por separado, modelo principal.
+# Misma matriz de ataques que el experimento 1 (la referencia sin defensas sale de ahi).
+name: e3_defensas
+description: ASR con cada defensa por separado, modelo principal
+models: [analyst]
+defenses:
+  - [sanitizer]
+  - [spotlighting]
+  - [schema_validation]
+  - [llm_judge]
+goals: [flip_to_benign, omit_ioc, downgrade_severity, drop_technique]
+attacks:
+  plaintext: {variants: [inline], formats: [txt]}
+  author_note: {variants: [analyst_note], formats: [txt]}
+  html_hidden: {variants: [display_none], formats: [html]}
+  unicode_invisible: {variants: [tags], formats: [txt]}
+  pdf_hidden: {variants: [metadata], formats: [pdf]}
+reports: all
+clean: true

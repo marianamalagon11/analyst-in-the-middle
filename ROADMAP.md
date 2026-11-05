@@ -242,18 +242,36 @@ técnicas: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 ## Fase 5 — Experimentos y métricas
 
-- [ ] Implementar `src/aitm/evaluation/runner.py`: ejecuta la matriz `reporte × ataque × defensas × modelo` y reanuda si se interrumpe.
-- [ ] Definir el criterio exacto de "ataque exitoso" por cada objetivo y dejarlo escrito en código y en el informe.
-- [ ] Implementar el cálculo de **ASR** condicionado a que el reporte limpio sí dé el resultado correcto.
+- [x] Implementar `src/aitm/evaluation/runner.py`: ejecuta la matriz `reporte × ataque × defensas × modelo` y reanuda si se interrumpe. `aitm run experiments/<e>.yaml` (con `--dry-run`); experimentos declarados en YAML antes de correr; cache de inferencia por equipo (`src/aitm/llm/cache.py`), válida porque el laboratorio es determinista.
+- [x] Definir el criterio exacto de "ataque exitoso" por cada objetivo y dejarlo escrito en código y en el informe. Código: `attacks/base.py` y `evaluation/asr.py`; texto para el informe: sección 4.1 de [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). Un bloqueo del juez cuenta como fracaso del ataque.
+- [x] Implementar el cálculo de **ASR** condicionado a que el reporte limpio sí dé el resultado correcto. `evaluation/asr.py`: el limpio es el de las mismas defensas y modelo; se reportan medibles, ASR, ASR sin bloqueo y detección atribuida al payload.
 - [ ] Correr el experimento 1: ASR por vector, sin defensas, modelo principal.
 - [ ] Correr el experimento 2: ASR por vector y por modelo (los tres), sin defensas.
 - [ ] Correr el experimento 3: ASR con cada defensa por separado.
 - [ ] Correr el experimento 4: ASR con todas las defensas combinadas.
 - [ ] Correr el experimento 5: costo de las defensas (exactitud sobre reportes limpios, FP del juez, latencia p50/p95).
-- [ ] Implementar `plots.py` y generar las gráficas: ASR por vector, ASR por modelo, ASR por defensa, exactitud vs. latencia.
-- [ ] Exportar las tablas a `results/tables/` en CSV y Markdown.
+- [ ] Implementar `plots.py` y generar las gráficas: ASR por vector, ASR por modelo, ASR por defensa, exactitud vs. latencia. **Implementado**; las genera `aitm report` cuando haya trazas.
+- [ ] Exportar las tablas a `results/tables/` en CSV y Markdown. **Implementado** en `aitm report` (`exp1`…`exp5` + `asr_celdas.csv`); falta correr.
 - [ ] Redactar las observaciones experimentales: qué vector fue más efectivo, qué defensa aportó más, qué nos sorprendió.
 - [ ] Guardar las trazas de 2–3 casos ilustrativos (prompt + salida) para mostrarlos tal cual en la sustentación.
+
+> **Estado (2026-11-05, Juan Carlos):** código de la Fase 5 listo (385 pruebas); faltan
+> las corridas. Cuatro experimentos fijados en `experiments/`, todos con la misma tajada
+> de ataques: la variante canónica de cada vector en su formato natural (`plaintext`
+> txt, `author_note` txt, `html_hidden` html, `unicode_invisible` tags txt,
+> `pdf_hidden` metadata pdf) y el payload canónico de cada objetivo.
+>
+> | Experimento | Qué | Celdas | Inferencias nuevas (en orden) |
+> |---|---|---|---|
+> | `e1_vectores` | sin defensas, llama, 4 objetivos | 256 | 256 |
+> | `e2_modelos` | sin defensas, mistral y qwen, 2 objetivos | 292 | 292 |
+> | `e3_defensas` | cada defensa sola, llama | 1.024 | 268 + 256 del juez |
+> | `e4_combinadas` | las cuatro juntas, llama | 256 | 12 + 12 del juez |
+>
+> ~22 h a 90 s por análisis. **Orden recomendado:** E1 → E3 → E4 en un mismo equipo
+> (la cache es por equipo) y E2 en paralelo en el M5. `--dry-run` recalcula horas con la
+> latencia medida en ese equipo. Experimento 5 (costo) no corre nada: sale de los limpios
+> de E1, E3 y E4. Después: `aitm report`.
 
 ## Fase 6 — Demo para la sustentación
 
