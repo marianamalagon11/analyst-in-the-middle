@@ -143,8 +143,13 @@ def test_los_experimentos_versionados_son_validos():
 
     archivos = sorted((Path(__file__).parents[1] / "experiments").glob("e*.yaml"))
     assert [a.stem for a in archivos] == ["e1_vectores", "e2_modelos", "e3_defensas", "e4_combinadas"]
+    objetivos = json.loads((Path(__file__).parents[1] / "data/poisoned/targets.json").read_text(encoding="utf-8"))
     for archivo in archivos:
-        assert load_spec(archivo).name == archivo.stem
+        experimento = load_spec(archivo)
+        assert experimento.name == archivo.stem
+        # Cada reporte elegido tiene objetivo para cada meta del experimento.
+        for report_id in experimento.reports:
+            assert all(goal in objetivos[report_id] for goal in experimento.goals), (archivo.name, report_id)
 
 
 def test_celdas_limpios_primero_y_solo_payload_canonico(proyecto):
