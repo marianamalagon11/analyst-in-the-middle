@@ -151,6 +151,7 @@ consultas al juez (~1,5 h en una GPU T4); E2, opcional, 96 análisis más.
 **Sin GPU propia:** [`experiments/fase5_kaggle.ipynb`](experiments/fase5_kaggle.ipynb) hace
 todo en Kaggle (GPU gratuita) de forma desatendida con *Save & Run All*, y deja
 `resultados_fase5.zip` en la salida. Descomprimirlo en la raíz del repo y correr `aitm report`.
+Resultados y observaciones de la corrida: [results/phase5_report.md](results/phase5_report.md).
 
 ## Configuración
 
@@ -166,5 +167,6 @@ Malagón y revisado y firmado por Juan Sebastián Ortega (método en la sección
 [docs/DATASET.md](docs/DATASET.md)). Fase 2: analista LLM,
 trazas, evaluador y línea base de 108 análisis (modelo principal `llama3.1:8b`). Fase 3:
 1056 reportes envenenados con 5 vectores. Fase 4: cuatro defensas componibles; el juez bloquea
-el 17 % de los reportes limpios (`results/tables/judge_fp.md`). Fase 5: runner, ASR y reporte
-listos; experimentos por correr. Ver [ROADMAP.md](ROADMAP.md).
+el 17 % de los reportes limpios (`results/tables/judge_fp.md`). Fase 5: corrida en Kaggle,
+ASR 0 % en todas las configuraciones con el payload canónico; el juez detecta la mitad de
+los ataques y bloquea 5/18 limpios ([results/phase5_report.md](results/phase5_report.md)). Ver [ROADMAP.md](ROADMAP.md).
