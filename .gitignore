@@ -251,3 +251,4 @@ data/poisoned/*
 # informe si se versionan.
 results/runs/*
 !results/runs/.gitkeep
+.DS_Store
