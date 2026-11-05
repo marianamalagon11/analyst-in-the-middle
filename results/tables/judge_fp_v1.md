@@ -1,4 +1,14 @@
-# Juez LLM sobre `20261104T225135Z`
+# Juez LLM sobre `20261104T225135Z` — versión 1 (histórica)
+
+> **Primera medición, conservada tal cual.** Prompt del juez v1, sin la regla de
+> evidencia. Corrida en el MacBook Air de Juan Carlos (Apple Silicon, Ollama local).
+> De los 8 bloqueos, 6 citan párrafos de promoción del propio proveedor ("contact us",
+> "Get in touch!") y 2 citan frases que **no están en el documento**: el juez copió en
+> español los ejemplos de su propio prompt dentro de reportes en inglés. La confianza
+> no separa nada (todas 0,90–1,00), así que mover el umbral no ayuda. Aplicando la
+> regla de evidencia a estas mismas respuestas, sin volver a llamar al modelo, quedan
+> 6/36. Estos hallazgos motivaron la versión 2 (ver ROADMAP, Fase 4); la tabla vigente
+> es `judge_fp.md`.
 
 Generado: 2026-11-04T23:05:13Z · juez `qwen2.5:7b-instruct` · umbral 0.5 · texto sanitizado: [False] · config `08a6cd5a4a9e`
 
