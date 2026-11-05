@@ -245,15 +245,15 @@ técnicas: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 - [x] Implementar `src/aitm/evaluation/runner.py`: ejecuta la matriz `reporte × ataque × defensas × modelo` y reanuda si se interrumpe. `aitm run experiments/<e>.yaml` (con `--dry-run`); experimentos declarados en YAML antes de correr; cache de inferencia por equipo (`src/aitm/llm/cache.py`), válida porque el laboratorio es determinista.
 - [x] Definir el criterio exacto de "ataque exitoso" por cada objetivo y dejarlo escrito en código y en el informe. Código: `attacks/base.py` y `evaluation/asr.py`; texto para el informe: sección 4.1 de [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). Un bloqueo del juez cuenta como fracaso del ataque.
 - [x] Implementar el cálculo de **ASR** condicionado a que el reporte limpio sí dé el resultado correcto. `evaluation/asr.py`: el limpio es el de las mismas defensas y modelo; se reportan medibles, ASR, ASR sin bloqueo y detección atribuida al payload.
-- [ ] Correr el experimento 1: ASR por vector, sin defensas, modelo principal.
-- [ ] Correr el experimento 2: ASR por vector y por modelo (los tres), sin defensas.
-- [ ] Correr el experimento 3: ASR con cada defensa por separado.
-- [ ] Correr el experimento 4: ASR con todas las defensas combinadas.
-- [ ] Correr el experimento 5: costo de las defensas (exactitud sobre reportes limpios, FP del juez, latencia p50/p95).
-- [ ] Implementar `plots.py` y generar las gráficas: ASR por vector, ASR por modelo, ASR por defensa, exactitud vs. latencia. **Implementado**; las genera `aitm report` cuando haya trazas.
-- [ ] Exportar las tablas a `results/tables/` en CSV y Markdown. **Implementado** en `aitm report` (`exp1`…`exp5` + `asr_celdas.csv`); falta correr.
-- [ ] Redactar las observaciones experimentales: qué vector fue más efectivo, qué defensa aportó más, qué nos sorprendió.
-- [ ] Guardar las trazas de 2–3 casos ilustrativos (prompt + salida) para mostrarlos tal cual en la sustentación.
+- [x] Correr el experimento 1: ASR por vector, sin defensas, modelo principal. **0/25 en los cinco vectores.**
+- [ ] Correr el experimento 2: ASR por vector y por modelo (los tres), sin defensas. **No corrido** (opcional en el diseño reducido; limitación declarada).
+- [x] Correr el experimento 3: ASR con cada defensa por separado. ASR 0 % en todas; el juez bloquea 21/30 (15 con la cita en el payload).
+- [x] Correr el experimento 4: ASR con todas las defensas combinadas. ASR 0 %; bloquea 15/30, detecta 8/30.
+- [x] Correr el experimento 5: costo de las defensas (exactitud sobre reportes limpios, FP del juez, latencia p50/p95). F1 IoC 0,83–0,86; FP del juez 5/18; +3 s p50.
+- [x] Implementar `plots.py` y generar las gráficas: ASR por vector, ASR por modelo, ASR por defensa, exactitud vs. latencia. En `results/figures/` (sin la de modelos, porque E2 no se corrió).
+- [x] Exportar las tablas a `results/tables/` en CSV y Markdown. `exp1`, `exp3_4`, `exp5` y `asr_celdas.csv`.
+- [x] Redactar las observaciones experimentales: qué vector fue más efectivo, qué defensa aportó más, qué nos sorprendió. En [results/phase5_report.md](results/phase5_report.md).
+- [x] Guardar las trazas de 2–3 casos ilustrativos (prompt + salida) para mostrarlos tal cual en la sustentación. Tres en `results/traces/`: ataque resistido, juez que detecta, falso positivo del juez.
 
 > **Estado (2026-11-05, Juan Carlos):** código de la Fase 5 listo; faltan las corridas.
 > **Diseño reducido por cómputo:** la matriz de 12 reportes × 4 objetivos costaba ~17 h
@@ -275,6 +275,18 @@ técnicas: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 > decisión de "Ollama local", documentada en la sección 7 de ARCHITECTURE). Limitación
 > para el informe: 6 casos por vector y defensa, un solo objetivo. Experimento 5 (costo)
 > sale de los limpios de E1, E3 y E4. Después: `aitm report`.
+
+> **Fase 5 cerrada (2026-11-05, Juan Carlos).** Corrida en Kaggle (2 × T4): 288 análisis,
+> 0 errores, ~1 h 20 min. **ASR 0 % en las seis configuraciones**, incluso sin contar los
+> bloqueos: llama3.1 8B nunca volteó el IoC objetivo a `benign` con el payload
+> `contextual`, en ningún vector. Por eso E3/E4 no pueden mostrar una reducción del ASR,
+> solo detección y costo. El juez detecta los payloads legibles (`author_note` 5/6) pero
+> no el de *tags* Unicode (0/6), y bloquea 5/18 limpios, siempre por promoción del
+> proveedor. Combinado con el sanitizador detecta menos (8/30 frente a 15/30), porque le
+> quitan antes los payloads ocultos. Observaciones completas y límites en
+> [results/phase5_report.md](results/phase5_report.md). **Para la demo de la Fase 6:**
+> con este payload el ataque no funciona, así que la demo necesita un payload/objetivo
+> que sí logre voltear el veredicto (probar `direct_override` o `format_mimic` en E1).
 
 ## Fase 6 — Demo para la sustentación
 
