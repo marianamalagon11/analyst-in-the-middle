@@ -186,6 +186,24 @@ class Analyst:
 
     # -- analisis ---------------------------------------------------------
 
+    def response_format(self) -> dict[str, Any] | str:
+        return ollama_schema() if self.config.analyst.structured_output else "json"
+
+    def prepare(
+        self, path: Path | str, *, report_id: str | None = None
+    ) -> tuple[ParsedReport, list[dict[str, str]], DefenseContext]:
+        """Lectura + defensas `pre` + mensajes, sin llamar al modelo.
+
+        Es exactamente lo que `analyze` le manda al modelo en el primer intento. El
+        runner de la Fase 5 lo usa para estimar, sin inferencia, cuantas celdas de un
+        experimento ya estan en la cache.
+        """
+        report = self.read(path, report_id=report_id)
+        context = DefenseContext()
+        for hook in self.pre_hooks:
+            report = hook(report, context)
+        return report, self.message_builder(self.system_prompt, report), context
+
     def analyze(
         self,
         path: Path | str,
@@ -195,16 +213,9 @@ class Analyst:
     ) -> RunRecord:
         path = Path(path)
         source_sha256 = sha256_bytes(path.read_bytes())
-        report = self.read(path, report_id=report_id)
-        context = DefenseContext()
-        for hook in self.pre_hooks:
-            report = hook(report, context)
-
-        messages = self.message_builder(self.system_prompt, report)
+        report, messages, context = self.prepare(path, report_id=report_id)
         conversation = list(messages)
-        response_format: dict[str, Any] | str = (
-            ollama_schema() if self.config.analyst.structured_output else "json"
-        )
+        response_format = self.response_format()
 
         attempts: list[Attempt] = []
         warnings: list[str] = []

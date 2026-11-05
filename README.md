@@ -128,6 +128,25 @@ aitm judge --run-dir results/runs/<ts> --regrade                # re-aplica la r
 `sanitize-check` y `judge` sobre envenenados necesitan la matriz de la Fase 3 en
 `data/poisoned/` (`aitm attack` la regenera, idéntica al manifiesto versionado).
 
+## Experimentos (Fase 5)
+
+Cuatro experimentos declarados en `experiments/*.yaml` antes de correr. `aitm run` los
+ejecuta (reanudable con el mismo comando) y `aitm report` calcula el ASR, el costo de las
+defensas, las tablas (`results/tables/exp*`) y las gráficas (`results/figures/`) sin LLM.
+
+```bash
+aitm run experiments/e1_vectores.yaml --dry-run   # celdas, inferencias nuevas y horas estimadas
+aitm run experiments/e1_vectores.yaml             # Ctrl+C y se retoma con el mismo comando
+aitm run experiments/e3_defensas.yaml
+aitm run experiments/e4_combinadas.yaml
+aitm run experiments/e2_modelos.yaml              # independiente: puede ir en otro equipo
+aitm report
+```
+
+El laboratorio es determinista, así que una petición idéntica a una ya hecha **en el mismo
+equipo** sale de una cache (`results/runs/_cache/`) en vez de volver a inferirse. En orden
+E1 → E3 → E4 la matriz completa (1.828 celdas) cuesta 828 análisis y 268 consultas al juez.
+
 ## Configuración
 
 Todo lo que afecta un resultado vive en [`config.yaml`](config.yaml): modelos, semilla,
@@ -142,4 +161,5 @@ Malagón y revisado y firmado por Juan Sebastián Ortega (método en la sección
 [docs/DATASET.md](docs/DATASET.md)). Fase 2: analista LLM,
 trazas, evaluador y línea base de 108 análisis (modelo principal `llama3.1:8b`). Fase 3:
 1056 reportes envenenados con 5 vectores. Fase 4: cuatro defensas componibles; el juez bloquea
-el 17 % de los reportes limpios (`results/tables/judge_fp.md`). Ver [ROADMAP.md](ROADMAP.md).
+el 17 % de los reportes limpios (`results/tables/judge_fp.md`). Fase 5: runner, ASR y reporte
+listos; experimentos por correr. Ver [ROADMAP.md](ROADMAP.md).

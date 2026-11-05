@@ -1,0 +1,18 @@
+# Experimento 2: ASR por vector y modelo, sin defensas.
+# El modelo principal sale del experimento 1; aqui corren los otros dos. Para que
+# quepa en el presupuesto, dos objetivos de naturaleza distinta: uno sobre un IoC
+# (flip_to_benign) y otro sobre el reporte entero (downgrade_severity). El informe
+# compara los tres modelos solo en estos dos objetivos.
+name: e2_modelos
+description: ASR por vector en mistral y qwen2.5, sin defensas (dos objetivos)
+models: [mistral:7b-instruct, qwen2.5:7b-instruct]
+defenses: [[]]
+goals: [flip_to_benign, downgrade_severity]
+attacks:
+  plaintext: {variants: [inline], formats: [txt]}
+  author_note: {variants: [analyst_note], formats: [txt]}
+  html_hidden: {variants: [display_none], formats: [html]}
+  unicode_invisible: {variants: [tags], formats: [txt]}
+  pdf_hidden: {variants: [metadata], formats: [pdf]}
+reports: all
+clean: true

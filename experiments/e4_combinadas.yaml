@@ -1,0 +1,15 @@
+# Experimento 4: ASR con las cuatro defensas combinadas, modelo principal.
+name: e4_combinadas
+description: ASR con las cuatro defensas juntas, modelo principal
+models: [analyst]
+defenses:
+  - [sanitizer, spotlighting, schema_validation, llm_judge]
+goals: [flip_to_benign, omit_ioc, downgrade_severity, drop_technique]
+attacks:
+  plaintext: {variants: [inline], formats: [txt]}
+  author_note: {variants: [analyst_note], formats: [txt]}
+  html_hidden: {variants: [display_none], formats: [html]}
+  unicode_invisible: {variants: [tags], formats: [txt]}
+  pdf_hidden: {variants: [metadata], formats: [pdf]}
+reports: all
+clean: true
