@@ -255,23 +255,26 @@ técnicas: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 - [ ] Redactar las observaciones experimentales: qué vector fue más efectivo, qué defensa aportó más, qué nos sorprendió.
 - [ ] Guardar las trazas de 2–3 casos ilustrativos (prompt + salida) para mostrarlos tal cual en la sustentación.
 
-> **Estado (2026-11-05, Juan Carlos):** código de la Fase 5 listo (385 pruebas); faltan
-> las corridas. Cuatro experimentos fijados en `experiments/`, todos con la misma tajada
-> de ataques: la variante canónica de cada vector en su formato natural (`plaintext`
-> txt, `author_note` txt, `html_hidden` html, `unicode_invisible` tags txt,
-> `pdf_hidden` metadata pdf) y el payload canónico de cada objetivo.
+> **Estado (2026-11-05, Juan Carlos):** código de la Fase 5 listo; faltan las corridas.
+> **Diseño reducido por cómputo:** la matriz de 12 reportes × 4 objetivos costaba ~17 h
+> y no hay equipo disponible tanto tiempo. Se fijó, antes de correr, un objetivo
+> (`flip_to_benign`, el principal desde el `setup_report` y el de la demo) y 6 reportes
+> elegidos por regla (ronda por proveedor, orden alfabético, entre los 10 con ese
+> objetivo). Misma tajada de ataques en todos: variante canónica de cada vector en su
+> formato natural y payload canónico.
 >
 > | Experimento | Qué | Celdas | Inferencias nuevas (en orden) |
 > |---|---|---|---|
-> | `e1_vectores` | sin defensas, llama, 4 objetivos | 256 | 256 |
-> | `e2_modelos` | sin defensas, mistral y qwen, 2 objetivos | 292 | 292 |
-> | `e3_defensas` | cada defensa sola, llama | 1.024 | 268 + 256 del juez |
-> | `e4_combinadas` | las cuatro juntas, llama | 256 | 12 + 12 del juez |
+> | `e1_vectores` | sin defensas, llama | 48 | 48 |
+> | `e3_defensas` | cada defensa sola, llama | 192 | 54 + 48 del juez |
+> | `e4_combinadas` | las cuatro juntas, llama | 48 | 6 + 6 del juez |
+> | `e2_modelos` (opcional) | sin defensas, mistral y qwen | 96 | 96 |
 >
-> ~22 h a 90 s por análisis. **Orden recomendado:** E1 → E3 → E4 en un mismo equipo
-> (la cache es por equipo) y E2 en paralelo en el M5. `--dry-run` recalcula horas con la
-> latencia medida en ese equipo. Experimento 5 (costo) no corre nada: sale de los limpios
-> de E1, E3 y E4. Después: `aitm report`.
+> ~1,5 h el núcleo en una GPU T4 (~2,5 h con E2). Se corre en Kaggle, desatendido, con
+> [`experiments/fase5_kaggle.ipynb`](experiments/fase5_kaggle.ipynb) (excepción a la
+> decisión de "Ollama local", documentada en la sección 7 de ARCHITECTURE). Limitación
+> para el informe: 6 casos por vector y defensa, un solo objetivo. Experimento 5 (costo)
+> sale de los limpios de E1, E3 y E4. Después: `aitm report`.
 
 ## Fase 6 — Demo para la sustentación
 

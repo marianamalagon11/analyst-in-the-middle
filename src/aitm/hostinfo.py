@@ -9,6 +9,7 @@ from __future__ import annotations
 import ctypes
 import os
 import platform
+import shutil
 import subprocess
 import sys
 from functools import lru_cache
@@ -53,4 +54,24 @@ def hardware_summary() -> str:
         memory = _sysctl("hw.memsize")
         if memory.isdigit():
             ram = f", {int(memory) / 1024**3:.1f} GB RAM"
-    return f"{cpu} ({cores} hilos{ram}), {platform.system()} {platform.release()}"
+    return f"{cpu} ({cores} hilos{ram}{_nvidia_gpu()}), {platform.system()} {platform.release()}"
+
+
+def _nvidia_gpu() -> str:
+    """`, GPU Tesla T4` si hay una GPU NVIDIA (Kaggle, Colab, VM en la nube).
+
+    En los Mac la GPU va con el chip y ya la nombra la CPU. En Linux sin esto, dos
+    corridas en GPUs distintas tendrian la misma huella y la cache de inferencia las
+    mezclaria, aunque el determinismo solo esta verificado dentro del mismo equipo.
+    """
+    if shutil.which("nvidia-smi") is None:
+        return ""
+    try:
+        names = subprocess.run(
+            ["nvidia-smi", "--query-gpu=name", "--format=csv,noheader"],
+            capture_output=True, text=True, timeout=10,
+        ).stdout.split("\n")
+    except (OSError, subprocess.SubprocessError):
+        return ""
+    names = [n.strip() for n in names if n.strip()]
+    return f", GPU {' + '.join(names)}" if names else ""

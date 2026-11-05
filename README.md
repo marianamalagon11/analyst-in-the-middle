@@ -144,8 +144,13 @@ aitm report
 ```
 
 El laboratorio es determinista, así que una petición idéntica a una ya hecha **en el mismo
-equipo** sale de una cache (`results/runs/_cache/`) en vez de volver a inferirse. En orden
-E1 → E3 → E4 la matriz completa (1.828 celdas) cuesta 828 análisis y 268 consultas al juez.
+equipo** sale de una cache (`results/runs/_cache/`) en vez de volver a inferirse. Diseño
+reducido (6 reportes, `flip_to_benign`): en orden E1 → E3 → E4 son 108 análisis y 54
+consultas al juez (~1,5 h en una GPU T4); E2, opcional, 96 análisis más.
+
+**Sin GPU propia:** [`experiments/fase5_kaggle.ipynb`](experiments/fase5_kaggle.ipynb) hace
+todo en Kaggle (GPU gratuita) de forma desatendida con *Save & Run All*, y deja
+`resultados_fase5.zip` en la salida. Descomprimirlo en la raíz del repo y correr `aitm report`.
 
 ## Configuración
 
