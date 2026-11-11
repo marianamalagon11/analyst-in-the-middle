@@ -1,0 +1,523 @@
+{
+  "built_at": "2026-11-02T16:08:28Z",
+  "config_hash": "52daeb40e2df",
+  "corpus": {
+    "name": "AnnoCTR",
+    "commit": "d510b6949e1938d47c93a43eedd562dc538439dc",
+    "license": "CC-BY-SA-4.0",
+    "citation": "Lange, L., Muller, M., Torbati, G. H., Pujari, S. C., Grau, P., et al. (2024). AnnoCTR: A Dataset for Detecting and Linking Entities, Tactics, and Techniques in Cyber Threat Reports. LREC-COLING 2024."
+  },
+  "selection": {
+    "n": 12,
+    "min_chars": 4000,
+    "max_chars": 14000,
+    "min_iocs": 3,
+    "min_ioc_types": 2,
+    "max_per_vendor": 4,
+    "requires_mitre_annotations": true,
+    "candidates": 42,
+    "pinned": [
+      "lab52_2021-05-17_literature-lover-targeting-colombia-with"
+    ]
+  },
+  "formats": [
+    "txt",
+    "html",
+    "pdf"
+  ],
+  "reports": [
+    {
+      "report_id": "lab52_2021-05-17_literature-lover-targeting-colombia-with",
+      "vendor": "lab52",
+      "published": "2021-05-17",
+      "chars": 7257,
+      "approx_tokens": 1814,
+      "ioc_counts": {
+        "domain": 7,
+        "file_path": 5,
+        "ipv4": 2,
+        "sha256": 2,
+        "url": 4
+      },
+      "n_iocs": 20,
+      "n_techniques": 7,
+      "selection_score": 12.0,
+      "files": {
+        "txt": {
+          "path": "data/processed/txt/lab52_2021-05-17_literature-lover-targeting-colombia-with.txt",
+          "sha256": "f1679fc463cb38f655cf8ed2f91dd0088bdf3130f9660255c4780168e930fc48",
+          "bytes": 7333,
+          "iocs_recovered": 29,
+          "iocs_lost": []
+        },
+        "html": {
+          "path": "data/processed/html/lab52_2021-05-17_literature-lover-targeting-colombia-with.html",
+          "sha256": "93b5abb87f36b8df3299afa9b2f98b2d7766a4de99928029cea872b51bded60a",
+          "bytes": 8687,
+          "iocs_recovered": 29,
+          "iocs_lost": []
+        },
+        "pdf": {
+          "path": "data/processed/pdf/lab52_2021-05-17_literature-lover-targeting-colombia-with.pdf",
+          "sha256": "7c429071111db493787ec775e2ffc0b7fb25ba2a238a5d0d218b5734aa394864",
+          "bytes": 8114,
+          "iocs_recovered": 28,
+          "iocs_lost": [
+            "https://onedrive.live.com/download?cid=A4F059D1DE692167&resid=A4F059D1DE692167%21107&authkey=AOG1a9Z-hUIFbhI"
+          ]
+        }
+      }
+    },
+    {
+      "report_id": "zscaler_2020-09-16_malware-leveraging-xml-rpc-vulnerability",
+      "vendor": "zscaler",
+      "published": "2020-09-16",
+      "chars": 10144,
+      "approx_tokens": 2536,
+      "ioc_counts": {
+        "domain": 2,
+        "file_path": 1,
+        "ipv4": 5,
+        "md5": 7,
+        "url": 1
+      },
+      "n_iocs": 16,
+      "n_techniques": 12,
+      "selection_score": 25.0,
+      "files": {
+        "txt": {
+          "path": "data/processed/txt/zscaler_2020-09-16_malware-leveraging-xml-rpc-vulnerability.txt",
+          "sha256": "b7ad1680deb1441c649f57368a553b8319f7dbfe1300d1fb6ff8214cff011cc1",
+          "bytes": 10165,
+          "iocs_recovered": 18,
+          "iocs_lost": []
+        },
+        "html": {
+          "path": "data/processed/html/zscaler_2020-09-16_malware-leveraging-xml-rpc-vulnerability.html",
+          "sha256": "3998decde05a61109d42c665d28d6d132e688d49cab2791af9e957858d71a204",
+          "bytes": 12268,
+          "iocs_recovered": 18,
+          "iocs_lost": []
+        },
+        "pdf": {
+          "path": "data/processed/pdf/zscaler_2020-09-16_malware-leveraging-xml-rpc-vulnerability.pdf",
+          "sha256": "e7defddbdd45ee6a69431f976b0cb33c40077b3cb65de7815e7966c6fd7c94ac",
+          "bytes": 10821,
+          "iocs_recovered": 17,
+          "iocs_lost": [
+            "https://www.virustotal.com/graph/g4f708a8a274f4ef1a8727d0c6e00d5a5f5d879652067434797084e53f5d37bef"
+          ]
+        }
+      }
+    },
+    {
+      "report_id": "lab52_2022-01-24_new-transparentribe-operation-targeting-india",
+      "vendor": "lab52",
+      "published": "2022-01-24",
+      "chars": 8906,
+      "approx_tokens": 2226,
+      "ioc_counts": {
+        "domain": 2,
+        "file_path": 1,
+        "ipv4": 2,
+        "md5": 2,
+        "sha1": 10
+      },
+      "n_iocs": 17,
+      "n_techniques": 12,
+      "selection_score": 24.0,
+      "files": {
+        "txt": {
+          "path": "data/processed/txt/lab52_2022-01-24_new-transparentribe-operation-targeting-india.txt",
+          "sha256": "296a60361cbce82a0670a57a3a718ab9fffd2dfca7b005ca9dfc178e9a80d3b3",
+          "bytes": 8923,
+          "iocs_recovered": 35,
+          "iocs_lost": []
+        },
+        "html": {
+          "path": "data/processed/html/lab52_2022-01-24_new-transparentribe-operation-targeting-india.html",
+          "sha256": "f093f292f23212312429eea97eca1181c7aaec65a1b36c435398b6ad27fd8c65",
+          "bytes": 11000,
+          "iocs_recovered": 35,
+          "iocs_lost": []
+        },
+        "pdf": {
+          "path": "data/processed/pdf/lab52_2022-01-24_new-transparentribe-operation-targeting-india.pdf",
+          "sha256": "310be65da6b34d9f7c75a2c0522f407b078d4e8ba7ceef3b2b2da60c32523219",
+          "bytes": 10510,
+          "iocs_recovered": 35,
+          "iocs_lost": []
+        }
+      }
+    },
+    {
+      "report_id": "proofpoint_2021-05-26_bazaflix-bazaloader-fakes-movie-streaming",
+      "vendor": "proofpoint",
+      "published": "2021-05-26",
+      "chars": 7777,
+      "approx_tokens": 1944,
+      "ioc_counts": {
+        "domain": 3,
+        "ipv4": 9,
+        "sha256": 1,
+        "url": 6
+      },
+      "n_iocs": 19,
+      "n_techniques": 4,
+      "selection_score": 20.0,
+      "files": {
+        "txt": {
+          "path": "data/processed/txt/proofpoint_2021-05-26_bazaflix-bazaloader-fakes-movie-streaming.txt",
+          "sha256": "774a96dfa5db5de3daf7b7aea4a13d12f25dc296bb658048658389ff2da989f6",
+          "bytes": 7791,
+          "iocs_recovered": 23,
+          "iocs_lost": []
+        },
+        "html": {
+          "path": "data/processed/html/proofpoint_2021-05-26_bazaflix-bazaloader-fakes-movie-streaming.html",
+          "sha256": "676f0597ade8544cc7edc705c1146e46f7cd6a22a7d292fb7e4068b2f1f16980",
+          "bytes": 9415,
+          "iocs_recovered": 23,
+          "iocs_lost": []
+        },
+        "pdf": {
+          "path": "data/processed/pdf/proofpoint_2021-05-26_bazaflix-bazaloader-fakes-movie-streaming.pdf",
+          "sha256": "ebc0729f853bb20c5c85180b987691e3fbf7d357aa235096f0c0ae9c722685c4",
+          "bytes": 8704,
+          "iocs_recovered": 20,
+          "iocs_lost": [
+            "https://www.motionpictures.org/press/global-subscriptions-to-online-video-services-exceeds-one-billion-for-first-time-ever-new-mpa-report-finds/",
+            "https://www.proofpoint.com/us/resources/webinars/what-healthcare-industry-should-know-about-ryuk-ransomware",
+            "https://www2.deloitte.com/us/en/insights/industry/technology/video-streaming-services-churn-rate.html"
+          ]
+        }
+      }
+    },
+    {
+      "report_id": "lab52_2020-06-02_mustang-panda-recent-activity-dll",
+      "vendor": "lab52",
+      "published": "2020-06-02",
+      "chars": 5838,
+      "approx_tokens": 1459,
+      "ioc_counts": {
+        "domain": 3,
+        "file_path": 1,
+        "ipv4": 3,
+        "sha256": 2,
+        "url": 4
+      },
+      "n_iocs": 13,
+      "n_techniques": 8,
+      "selection_score": 14.5,
+      "files": {
+        "txt": {
+          "path": "data/processed/txt/lab52_2020-06-02_mustang-panda-recent-activity-dll.txt",
+          "sha256": "5bed1af21591ddb19891dc4ac2fbabe770d03e1c599f975f8bbc3083278f2f36",
+          "bytes": 5885,
+          "iocs_recovered": 21,
+          "iocs_lost": []
+        },
+        "html": {
+          "path": "data/processed/html/lab52_2020-06-02_mustang-panda-recent-activity-dll.html",
+          "sha256": "cdc37435e1140d72c585b90bd3c5447e327a0a70b512d898f1cf81f6f2dd3a40",
+          "bytes": 7009,
+          "iocs_recovered": 21,
+          "iocs_lost": []
+        },
+        "pdf": {
+          "path": "data/processed/pdf/lab52_2020-06-02_mustang-panda-recent-activity-dll.pdf",
+          "sha256": "7e1f1a631d5b03dbc0b0d01d04538109cdf84e5f267312e190dc62be5695110b",
+          "bytes": 6309,
+          "iocs_recovered": 18,
+          "iocs_lost": [
+            "https://blog.vincss.net/2020/03/re012-phan-tich-ma-doc-loi-dung-dich-COVID-19-de-phat-tan-gia-mao-chi-thi-cua-thu-tuong-Nguyen-Xuan-Phuc-phan2.html",
+            "https://blog.vincss.net/2020/03/re012-phan-tich-ma-doc-loi-dung-dich-COVID-19-de-phat-tan-gia-mao-chi-thi-cua-thu-tuong-Nguyen-Xuan-Phuc.html",
+            "https://www.anomali.com/blog/covid-19-themes-are-being-utilized-by-threat-actors-of-varying-sophistication"
+          ]
+        }
+      }
+    },
+    {
+      "report_id": "lab52_2021-04-29_chimera-apt-updates-on-its",
+      "vendor": "lab52",
+      "published": "2021-04-29",
+      "chars": 7161,
+      "approx_tokens": 1790,
+      "ioc_counts": {
+        "file_path": 1,
+        "sha256": 6,
+        "url": 8
+      },
+      "n_iocs": 15,
+      "n_techniques": 6,
+      "selection_score": 14.0,
+      "files": {
+        "txt": {
+          "path": "data/processed/txt/lab52_2021-04-29_chimera-apt-updates-on-its.txt",
+          "sha256": "30fd6b557957f3b0620fdc5d502a12bc1d12f95a12d12b8f0862820a231499b7",
+          "bytes": 7246,
+          "iocs_recovered": 22,
+          "iocs_lost": []
+        },
+        "html": {
+          "path": "data/processed/html/lab52_2021-04-29_chimera-apt-updates-on-its.html",
+          "sha256": "5887b6dd72892fd00e7126a7e23b71b114a5d448cce175be32b9359cb38da2a6",
+          "bytes": 8623,
+          "iocs_recovered": 22,
+          "iocs_lost": []
+        },
+        "pdf": {
+          "path": "data/processed/pdf/lab52_2021-04-29_chimera-apt-updates-on-its.pdf",
+          "sha256": "d5dfd5bc3f620771bc09897fa42ef0bf100cbd06bbe17561b2c8a31d461120ef",
+          "bytes": 8015,
+          "iocs_recovered": 21,
+          "iocs_lost": [
+            "https://cybernews.com/security/taiwan-government-targeted-by-multiple-cyberattacks-owlproxy-malware/"
+          ]
+        }
+      }
+    },
+    {
+      "report_id": "intel471_2021-04-07_ettersilent-maldoc-builder-macro-trickbot",
+      "vendor": "intel471",
+      "published": "2021-04-07",
+      "chars": 6457,
+      "approx_tokens": 1614,
+      "ioc_counts": {
+        "cve": 1,
+        "sha256": 16,
+        "url": 7
+      },
+      "n_iocs": 24,
+      "n_techniques": 6,
+      "selection_score": 13.0,
+      "files": {
+        "txt": {
+          "path": "data/processed/txt/intel471_2021-04-07_ettersilent-maldoc-builder-macro-trickbot.txt",
+          "sha256": "180f66a40a47baf712fe5b349d4b83aa3c950360abb40cbdedd436f157bf2568",
+          "bytes": 6487,
+          "iocs_recovered": 27,
+          "iocs_lost": []
+        },
+        "html": {
+          "path": "data/processed/html/intel471_2021-04-07_ettersilent-maldoc-builder-macro-trickbot.html",
+          "sha256": "98f181e42fc2ab8c489a6a073a3223a274d5d8861e8f60abc2f71040dff51ea7",
+          "bytes": 7933,
+          "iocs_recovered": 27,
+          "iocs_lost": []
+        },
+        "pdf": {
+          "path": "data/processed/pdf/intel471_2021-04-07_ettersilent-maldoc-builder-macro-trickbot.pdf",
+          "sha256": "a1da6894101538cdb7d8a94558315a0071e91c15821d951448d83b2ab35a7624",
+          "bytes": 7645,
+          "iocs_recovered": 26,
+          "iocs_lost": [
+            "https://intel471.com/blog/bulletproof-hosting-yalishanda-ransomware-banking-trojans-information-stealers/"
+          ]
+        }
+      }
+    },
+    {
+      "report_id": "proofpoint_2021-07-28_i-knew-you-were-trouble",
+      "vendor": "proofpoint",
+      "published": "2021-07-28",
+      "chars": 12596,
+      "approx_tokens": 3149,
+      "ioc_counts": {
+        "domain": 2,
+        "file_path": 2,
+        "registry_key": 1,
+        "sha256": 4,
+        "url": 4
+      },
+      "n_iocs": 13,
+      "n_techniques": 16,
+      "selection_score": 13.0,
+      "files": {
+        "txt": {
+          "path": "data/processed/txt/proofpoint_2021-07-28_i-knew-you-were-trouble.txt",
+          "sha256": "ecf2d588b5da7443a113da4c98435cfc04e3a611b45b8d7661b66a6c2cb9ef49",
+          "bytes": 13051,
+          "iocs_recovered": 13,
+          "iocs_lost": []
+        },
+        "html": {
+          "path": "data/processed/html/proofpoint_2021-07-28_i-knew-you-were-trouble.html",
+          "sha256": "7eaaa881682637cf1b8a7c966262ace31648e72104dd5537cc4413845f6562b4",
+          "bytes": 15022,
+          "iocs_recovered": 13,
+          "iocs_lost": []
+        },
+        "pdf": {
+          "path": "data/processed/pdf/proofpoint_2021-07-28_i-knew-you-were-trouble.pdf",
+          "sha256": "92bb1bdfa44d1e72d8d38fcc8d482873e8d89ac9bf9c0bc43c4f866eb8a31782",
+          "bytes": 13257,
+          "iocs_recovered": 12,
+          "iocs_lost": [
+            "https://symantec-enterprise-blogs.security.com/blogs/threat-intelligence/tortoiseshell-apt-supply-chain"
+          ]
+        }
+      }
+    },
+    {
+      "report_id": "proofpoint_2021-12-09_holiday-feelin-ta575-brings-warm",
+      "vendor": "proofpoint",
+      "published": "2021-12-09",
+      "chars": 4956,
+      "approx_tokens": 1239,
+      "ioc_counts": {
+        "ipv4": 5,
+        "sha256": 5
+      },
+      "n_iocs": 10,
+      "n_techniques": 6,
+      "selection_score": 13.0,
+      "files": {
+        "txt": {
+          "path": "data/processed/txt/proofpoint_2021-12-09_holiday-feelin-ta575-brings-warm.txt",
+          "sha256": "6491cc0c74c8e4f974e2e83bf0cf6228c0e0ef0dab02671153c43ebe8e1faccb",
+          "bytes": 5053,
+          "iocs_recovered": 11,
+          "iocs_lost": []
+        },
+        "html": {
+          "path": "data/processed/html/proofpoint_2021-12-09_holiday-feelin-ta575-brings-warm.html",
+          "sha256": "22a0fc80c5daee295b9154082d79b9a8c4d42253a89edc2b337be7255cf93314",
+          "bytes": 6873,
+          "iocs_recovered": 11,
+          "iocs_lost": []
+        },
+        "pdf": {
+          "path": "data/processed/pdf/proofpoint_2021-12-09_holiday-feelin-ta575-brings-warm.pdf",
+          "sha256": "a49b3fae034361b7b735d2914a86fe3a65d5c98ff9393bbf3e4aac72ac427230",
+          "bytes": 6811,
+          "iocs_recovered": 10,
+          "iocs_lost": [
+            "https://www.proofpoint.com/us/blog/threat-insight/ta575-uses-squid-game-lures-distribute-dridex-malware"
+          ]
+        }
+      }
+    },
+    {
+      "report_id": "zscaler_2020-06-26_taurus-new-stealer-town",
+      "vendor": "zscaler",
+      "published": "2020-06-26",
+      "chars": 11545,
+      "approx_tokens": 2886,
+      "ioc_counts": {
+        "domain": 8,
+        "ipv4": 2,
+        "md5": 4
+      },
+      "n_iocs": 14,
+      "n_techniques": 14,
+      "selection_score": 13.0,
+      "files": {
+        "txt": {
+          "path": "data/processed/txt/zscaler_2020-06-26_taurus-new-stealer-town.txt",
+          "sha256": "c4ab2b492011ea3ed56eb62692a1d24005b0697e98d7627c58500acc448e9e85",
+          "bytes": 11617,
+          "iocs_recovered": 20,
+          "iocs_lost": []
+        },
+        "html": {
+          "path": "data/processed/html/zscaler_2020-06-26_taurus-new-stealer-town.html",
+          "sha256": "35fb92a89c693b49148d4a102cfa4899c0e0b476f98ed89dc6f666b5f03db087",
+          "bytes": 13989,
+          "iocs_recovered": 20,
+          "iocs_lost": []
+        },
+        "pdf": {
+          "path": "data/processed/pdf/zscaler_2020-06-26_taurus-new-stealer-town.pdf",
+          "sha256": "32f11ae47e673f2a8c842c066f6457dc9ad06e17b98aa44483ab1e86b3b99cd6",
+          "bytes": 12589,
+          "iocs_recovered": 19,
+          "iocs_lost": [
+            "https://www.virustotal.com/gui/file/4a30ef818603b0a0f2b8153d9ba6e9494447373e86599bcc7c461135732e64b2/detection"
+          ]
+        }
+      }
+    },
+    {
+      "report_id": "zscaler_2020-08-14_purplewave-new-infostealer-russia",
+      "vendor": "zscaler",
+      "published": "2020-08-14",
+      "chars": 12733,
+      "approx_tokens": 3183,
+      "ioc_counts": {
+        "domain": 6,
+        "file_path": 2,
+        "md5": 17,
+        "registry_key": 1
+      },
+      "n_iocs": 26,
+      "n_techniques": 20,
+      "selection_score": 13.0,
+      "files": {
+        "txt": {
+          "path": "data/processed/txt/zscaler_2020-08-14_purplewave-new-infostealer-russia.txt",
+          "sha256": "54fcfa168db9a43a536aab7a7a434aba81a14fc50b788ae76359a7228042b972",
+          "bytes": 13053,
+          "iocs_recovered": 29,
+          "iocs_lost": []
+        },
+        "html": {
+          "path": "data/processed/html/zscaler_2020-08-14_purplewave-new-infostealer-russia.html",
+          "sha256": "b1ef3f42549c86ba8610c64580d63a207160ec35b7f9df4f00aaf2020b1442d1",
+          "bytes": 15748,
+          "iocs_recovered": 29,
+          "iocs_lost": []
+        },
+        "pdf": {
+          "path": "data/processed/pdf/zscaler_2020-08-14_purplewave-new-infostealer-russia.pdf",
+          "sha256": "cd05b0cd4d0eb47ca19aebdbd592c8723763fea1c8a211f67b35f3c3687ccdaf",
+          "bytes": 12441,
+          "iocs_recovered": 29,
+          "iocs_lost": []
+        }
+      }
+    },
+    {
+      "report_id": "quoteintelligence_2020-08-07_blackwater-malware-leveraging-beirut-tragedy",
+      "vendor": "quoteintelligence",
+      "published": "2020-08-07",
+      "chars": 7520,
+      "approx_tokens": 1880,
+      "ioc_counts": {
+        "domain": 1,
+        "file_path": 2,
+        "sha256": 4,
+        "url": 11
+      },
+      "n_iocs": 18,
+      "n_techniques": 8,
+      "selection_score": 12.0,
+      "files": {
+        "txt": {
+          "path": "data/processed/txt/quoteintelligence_2020-08-07_blackwater-malware-leveraging-beirut-tragedy.txt",
+          "sha256": "194c8ff0683bd9aca7c5643cba3b512a339d2c080cdbf991104d517ebd061c3c",
+          "bytes": 7571,
+          "iocs_recovered": 28,
+          "iocs_lost": []
+        },
+        "html": {
+          "path": "data/processed/html/quoteintelligence_2020-08-07_blackwater-malware-leveraging-beirut-tragedy.html",
+          "sha256": "689fff5f55b84be9cbc9a332fa0474264ec29689cfb4534025540f1a66a4f81e",
+          "bytes": 9190,
+          "iocs_recovered": 28,
+          "iocs_lost": []
+        },
+        "pdf": {
+          "path": "data/processed/pdf/quoteintelligence_2020-08-07_blackwater-malware-leveraging-beirut-tragedy.pdf",
+          "sha256": "cece5072dd80cbb2080e3e0cf0c7104c87d77ebe7a8c5ef59a17fb3eeaf9c9a3",
+          "bytes": 8538,
+          "iocs_recovered": 26,
+          "iocs_lost": [
+            "https://www.bleepingcomputer.com/news/security/blackwater-malware-abuses-cloudflare-workers-for-c2-communication/",
+            "https://www.virustotal.com/gui/file/b4ed39b6852bce329686ec44e2e8e39b1c0be9b7095cec2e1682e6e2ef724c69"
+          ]
+        }
+      }
+    }
+  ]
+}

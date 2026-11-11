@@ -1,0 +1,290 @@
+{
+  "report_id": "lab52_2022-01-24_new-transparentribe-operation-targeting-india",
+  "source": {
+    "corpus": "AnnoCTR",
+    "file": "AnnoCTR/all/text/lab52_2022-01-24_new-transparentribe-operation-targeting-india.txt",
+    "vendor": "lab52",
+    "published": "2022-01-24",
+    "license": "CC-BY-SA-4.0",
+    "url": null
+  },
+  "formats": [
+    "txt",
+    "html",
+    "pdf"
+  ],
+  "status": "frozen",
+  "annotators": [
+    "Mariana Malagón"
+  ],
+  "reviewers": [
+    "Juan Sebastián Ortega"
+  ],
+  "severity": "high",
+  "threat_actor": "Transparent Tribe",
+  "iocs": [
+    {
+      "value": "948dffef9a11c11a6d81905e59ca1882",
+      "type": "md5",
+      "verdict": "malicious",
+      "notes": "Initially, Lab52 detected a suspicious IMG file (Covid\\_Letter.img – 948dffef9a11c11a6d81905e59ca1882) that was uploaded in VirusTotal via the web site from India, with upload date 09-06-2021."
+    },
+    {
+      "value": "68d73d596a7103e517967f7f4e22cecb",
+      "type": "md5",
+      "verdict": "malicious",
+      "notes": "The infection chain continues executing both the decoy PDF document and a Windows PE (ServiceHub.MsDetouredHost.exe – 68d73d596a7103e517967f7f4e22cecb) which after being analyzed, we have been able to"
+    },
+    {
+      "value": "%APPDATA%\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\devenv.defender.scr",
+      "type": "file_path",
+      "verdict": "malicious",
+      "notes": "Finally, as a persistence mechanism, *simplify* function drops a new Windows PE file into the current user startup folder: (%APPDATA%\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\devenv.defender.scr)"
+    },
+    {
+      "value": "c060431e55db84a195241be1cffdbdc30f42d666",
+      "type": "sha1",
+      "verdict": "malicious",
+      "notes": "| Covid\\_Letter.img | c060431e55db84a195241be1cffdbdc30f42d666 |"
+    },
+    {
+      "value": "37dfea2d3e123ad91a8782debccb8f5c923b1a37",
+      "type": "sha1",
+      "verdict": "malicious",
+      "notes": "| ServiceHub.MsDetouredHost.exe | 37dfea2d3e123ad91a8782debccb8f5c923b1a37 |"
+    },
+    {
+      "value": "226781c376d6b4bdb8935dc98f645744da41ef68",
+      "type": "sha1",
+      "verdict": "malicious",
+      "notes": "| devenv.defender.scr | 226781c376d6b4bdb8935dc98f645744da41ef68 |"
+    },
+    {
+      "value": "f4ccf4dfcd6966eaa0b96b3977266113d71c5fa8",
+      "type": "sha1",
+      "verdict": "malicious",
+      "notes": "| doc.vbs | f4ccf4dfcd6966eaa0b96b3977266113d71c5fa8 |"
+    },
+    {
+      "value": "aa9eb957a3f46dc6a3d300c730c2d3892f577100",
+      "type": "sha1",
+      "verdict": "malicious",
+      "notes": "| Vaccination06042021.PDF | aa9eb957a3f46dc6a3d300c730c2d3892f577100 |"
+    },
+    {
+      "value": "9e27af77135943714bd5821f628c53af9a3f5fc9",
+      "type": "sha1",
+      "verdict": "malicious",
+      "notes": "| Vaccination06042021.pdf.lnk | 9e27af77135943714bd5821f628c53af9a3f5fc9 |"
+    },
+    {
+      "value": "cfe0dba23fb55450d158731a35097de6c34679bd",
+      "type": "sha1",
+      "verdict": "malicious",
+      "notes": "| mscontainer.dll | cfe0dba23fb55450d158731a35097de6c34679bd |"
+    },
+    {
+      "value": "iwestcloud.com",
+      "type": "domain",
+      "verdict": "malicious",
+      "notes": "| iwestcloud.com |"
+    },
+    {
+      "value": "zoneflare.com",
+      "type": "domain",
+      "verdict": "malicious",
+      "notes": "| zoneflare.com |"
+    },
+    {
+      "value": "167.99.40.13",
+      "type": "ipv4",
+      "verdict": "malicious",
+      "notes": "| 167.99.40.13 |"
+    },
+    {
+      "value": "46.101.202.66",
+      "type": "ipv4",
+      "verdict": "malicious",
+      "notes": "| 46.101.202.66 |"
+    },
+    {
+      "value": "c65bb0e553dcc2ee68f24a862766cf1a813f0e0f",
+      "type": "sha1",
+      "verdict": "malicious",
+      "notes": "| tracking\\_notice.xls | c65bb0e553dcc2ee68f24a862766cf1a813f0e0f |"
+    },
+    {
+      "value": "4c5d43a71a24f4aa60f28613f2e26845418f4304",
+      "type": "sha1",
+      "verdict": "malicious",
+      "notes": "| mybinder.exe | 4c5d43a71a24f4aa60f28613f2e26845418f4304 |"
+    },
+    {
+      "value": "e4f90256b82b7d09bdd5c622982a20fe064ae7a9",
+      "type": "sha1",
+      "verdict": "malicious",
+      "notes": "| uipool.scr | e4f90256b82b7d09bdd5c622982a20fe064ae7a9 |"
+    }
+  ],
+  "excluded_iocs": [
+    {
+      "value": "https://lab52.io/blog/wp-content/uploads/2022/01/1-2-810x1024.png",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://lab52.io/blog/wp-content/uploads/2022/01/1-2-810x102)"
+    },
+    {
+      "value": "https://lab52.io/blog/wp-content/uploads/2022/01/2v2-2-1024x843.jpg",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://lab52.io/blog/wp-content/uploads/2022/01/2v2-2-1024x)"
+    },
+    {
+      "value": "https://lab52.io/blog/wp-content/uploads/2022/01/3-2-1024x413.png",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://lab52.io/blog/wp-content/uploads/2022/01/3-2-1024x41)"
+    },
+    {
+      "value": "https://lab52.io/blog/wp-content/uploads/2022/01/4-1-1024x604.png",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://lab52.io/blog/wp-content/uploads/2022/01/4-1-1024x60)"
+    },
+    {
+      "value": "https://lab52.io/blog/wp-content/uploads/2022/01/5-2.png",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://lab52.io/blog/wp-content/uploads/2022/01/5-2.png)"
+    },
+    {
+      "value": "https://lab52.io/blog/wp-content/uploads/2022/01/6-2.png",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://lab52.io/blog/wp-content/uploads/2022/01/6-2.png)"
+    },
+    {
+      "value": "https://lab52.io/blog/wp-content/uploads/2022/01/7-2.png",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://lab52.io/blog/wp-content/uploads/2022/01/7-2.png)"
+    },
+    {
+      "value": "https://lab52.io/blog/wp-content/uploads/2022/01/8-2.png",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://lab52.io/blog/wp-content/uploads/2022/01/8-2.png)"
+    },
+    {
+      "value": "https://lab52.io/blog/wp-content/uploads/2022/01/9-1.png",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://lab52.io/blog/wp-content/uploads/2022/01/9-1.png)"
+    },
+    {
+      "value": "https://lab52.io/blog/wp-content/uploads/2022/01/10-2.png",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://lab52.io/blog/wp-content/uploads/2022/01/10-2.png)"
+    },
+    {
+      "value": "https://lab52.io/blog/wp-content/uploads/2022/01/11-2.png",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://lab52.io/blog/wp-content/uploads/2022/01/11-2.png)"
+    },
+    {
+      "value": "https://lab52.io/blog/wp-content/uploads/2022/01/12-2.png",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://lab52.io/blog/wp-content/uploads/2022/01/12-2.png)"
+    },
+    {
+      "value": "https://lab52.io/blog/wp-content/uploads/2022/01/13-2-1024x211.png",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://lab52.io/blog/wp-content/uploads/2022/01/13-2-1024x2)"
+    },
+    {
+      "value": "https://lab52.io/blog/wp-content/uploads/2022/01/14-2.png",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://lab52.io/blog/wp-content/uploads/2022/01/14-2.png)"
+    },
+    {
+      "value": "https://lab52.io/blog/wp-content/uploads/2022/01/15-2.png",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://lab52.io/blog/wp-content/uploads/2022/01/15-2.png)"
+    },
+    {
+      "value": "https://lab52.io/blog/wp-content/uploads/2022/01/16-2.png",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://lab52.io/blog/wp-content/uploads/2022/01/16-2.png)"
+    },
+    {
+      "value": "https://lab52.io/blog/wp-content/uploads/2022/01/17-3-1024x336.png",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://lab52.io/blog/wp-content/uploads/2022/01/17-3-1024x3)"
+    },
+    {
+      "value": "https://lab52.io/contact",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://lab52.io/contact)"
+    }
+  ],
+  "mitre_attack": [
+    {
+      "technique_id": "T1005",
+      "technique_name": "Data from Local System"
+    },
+    {
+      "technique_id": "T1041",
+      "technique_name": "Exfiltration Over C2 Channel"
+    },
+    {
+      "technique_id": "T1055",
+      "technique_name": "Process Injection"
+    },
+    {
+      "technique_id": "T1057",
+      "technique_name": "Process Discovery"
+    },
+    {
+      "technique_id": "T1059",
+      "technique_name": "Command and Scripting Interpreter"
+    },
+    {
+      "technique_id": "T1071",
+      "technique_name": "Application Layer Protocol"
+    },
+    {
+      "technique_id": "T1105",
+      "technique_name": "Ingress Tool Transfer"
+    },
+    {
+      "technique_id": "T1204",
+      "technique_name": "User Execution"
+    },
+    {
+      "technique_id": "T1497",
+      "technique_name": "Virtualization/Sandbox Evasion"
+    },
+    {
+      "technique_id": "T1547",
+      "technique_name": "Boot or Logon Autostart Execution"
+    },
+    {
+      "technique_id": "T1566",
+      "technique_name": "Phishing"
+    },
+    {
+      "technique_id": "T1568",
+      "technique_name": "Dynamic Resolution"
+    }
+  ],
+  "notes": "Transparent Tribe contra personal de gobierno y militar de India, con senuelos de vacunacion COVID-19. Severidad high: espionaje dirigido a objetivos gubernamentales con persistencia e infraestructura propia. La ruta de persistencia se completo a mano hasta el ejecutable que deja en el arranque.\n\nAnotado indicador por indicador contra el texto del reporte (Mariana Malagón).\n\nRevision independiente (2026-11-02): Juan Sebastián Ortega, leyendo el reporte completo contra cada indicador, exclusion, severidad y actor. Sin cambios."
+}

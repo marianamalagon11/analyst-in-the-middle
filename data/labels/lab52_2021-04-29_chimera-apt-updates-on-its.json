@@ -1,0 +1,188 @@
+{
+  "report_id": "lab52_2021-04-29_chimera-apt-updates-on-its",
+  "source": {
+    "corpus": "AnnoCTR",
+    "file": "AnnoCTR/all/text/lab52_2021-04-29_chimera-apt-updates-on-its.txt",
+    "vendor": "lab52",
+    "published": "2021-04-29",
+    "license": "CC-BY-SA-4.0",
+    "url": null
+  },
+  "formats": [
+    "txt",
+    "html",
+    "pdf"
+  ],
+  "status": "frozen",
+  "annotators": [
+    "Mariana Malagón"
+  ],
+  "reviewers": [
+    "Juan Sebastián Ortega"
+  ],
+  "severity": "high",
+  "threat_actor": "Chimera",
+  "iocs": [
+    {
+      "value": "dee3a502aedcbe109373aa200a690d4e2d1a10fa3cf69a7b6db68a78c6abfc2c",
+      "type": "sha256",
+      "verdict": "malicious",
+      "notes": "DEE3A502AEDCBE109373AA200A690D4E2D1A10FA3CF69A7B6DB68A78C6ABFC2C"
+    },
+    {
+      "value": "75e616bf87ad0cbe738c4c48bc0ecd114871def145e21545fa11705d3a11d60e",
+      "type": "sha256",
+      "verdict": "malicious",
+      "notes": "75E616BF87AD0CBE738C4C48BC0ECD114871DEF145E21545FA11705D3A11D60E"
+    },
+    {
+      "value": "f:\\project\\owl\\isapi\\win32\\release\\iisinstaller.pdb",
+      "type": "file_path",
+      "verdict": "suspicious",
+      "notes": "“f:\\project\\owl\\isapi\\win32\\release\\iisinstaller.pdb”."
+    },
+    {
+      "value": "16cf6924eca8208ad9d9b8470cf0a849995ed4d981d5bc706e62ae878ef261bb",
+      "type": "sha256",
+      "verdict": "malicious",
+      "notes": "| 16CF6924ECA8208AD9D9B8470CF0A849995ED4D981D5BC706E62AE878EF261BB | Recent OwlProxy x86 version |"
+    },
+    {
+      "value": "c9b8cfacc859e494984ae9ddf864314af651fd32e60f33c7f42bfc640620e8ca",
+      "type": "sha256",
+      "verdict": "malicious",
+      "notes": "| C9B8CFACC859E494984AE9DDF864314AF651FD32E60F33C7F42BFC640620E8CA | Recent OwlProxy x64 version |"
+    },
+    {
+      "value": "95e7e09468f7dc62da42e036b6e36ce27dc04c2ca0bb86a2fed39b3cc2bf4a97",
+      "type": "sha256",
+      "verdict": "malicious",
+      "notes": "| 95E7E09468F7DC62DA42E036B6E36CE27DC04C2CA0BB86A2FED39B3CC2BF4A97 | VMProtect OwlProxy x64 version |"
+    },
+    {
+      "value": "9a9ffdb8fc20b6e6e5a1de434f6b834e69755fd62157f91884e9a681f0073256",
+      "type": "sha256",
+      "verdict": "malicious",
+      "notes": "| 9A9FFDB8FC20B6E6E5A1DE434F6B834E69755FD62157F91884E9A681F0073256 | OwlInstaller |"
+    }
+  ],
+  "excluded_iocs": [
+    {
+      "value": "https://lab52.io/blog/wp-content/uploads/2021/04/asd2-1024x308.png",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://lab52.io/blog/wp-content/uploads/2021/04/asd2-1024x3)"
+    },
+    {
+      "value": "https://lab52.io/blog/wp-content/uploads/2021/04/asd3.png",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://lab52.io/blog/wp-content/uploads/2021/04/asd3.png)"
+    },
+    {
+      "value": "https://cybernews.com/security/taiwan-government-targeted-by-multiple-cyberattacks-owlproxy-malware/",
+      "type": "url",
+      "reason": "reference_only",
+      "notes": "propuesto por el extractor (https://cybernews.com/security/taiwan-government-targeted-by)"
+    },
+    {
+      "value": "https://lab52.io/blog/wp-content/uploads/2021/04/asd4.png",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://lab52.io/blog/wp-content/uploads/2021/04/asd4.png)"
+    },
+    {
+      "value": "https://lab52.io/blog/wp-content/uploads/2021/04/asd5.png",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://lab52.io/blog/wp-content/uploads/2021/04/asd5.png)"
+    },
+    {
+      "value": "https://lab52.io/blog/wp-content/uploads/2021/04/asd6-1.png",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://lab52.io/blog/wp-content/uploads/2021/04/asd6-1.png)"
+    },
+    {
+      "value": "https://lab52.io/blog/wp-content/uploads/2021/04/asd7.png",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://lab52.io/blog/wp-content/uploads/2021/04/asd7.png)"
+    },
+    {
+      "value": "https://lab52.io/blog/wp-content/uploads/2021/04/asd8-1.png",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://lab52.io/blog/wp-content/uploads/2021/04/asd8-1.png)"
+    },
+    {
+      "value": "https://+:443/HelpTheme/",
+      "type": "url",
+      "reason": "extraction_artifact",
+      "notes": "movido en la revision"
+    },
+    {
+      "value": "https://+:443/HelpTheme/pp/",
+      "type": "url",
+      "reason": "extraction_artifact",
+      "notes": "movido en la revision"
+    },
+    {
+      "value": "https://+:443/topics/",
+      "type": "url",
+      "reason": "extraction_artifact",
+      "notes": "movido en la revision"
+    },
+    {
+      "value": "https://+:443/topics/pp/",
+      "type": "url",
+      "reason": "extraction_artifact",
+      "notes": "movido en la revision"
+    },
+    {
+      "value": "https://+:443/exchangetopicservices/",
+      "type": "url",
+      "reason": "extraction_artifact",
+      "notes": "movido en la revision"
+    },
+    {
+      "value": "https://+:443/exchangetopicservices/pp/",
+      "type": "url",
+      "reason": "extraction_artifact",
+      "notes": "movido en la revision"
+    },
+    {
+      "value": "https://+:443/exchangetopicservices/px/",
+      "type": "url",
+      "reason": "extraction_artifact",
+      "notes": "movido en la revision"
+    }
+  ],
+  "mitre_attack": [
+    {
+      "technique_id": "T1027",
+      "technique_name": "Obfuscated Files or Information"
+    },
+    {
+      "technique_id": "T1036",
+      "technique_name": "Masquerading"
+    },
+    {
+      "technique_id": "T1059",
+      "technique_name": "Command and Scripting Interpreter"
+    },
+    {
+      "technique_id": "T1071",
+      "technique_name": "Application Layer Protocol"
+    },
+    {
+      "technique_id": "T1083",
+      "technique_name": "File and Directory Discovery"
+    },
+    {
+      "technique_id": "T1547",
+      "technique_name": "Boot or Logon Autostart Execution"
+    }
+  ],
+  "notes": "Version nueva de OwlProxy, herramienta del grupo Chimera, instalada como modulo ISAPI en IIS para hacer de proxy y webshell. Severidad high: compromiso persistente de servidores expuestos con control remoto. Las URL con host '+' no son indicadores de red sino reservas de URL de HTTP.sys (bindings locales del listener): se excluyen porque ningun analista las bloquearia y el modelo no las reproduciria de forma estable. La ruta del PDB queda suspicious: es un artefacto de compilacion util para hunting, no infraestructura del atacante.\n\nAnotado indicador por indicador contra el texto del reporte (Mariana Malagón).\n\nRevision independiente (2026-11-02): Juan Sebastián Ortega, leyendo el reporte completo contra cada indicador, exclusion, severidad y actor. Sin cambios."
+}

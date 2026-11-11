@@ -1,0 +1,13 @@
+{
+  "corpus": "AnnoCTR",
+  "repo": "boschresearch/anno-ctr-lrec-coling-2024",
+  "commit": "d510b6949e1938d47c93a43eedd562dc538439dc",
+  "archive_sha256": "2eb29db3bba2e95f908ad3d4195c202b3c44a666f98c43e4c02a809edffcd480",
+  "content_sha256": "e807ee1924f95aa4f07070ab0e82f9d443b8f702139b8c9df24b941a9ef43561",
+  "license": "CC-BY-SA-4.0",
+  "citation": "Lange, L., Muller, M., Torbati, G. H., Pujari, S. C., Grau, P., et al. (2024). AnnoCTR: A Dataset for Detecting and Linking Entities, Tactics, and Techniques in Cyber Threat Reports. LREC-COLING 2024.",
+  "fetched_at": "2026-11-02T16:07:20Z",
+  "n_reports": 400,
+  "n_mitre_annotations": 400,
+  "files": 801
+}

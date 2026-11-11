@@ -1,0 +1,174 @@
+{
+  "report_id": "proofpoint_2021-07-28_i-knew-you-were-trouble",
+  "source": {
+    "corpus": "AnnoCTR",
+    "file": "AnnoCTR/all/text/proofpoint_2021-07-28_i-knew-you-were-trouble.txt",
+    "vendor": "proofpoint",
+    "published": "2021-07-28",
+    "license": "CC-BY-SA-4.0",
+    "url": null
+  },
+  "formats": [
+    "txt",
+    "html",
+    "pdf"
+  ],
+  "status": "frozen",
+  "annotators": [
+    "Mariana Malagón"
+  ],
+  "reviewers": [
+    "Juan Sebastián Ortega"
+  ],
+  "severity": "critical",
+  "threat_actor": "TA456",
+  "iocs": [
+    {
+      "value": "dfddbd09ccea598c4841f1abbc927f1c661d85d4bd9bcb081f7c811212d8a64a",
+      "type": "sha256",
+      "verdict": "malicious",
+      "notes": "The OneDrive URL delivered a .rar file (dfddbd09ccea598c4841f1abbc927f1c661d85d4bd9bcb081f7c811212d8a64a) containing a .xlsm (Figure 2) (612bdfb4f6eaf920a7a41fa06de8d99f6ecf6ad147374efa6eb1d5aff91df55"
+    },
+    {
+      "value": "612bdfb4f6eaf920a7a41fa06de8d99f6ecf6ad147374efa6eb1d5aff91df558",
+      "type": "sha256",
+      "verdict": "malicious",
+      "notes": "The OneDrive URL delivered a .rar file (dfddbd09ccea598c4841f1abbc927f1c661d85d4bd9bcb081f7c811212d8a64a) containing a .xlsm (Figure 2) (612bdfb4f6eaf920a7a41fa06de8d99f6ecf6ad147374efa6eb1d5aff91df55"
+    },
+    {
+      "value": "1534f95f49ddf2ada38561705f901e5938470c1678d6a81f0f4177ba7412ef5b",
+      "type": "sha256",
+      "verdict": "malicious",
+      "notes": "If the content is enabled, the macro will create and hide the directory \\Appdata\\Perflog and then write LEMPO, a very simple but ingenious plaintext stealer comprised of Visual Basic Script (VBS), to "
+    },
+    {
+      "value": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run",
+      "type": "registry_key",
+      "verdict": "benign",
+      "notes": "After authoring the VBS, the Excel macro will add a registry key (HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run /v Schedule /t REG\\_SZ /d C:\\Users\\[redacted\\_username]\\AppData\\Perflog\\Schedule.vb"
+    },
+    {
+      "value": "showip.net",
+      "type": "domain",
+      "verdict": "benign",
+      "notes": "The macro in the Excel document also contains code to connect via HTTP POST to showip.net."
+    },
+    {
+      "value": "da65aa439e90d21b2cf53afef6491e7dcdca19dd1bbec50329d53f3d977ee089",
+      "type": "sha256",
+      "verdict": "malicious",
+      "notes": "While most of this analysis is based off the sample blocked by Proofpoint (1534f95f49ddf2ada38561705f901e5938470c1678d6a81f0f4177ba7412ef5b) in June 2021, we also identified  a similar sample (da65aa4"
+    },
+    {
+      "value": "%temp%\\Logs.txt",
+      "type": "file_path",
+      "verdict": "suspicious",
+      "notes": "archivo donde LEMPO guarda lo recolectado; nombre generico, no basta para bloquear (revision: estaba malicious)"
+    },
+    {
+      "value": "ford.com",
+      "type": "domain",
+      "verdict": "benign",
+      "notes": "The June 2020 version of LEMPO includes only a connectivity check to ford.com."
+    }
+  ],
+  "excluded_iocs": [
+    {
+      "value": "https://web.archive.org/web/*/https:/www.facebook.com/marcella.flores.14019",
+      "type": "url",
+      "reason": "reference_only",
+      "notes": "propuesto por el extractor (https://web.archive.org/web/*/https:/www.facebook.com/marcel)"
+    },
+    {
+      "value": "C:\\Users\\[redacted\\_username]\\AppData\\Perflog\\Schedule.vbs",
+      "type": "file_path",
+      "reason": "extraction_artifact",
+      "notes": "movido en la revision"
+    },
+    {
+      "value": "https://blog.talosintelligence.com/2019/09/tortoiseshell-fake-veterans.html",
+      "type": "url",
+      "reason": "reference_only",
+      "notes": "movido en la revision"
+    },
+    {
+      "value": "https://about.fb.com/news/2021/07/taking-action-against-hackers-in-iran/",
+      "type": "url",
+      "reason": "reference_only",
+      "notes": "movido en la revision"
+    },
+    {
+      "value": "https://symantec-enterprise-blogs.security.com/blogs/threat-intelligence/tortoiseshell-apt-supply-chain",
+      "type": "url",
+      "reason": "reference_only",
+      "notes": "movido en la revision"
+    }
+  ],
+  "mitre_attack": [
+    {
+      "technique_id": "T1005",
+      "technique_name": "Data from Local System"
+    },
+    {
+      "technique_id": "T1016",
+      "technique_name": "System Network Configuration Discovery"
+    },
+    {
+      "technique_id": "T1033",
+      "technique_name": "System Owner/User Discovery"
+    },
+    {
+      "technique_id": "T1041",
+      "technique_name": "Exfiltration Over C2 Channel"
+    },
+    {
+      "technique_id": "T1049",
+      "technique_name": "System Network Connections Discovery"
+    },
+    {
+      "technique_id": "T1057",
+      "technique_name": "Process Discovery"
+    },
+    {
+      "technique_id": "T1059",
+      "technique_name": "Command and Scripting Interpreter"
+    },
+    {
+      "technique_id": "T1070",
+      "technique_name": "Indicator Removal on Host"
+    },
+    {
+      "technique_id": "T1071",
+      "technique_name": "Application Layer Protocol"
+    },
+    {
+      "technique_id": "T1082",
+      "technique_name": "System Information Discovery"
+    },
+    {
+      "technique_id": "T1083",
+      "technique_name": "File and Directory Discovery"
+    },
+    {
+      "technique_id": "T1195",
+      "technique_name": "Supply Chain Compromise"
+    },
+    {
+      "technique_id": "T1203",
+      "technique_name": "Exploitation for Client Execution"
+    },
+    {
+      "technique_id": "T1518",
+      "technique_name": "Software Discovery"
+    },
+    {
+      "technique_id": "T1547",
+      "technique_name": "Boot or Logon Autostart Execution"
+    },
+    {
+      "technique_id": "T1566",
+      "technique_name": "Phishing"
+    }
+  ],
+  "notes": "TA456, alineado con el Estado irani, mantuvo durante anos la persona falsa 'Marcella Flores' para infectar a un empleado de un contratista de defensa con el malware LEMPO (reconocimiento, persistencia y exfiltracion). Severidad critical, la unica del dataset: actor estatal, objetivo de defensa y via de acceso a la cadena de suministro de contratistas mayores. El actor se corrigio a mano: la anotacion automatica del corpus decia 'Cleaver' por una mencion de contexto, pero el reporte es sobre TA456. showip.net, ford.com y la clave Run quedan benign: son recursos legitimos que el malware consulta o abusa. La ruta con '[redacted_username]' se excluye porque el vendor la publico censurada y no empareja con nada.\n\nAnotado indicador por indicador contra el texto del reporte (Mariana Malagón).\n\nRevision independiente (2026-11-02): Juan Sebastián Ortega, leyendo el reporte completo contra cada indicador, exclusion, severidad y actor. Cambios: %temp%\\Logs.txt pasa de malicious a suspicious (artefacto con nombre generico, no basta para bloquear)."
+}

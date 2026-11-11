@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aitm"
+version = "0.1.0"
+description = "Prompt injection contra analistas CTI basados en LLM: envenenamiento de reportes y evaluacion de defensas"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "requests>=2.31",
+    "pydantic>=2.6",
+    "pyyaml>=6.0",
+    "beautifulsoup4>=4.12",
+    "lxml>=5.1",
+    "pypdf>=4.2",
+    "reportlab>=4.1",
+    "pandas>=2.2",
+    "matplotlib>=3.8",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+]
+# Verificacion visual de los reportes envenenados (Fase 3): rasteriza los PDF para
+# compararlos pixel a pixel. Las capturas de HTML usan Chrome headless del sistema.
+visual = [
+    "pypdfium2>=4.30",
+]
+
+[project.scripts]
+aitm = "aitm.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
